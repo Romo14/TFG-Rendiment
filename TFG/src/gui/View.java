@@ -33,6 +33,7 @@ public class View extends JFrame {
 
     public void Run() {
 	pack();
+	setLocationRelativeTo(null);
 	this.setVisible(true);
     }
 

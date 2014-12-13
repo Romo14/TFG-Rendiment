@@ -15,7 +15,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class AnalisisPersonalitzatPopUp extends JPanel {
 
-    private  ActionListener analitzaListener = new ActionListener() {
+    private ActionListener analitzaListener = new ActionListener() {
 
 	public void actionPerformed(ActionEvent arg0) {
 	    if (!cpuCheckBox.isSelected() && !discDurCheckBox.isSelected()
@@ -25,18 +25,25 @@ public class AnalisisPersonalitzatPopUp extends JPanel {
 		JOptionPane.showMessageDialog(null,
 			"S'ha d'escollir almenys un element per analitzar");
 	    } else {
-		ViewOpcionsController.setGpu(gpuCheckBox.isSelected());
-		ViewOpcionsController.setNet(internetCheckBox.isSelected());
-		ViewOpcionsController.setHdd(discDurCheckBox.isSelected());
-		ViewOpcionsController.setCpu(cpuCheckBox.isSelected());
-		ViewOpcionsController.setRam(ramCheckBox.isSelected());
-		ViewAnalisisController.analisisPersonalitzat();
-		options.dispose();
+		int confirmar = JOptionPane.showConfirmDialog(null,
+			"<html> Es realitzara un anàlisis dels components seleccionats <br> durant "
+				+ MainController.view.panel.getTempsLabel(), "Anàlisis personalitzat",JOptionPane.YES_NO_OPTION);
+		if (confirmar == 0) {
+		    ViewOpcionsController.setGpu(gpuCheckBox.isSelected());
+		    ViewOpcionsController.setNet(internetCheckBox.isSelected());
+		    ViewOpcionsController.setHdd(discDurCheckBox.isSelected());
+		    ViewOpcionsController.setCpu(cpuCheckBox.isSelected());
+		    ViewOpcionsController.setRam(ramCheckBox.isSelected());
+		    ViewAnalisisController.analisisPersonalitzat();
+		    options.dispose();
+		    new AnalisisView();
+		    MainController.view.dispose();
+		}
 	    }
 
 	}
     };
-    private  ActionListener cancelaListener = new ActionListener() {
+    private ActionListener cancelaListener = new ActionListener() {
 	public void actionPerformed(ActionEvent arg0) {
 	    options.dispose();
 	}
@@ -47,8 +54,8 @@ public class AnalisisPersonalitzatPopUp extends JPanel {
     private static JCheckBox internetCheckBox;
     private static JCheckBox ramCheckBox;
     private static final long serialVersionUID = -1893117450756795448L;
-    private  JDialog options;
-    Font font = new Font(getFont().getName(), getFont().getStyle(), 16);
+    private JDialog options;
+    private Font font = new Font(getFont().getName(), getFont().getStyle(), 16);
 
     public AnalisisPersonalitzatPopUp() {
 	options = new JDialog(MainController.view.getOwner(),
@@ -57,7 +64,7 @@ public class AnalisisPersonalitzatPopUp extends JPanel {
 	Point aqui = new Point(
 		MainController.view.getLocationOnScreen().x + 50,
 		MainController.view.getLocationOnScreen().y + 50);
-	Dimension min = new Dimension(350, 300);
+	Dimension min = new Dimension(340, 280);
 	Box popUpLayout = Box.createVerticalBox();
 	options.setLocation(aqui);
 	options.setSize(min);

@@ -50,12 +50,12 @@ public class DuracioPopUp extends JPanel {
     private JSpinner horesSpinner;
     public int minuts;
     private JLabel minutsLabel;
-    Font font = new Font(getFont().getName(), getFont().getStyle(), 16);
+    private Font font = new Font(getFont().getName(), getFont().getStyle(), 16);
     private JSpinner minutsSpinner;
 
     public DuracioPopUp() {
 	duracio = new JDialog(MainController.view.getOwner(),
-		"Anàlisi Personalitzat" + "");
+		"Duració de l'anàlisis" + "");
 	Point aqui = new Point(
 		MainController.view.getLocationOnScreen().x + 50,
 		MainController.view.getLocationOnScreen().y + 50);

@@ -9,6 +9,7 @@ public class AnalisisController {
     private AnalisisHDD hdd;
     private AnalisisNET net;
     private AnalisisRAM ram;
+    private boolean stop = false;
 
     public AnalisisController(OpcionsController oc) {
 	cpu = new AnalisisCPU();
@@ -19,7 +20,7 @@ public class AnalisisController {
 	opcionsController = oc;
     }
 
-    private static int convertTemps() {
+    public static int convertTemps() {
 	segons = 0;
 	segons += opcionsController.getMinuts() * 60;
 	segons += opcionsController.getHores() * 3600;
@@ -30,7 +31,7 @@ public class AnalisisController {
     public void analisisComplet() {
 	System.out.println("analisi complet");
 	segons = convertTemps();
-	while (segons > 0) {
+	while (segons > 0 && !stop) {
 	    if (segons % 10 == 0) {
 
 	    }
@@ -42,7 +43,7 @@ public class AnalisisController {
     public void analisisPersonalitzat() {
 	System.out.println("analisis personalitzat");
 	segons = convertTemps();
-	while (segons > 0) {
+	while (segons > 0 && !stop) {
 	    if (segons % 10 == 0) {
 		if (opcionsController.isCpu()) {
 		}
@@ -62,6 +63,14 @@ public class AnalisisController {
 
     private void guardaResultats() {
 
+    }
+
+    public void stop() {
+	stop = true;	
+    }
+    
+    public void start(){
+	stop = false;
     }
 
 }
