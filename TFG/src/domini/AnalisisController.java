@@ -28,6 +28,7 @@ public class AnalisisController {
     }
 
     public void analisisComplet() {
+	System.out.println("analisi complet");
 	segons = convertTemps();
 	while (segons > 0) {
 	    if (segons % 10 == 0) {
@@ -39,6 +40,7 @@ public class AnalisisController {
     }
 
     public void analisisPersonalitzat() {
+	System.out.println("analisis personalitzat");
 	segons = convertTemps();
 	while (segons > 0) {
 	    if (segons % 10 == 0) {

@@ -15,7 +15,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class AnalisisPersonalitzatPopUp extends JPanel {
 
-    private static ActionListener analitzaListener = new ActionListener() {
+    private  ActionListener analitzaListener = new ActionListener() {
 
 	public void actionPerformed(ActionEvent arg0) {
 	    if (!cpuCheckBox.isSelected() && !discDurCheckBox.isSelected()
@@ -31,14 +31,14 @@ public class AnalisisPersonalitzatPopUp extends JPanel {
 		ViewOpcionsController.setCpu(cpuCheckBox.isSelected());
 		ViewOpcionsController.setRam(ramCheckBox.isSelected());
 		ViewAnalisisController.analisisPersonalitzat();
-		// TODO Analitzar sistema
+		options.dispose();
 	    }
 
 	}
     };
-    private static ActionListener cancelaListener = new ActionListener() {
+    private  ActionListener cancelaListener = new ActionListener() {
 	public void actionPerformed(ActionEvent arg0) {
-	    // TODO tancar finestra
+	    options.dispose();
 	}
     };
     private static JCheckBox cpuCheckBox;
@@ -47,7 +47,7 @@ public class AnalisisPersonalitzatPopUp extends JPanel {
     private static JCheckBox internetCheckBox;
     private static JCheckBox ramCheckBox;
     private static final long serialVersionUID = -1893117450756795448L;
-    private JDialog options;
+    private  JDialog options;
     Font font = new Font(getFont().getName(), getFont().getStyle(), 16);
 
     public AnalisisPersonalitzatPopUp() {
