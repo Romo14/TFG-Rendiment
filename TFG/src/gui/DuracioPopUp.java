@@ -2,8 +2,10 @@ package gui;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Point;
 
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -56,6 +58,9 @@ public class DuracioPopUp extends JPanel {
     public DuracioPopUp() {
 	duracio = new JDialog(MainController.view.getOwner(),
 		"Duració de l'anàlisis" + "");
+	Image img = new ImageIcon(this.getClass().getResource(
+		"/images/app-icon.png")).getImage();
+	duracio.setIconImage(img);
 	Point aqui = new Point(
 		MainController.view.getLocationOnScreen().x + 50,
 		MainController.view.getLocationOnScreen().y + 50);
@@ -73,7 +78,7 @@ public class DuracioPopUp extends JPanel {
 		}
 	    }
 	});
-	minutsSpinner.setModel(new SpinnerNumberModel(0, 0, 60, 1));
+	minutsSpinner.setModel(new SpinnerNumberModel(ViewOpcionsController.getMinuts(), 0, 60, 1));
 	minutsSpinner.setFont(font);
 	horesLabel = new JLabel("Hores (0-23):");
 	horesLabel.setFont(font);
@@ -91,7 +96,7 @@ public class DuracioPopUp extends JPanel {
 		}
 	    }
 	});
-	horesSpinner.setModel(new SpinnerNumberModel(1, 0, 24, 1));
+	horesSpinner.setModel(new SpinnerNumberModel(ViewOpcionsController.getHores(), 0, 24, 1));
 	horesSpinner.setFont(font);
 
 	diesSpinner = new JSpinner();
@@ -107,7 +112,7 @@ public class DuracioPopUp extends JPanel {
 		}
 	    }
 	});
-	diesSpinner.setModel(new SpinnerNumberModel(0, 0, null, 1));
+	diesSpinner.setModel(new SpinnerNumberModel(ViewOpcionsController.getDies(), 0, null, 1));
 	diesSpinner.setFont(font);
 
 	JButton acceptaButton = new JButton("Accepta");
@@ -132,9 +137,9 @@ public class DuracioPopUp extends JPanel {
 					.addComponent(horesLabel))
 				.addPreferredGap(ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
 				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-					.addComponent(minutsSpinner, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addComponent(horesSpinner, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addComponent(diesSpinner, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addComponent(minutsSpinner, Alignment.TRAILING)
+					.addComponent(horesSpinner, Alignment.TRAILING)
+					.addComponent(diesSpinner, Alignment.TRAILING))
 				.addGap(66))
 			.addGroup(groupLayout.createSequentialGroup()
 				.addGap(41)

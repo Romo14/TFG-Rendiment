@@ -24,6 +24,7 @@ public class PanelView extends JPanel {
 			    "<html> Es realitzara un anàlisis de tots<br>  els components del sistema <br> durant "
 				    + t, "Anàlisis complet",JOptionPane.YES_NO_OPTION);
 	    if (confirmar == 0) {
+		ViewOpcionsController.setAllTrue();
 		ViewAnalisisController.analisisComplet();
 		analisisView = new AnalisisView();
 		tanca();
@@ -209,7 +210,7 @@ public class PanelView extends JPanel {
 	minuts = duracioPopUp.getMinuts();
 	hores = duracioPopUp.getHores();
 	dies = duracioPopUp.getDies();
-	t = (dies + " dia/es " + hores + " hora/es " + minuts + " minut/s");
+	t = dies + " dia/es " + hores + " hora/es " + minuts + " minut/s";
 	duracioLabelEdita.setText(t);
     }
     

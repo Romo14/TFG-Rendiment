@@ -72,4 +72,13 @@ public class OpcionsController {
 	opcions.setRam(ram);
     }
 
+    public void setAllTrue() {
+	opcions.setCpu(true);
+	opcions.setGpu(true);
+	opcions.setHdd(true);
+	opcions.setNet(true);
+	opcions.setRam(true);
+	
+    }
+
 }

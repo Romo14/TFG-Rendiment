@@ -83,4 +83,9 @@ public class ViewOpcionsController {
 		+ opcions.getMinuts() * 60;
     }
 
+    public static void setAllTrue() {
+	opcions.setAllTrue();
+	
+    }
+
 }

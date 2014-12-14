@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Point;
 
 import javax.swing.*;
@@ -61,6 +62,9 @@ public class AnalisisPersonalitzatPopUp extends JPanel {
 	options = new JDialog(MainController.view.getOwner(),
 		"Anàlisi Personalitzat" + "");
 	options.setFont(font);
+	Image img = new ImageIcon(this.getClass().getResource(
+		"/images/app-icon.png")).getImage();
+	options.setIconImage(img);
 	Point aqui = new Point(
 		MainController.view.getLocationOnScreen().x + 50,
 		MainController.view.getLocationOnScreen().y + 50);
