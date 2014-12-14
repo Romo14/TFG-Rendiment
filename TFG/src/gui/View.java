@@ -19,7 +19,7 @@ public class View extends JFrame {
 
     public View() throws ClassNotFoundException, InstantiationException,
 	    IllegalAccessException, UnsupportedLookAndFeelException {
-	super("Análisis de rendiment");
+	super("Análisi de rendiment");
 	Image img = new ImageIcon(this.getClass().getResource(
 		"/images/app-icon.png")).getImage();
 	setIconImage(img);

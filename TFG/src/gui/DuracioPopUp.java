@@ -33,14 +33,24 @@ public class DuracioPopUp extends JPanel {
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-	    setHores((int) horesSpinner.getValue());
-	    setDies((int) diesSpinner.getValue());
-	    setMinuts((int) minutsSpinner.getValue());
-	    PanelView.updateDuracioLabel();
-	    ViewOpcionsController.setHores(hores);
-	    ViewOpcionsController.setMinuts(minuts);
-	    ViewOpcionsController.setDies(dies);
-	    duracio.dispose();
+	    if (((int) horesSpinner.getValue()) == 0
+		    && (int) minutsSpinner.getValue() == 0
+		    && (int) diesSpinner.getValue() == 0) {
+		JOptionPane
+			.showMessageDialog(
+				null,
+				"No es pot fer un anàlisi de durada inferior a 1 minut",
+				"Error", JOptionPane.ERROR_MESSAGE);
+	    } else {
+		setHores((int) horesSpinner.getValue());
+		setDies((int) diesSpinner.getValue());
+		setMinuts((int) minutsSpinner.getValue());
+		PanelView.updateDuracioLabel();
+		ViewOpcionsController.setHores(hores);
+		ViewOpcionsController.setMinuts(minuts);
+		ViewOpcionsController.setDies(dies);
+		duracio.dispose();
+	    }
 	}
     };
     public int dies;
@@ -57,7 +67,7 @@ public class DuracioPopUp extends JPanel {
 
     public DuracioPopUp() {
 	duracio = new JDialog(MainController.view.getOwner(),
-		"Duració de l'anàlisis" + "");
+		"Duració de l'anàlisi" + "");
 	Image img = new ImageIcon(this.getClass().getResource(
 		"/images/app-icon.png")).getImage();
 	duracio.setIconImage(img);
@@ -78,7 +88,8 @@ public class DuracioPopUp extends JPanel {
 		}
 	    }
 	});
-	minutsSpinner.setModel(new SpinnerNumberModel(ViewOpcionsController.getMinuts(), 0, 60, 1));
+	minutsSpinner.setModel(new SpinnerNumberModel(ViewOpcionsController
+		.getMinuts(), 0, 60, 1));
 	minutsSpinner.setFont(font);
 	horesLabel = new JLabel("Hores (0-23):");
 	horesLabel.setFont(font);
@@ -96,7 +107,8 @@ public class DuracioPopUp extends JPanel {
 		}
 	    }
 	});
-	horesSpinner.setModel(new SpinnerNumberModel(ViewOpcionsController.getHores(), 0, 24, 1));
+	horesSpinner.setModel(new SpinnerNumberModel(ViewOpcionsController
+		.getHores(), 0, 24, 1));
 	horesSpinner.setFont(font);
 
 	diesSpinner = new JSpinner();
@@ -112,7 +124,8 @@ public class DuracioPopUp extends JPanel {
 		}
 	    }
 	});
-	diesSpinner.setModel(new SpinnerNumberModel(ViewOpcionsController.getDies(), 0, null, 1));
+	diesSpinner.setModel(new SpinnerNumberModel(ViewOpcionsController
+		.getDies(), 0, null, 1));
 	diesSpinner.setFont(font);
 
 	JButton acceptaButton = new JButton("Accepta");
@@ -121,55 +134,102 @@ public class DuracioPopUp extends JPanel {
 
 	JButton btnCancellar = new JButton("Cancel\u00B7lar");
 	btnCancellar.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-		    duracio.dispose();
-		}
+	    public void actionPerformed(ActionEvent arg0) {
+		duracio.dispose();
+	    }
 	});
 	btnCancellar.setFont(font);
 	GroupLayout groupLayout = new GroupLayout(duracio.getContentPane());
-	groupLayout.setHorizontalGroup(
-		groupLayout.createParallelGroup(Alignment.LEADING)
-			.addGroup(groupLayout.createSequentialGroup()
+	groupLayout.setHorizontalGroup(groupLayout
+		.createParallelGroup(Alignment.LEADING)
+		.addGroup(
+			groupLayout
+				.createSequentialGroup()
 				.addGap(43)
-				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-					.addComponent(minutsLabel)
-					.addComponent(diesLabel)
-					.addComponent(horesLabel))
-				.addPreferredGap(ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
-				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-					.addComponent(minutsSpinner, Alignment.TRAILING)
-					.addComponent(horesSpinner, Alignment.TRAILING)
-					.addComponent(diesSpinner, Alignment.TRAILING))
+				.addGroup(
+					groupLayout
+						.createParallelGroup(
+							Alignment.LEADING)
+						.addComponent(minutsLabel)
+						.addComponent(diesLabel)
+						.addComponent(horesLabel))
+				.addPreferredGap(ComponentPlacement.RELATED,
+					44, Short.MAX_VALUE)
+				.addGroup(
+					groupLayout
+						.createParallelGroup(
+							Alignment.LEADING,
+							false)
+						.addComponent(minutsSpinner,
+							Alignment.TRAILING)
+						.addComponent(horesSpinner,
+							Alignment.TRAILING)
+						.addComponent(diesSpinner,
+							Alignment.TRAILING))
 				.addGap(66))
-			.addGroup(groupLayout.createSequentialGroup()
-				.addGap(41)
-				.addComponent(btnCancellar)
-				.addGap(18)
+		.addGroup(
+			groupLayout.createSequentialGroup().addGap(41)
+				.addComponent(btnCancellar).addGap(18)
 				.addComponent(acceptaButton)
-				.addContainerGap(38, Short.MAX_VALUE))
-	);
-	groupLayout.setVerticalGroup(
-		groupLayout.createParallelGroup(Alignment.LEADING)
-			.addGroup(groupLayout.createSequentialGroup()
-				.addGap(28)
-				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-					.addGroup(groupLayout.createSequentialGroup()
-						.addComponent(minutsSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-							.addComponent(horesSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(horesLabel)))
-					.addComponent(minutsLabel))
-				.addGap(10)
-				.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-					.addComponent(diesSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addComponent(diesLabel))
-				.addGap(18)
-				.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-					.addComponent(acceptaButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addComponent(btnCancellar))
-				.addGap(31))
-	);
+				.addContainerGap(38, Short.MAX_VALUE)));
+	groupLayout
+		.setVerticalGroup(groupLayout
+			.createParallelGroup(Alignment.LEADING)
+			.addGroup(
+				groupLayout
+					.createSequentialGroup()
+					.addGap(28)
+					.addGroup(
+						groupLayout
+							.createParallelGroup(
+								Alignment.LEADING)
+							.addGroup(
+								groupLayout
+									.createSequentialGroup()
+									.addComponent(
+										minutsSpinner,
+										GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(
+										ComponentPlacement.RELATED)
+									.addGroup(
+										groupLayout
+											.createParallelGroup(
+												Alignment.BASELINE)
+											.addComponent(
+												horesSpinner,
+												GroupLayout.PREFERRED_SIZE,
+												GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+											.addComponent(
+												horesLabel)))
+							.addComponent(
+								minutsLabel))
+					.addGap(10)
+					.addGroup(
+						groupLayout
+							.createParallelGroup(
+								Alignment.BASELINE)
+							.addComponent(
+								diesSpinner,
+								GroupLayout.PREFERRED_SIZE,
+								GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+							.addComponent(diesLabel))
+					.addGap(18)
+					.addGroup(
+						groupLayout
+							.createParallelGroup(
+								Alignment.BASELINE)
+							.addComponent(
+								acceptaButton,
+								GroupLayout.DEFAULT_SIZE,
+								GroupLayout.DEFAULT_SIZE,
+								Short.MAX_VALUE)
+							.addComponent(
+								btnCancellar))
+					.addGap(31)));
 	duracio.getContentPane().setLayout(groupLayout);
 
     }
@@ -200,6 +260,6 @@ public class DuracioPopUp extends JPanel {
 
     public void limitTemps() {
 	JOptionPane.showMessageDialog(null,
-		"No es pot fer una anàlisis de durada superior a 7 dies");
+		"No es pot fer un anàlisi de durada superior a 7 dies", "Error", JOptionPane.ERROR_MESSAGE);
     }
 }

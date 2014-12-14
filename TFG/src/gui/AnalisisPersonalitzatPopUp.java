@@ -24,11 +24,30 @@ public class AnalisisPersonalitzatPopUp extends JPanel {
 		    && !internetCheckBox.isSelected()
 		    && !ramCheckBox.isSelected()) {
 		JOptionPane.showMessageDialog(null,
-			"S'ha d'escollir almenys un element per analitzar");
+			"S'ha d'escollir almenys un element per analitzar",
+			"Error", JOptionPane.ERROR_MESSAGE);
 	    } else {
+		String components = "";
+		if (cpuCheckBox.isSelected()) components +="CPU";
+		if (discDurCheckBox.isSelected()) {
+		    if(components!="") components+=", ";
+		    components+= "disc dur";
+		}
+		if (gpuCheckBox.isSelected()) {
+		    if(components!="") components+=", ";
+		    components+= "GPU";
+		}
+		if (ramCheckBox.isSelected()) {
+		    if(components!="") components+=", ";
+		    components+= "memòria RAM";
+		}
+		if (internetCheckBox.isSelected()) {
+		    if(components!="") components+=", ";
+		    components+= "targeta de xarxa";
+		}
 		int confirmar = JOptionPane.showConfirmDialog(null,
-			"<html> Es realitzara un anàlisis dels components seleccionats <br> durant "
-				+ MainController.view.panel.getTempsLabel(), "Anàlisis personalitzat",JOptionPane.YES_NO_OPTION);
+			"<html> Vol realitzar un anàlisi de: "+ components +" <br> durant "
+				+ MainController.view.panel.getTempsLabel()+"?", "Anàlisi personalitzat",JOptionPane.YES_NO_OPTION);
 		if (confirmar == 0) {
 		    ViewOpcionsController.setGpu(gpuCheckBox.isSelected());
 		    ViewOpcionsController.setNet(internetCheckBox.isSelected());
@@ -125,7 +144,7 @@ public class AnalisisPersonalitzatPopUp extends JPanel {
 	ramCheckBox.setAlignmentX(Component.RIGHT_ALIGNMENT);
 	ramCheckBox.setFont(font);
 	JLabel analisiPersonalitzatLabel = new JLabel(
-		"Quins components vols analitzar?");
+		"Quins components vol analitzar?");
 	analisiPersonalitzatLabel.setFont(font);
 	analisiPersonalitzatLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 	GroupLayout gl_popUpPanel = new GroupLayout(popUpPanel);

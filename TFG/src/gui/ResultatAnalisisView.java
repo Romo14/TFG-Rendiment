@@ -2,8 +2,17 @@ package gui;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.util.Date;
 
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -14,9 +23,18 @@ import javax.swing.border.TitledBorder;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
+import com.itextpdf.awt.DefaultFontMapper;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfTemplate;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import javax.swing.JLabel;
@@ -42,10 +60,12 @@ public class ResultatAnalisisView extends JPanel {
     private JCheckBox chckbxRam;
     private JCheckBox chckbxDiscDur;
     private JCheckBox chckbxXarxa;
+    private JButton btnInici;
+    private JButton pdfButton;
 
     public ResultatAnalisisView() {
 	resultat = new JDialog(MainController.view.getOwner(),
-		"Resultats de l'anàlisis");
+		"Resultats de l'anàlisi");
 	Image img = new ImageIcon(this.getClass().getResource(
 		"/images/app-icon.png")).getImage();
 	resultat.setIconImage(img);
@@ -56,9 +76,8 @@ public class ResultatAnalisisView extends JPanel {
 	SpringLayout springLayout = new SpringLayout();
 	resultat.getContentPane().setLayout(springLayout);
 
-	ImageIcon image = new ImageIcon(this.getClass().getResource(
-		"/images/ok-icon.png"));
-	ok = new JLabel(image);
+	ok = new JLabel(new ImageIcon(this.getClass().getResource(
+		"/images/ok-icon.png")));
 	ko = new JLabel(new ImageIcon(this.getClass().getResource(
 		"/images/ko-icon.png")));
 
@@ -93,45 +112,132 @@ public class ResultatAnalisisView extends JPanel {
 
 	grafica = crearGrafica();
 	ChartPanel graficaPanel = new ChartPanel(grafica);
+	btnInici = new JButton();
+	btnInici.setIcon(new ImageIcon(this.getClass().getResource(
+		"/images/home-icon.png")));
+	btnInici.addActionListener(new ActionListener() {
+	    public void actionPerformed(ActionEvent e) {
+		int a = JOptionPane.showConfirmDialog(null,
+			"Vols tornar al menú principal?", "",
+			JOptionPane.YES_NO_OPTION);
+		if (a == 0) {
+		    MainController.main(null);
+		    resultat.dispose();
+		}
+	    }
+	});
+
+	pdfButton = new JButton("");
+	pdfButton.addActionListener(new ActionListener() {
+	    public void actionPerformed(ActionEvent e) {
+		long t = new Date().getDate();
+		System.out.println(t);
+		writeChartToPDF(grafica, 500, 400, String.valueOf(t)+".pdf");
+	    }
+	});
+	pdfButton.setBorder(null);
+	pdfButton.setContentAreaFilled(false);
+	pdfButton.setIcon(new ImageIcon(ResultatAnalisisView.class
+		.getResource("/images/pdf-icon.png")));
 	GroupLayout gl_panelGrafiques = new GroupLayout(panelGrafiques);
-	gl_panelGrafiques.setHorizontalGroup(gl_panelGrafiques
-		.createParallelGroup(Alignment.LEADING)
-		.addGroup(
-			gl_panelGrafiques
-				.createSequentialGroup()
-				.addGap(19)
-				.addComponent(graficaPanel,
-					GroupLayout.DEFAULT_SIZE, 386,
-					Short.MAX_VALUE).addContainerGap())
-		.addGroup(
-			Alignment.TRAILING,
-			gl_panelGrafiques.createSequentialGroup()
-				.addContainerGap(48, Short.MAX_VALUE)
-				.addComponent(chckbxCpu).addGap(18)
-				.addComponent(chckbxGpu).addGap(18)
-				.addComponent(chckbxRam).addGap(18)
-				.addComponent(chckbxDiscDur).addGap(18)
-				.addComponent(chckbxXarxa).addGap(40)));
-	gl_panelGrafiques.setVerticalGroup(gl_panelGrafiques
-		.createParallelGroup(Alignment.TRAILING).addGroup(
-			Alignment.LEADING,
-			gl_panelGrafiques
-				.createSequentialGroup()
-				.addContainerGap()
-				.addComponent(graficaPanel,
-					GroupLayout.PREFERRED_SIZE, 351,
-					GroupLayout.PREFERRED_SIZE)
-				.addGap(18)
-				.addGroup(
-					gl_panelGrafiques
-						.createParallelGroup(
-							Alignment.BASELINE)
-						.addComponent(chckbxCpu)
-						.addComponent(chckbxGpu)
-						.addComponent(chckbxRam)
-						.addComponent(chckbxDiscDur)
-						.addComponent(chckbxXarxa))
-				.addContainerGap(157, Short.MAX_VALUE)));
+	gl_panelGrafiques
+		.setHorizontalGroup(gl_panelGrafiques
+			.createParallelGroup(Alignment.TRAILING)
+			.addGroup(
+				gl_panelGrafiques
+					.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(
+						gl_panelGrafiques
+							.createParallelGroup(
+								Alignment.TRAILING)
+							.addGroup(
+								gl_panelGrafiques
+									.createSequentialGroup()
+									.addGap(35)
+									.addComponent(
+										chckbxCpu)
+									.addGap(18)
+									.addComponent(
+										chckbxGpu)
+									.addGap(18)
+									.addComponent(
+										chckbxRam)
+									.addGap(18)
+									.addComponent(
+										chckbxDiscDur)
+									.addGap(18)
+									.addComponent(
+										chckbxXarxa)
+									.addGap(40))
+							.addGroup(
+								gl_panelGrafiques
+									.createSequentialGroup()
+									.addComponent(
+										graficaPanel,
+										GroupLayout.DEFAULT_SIZE,
+										395,
+										Short.MAX_VALUE)
+									.addContainerGap())
+							.addGroup(
+								gl_panelGrafiques
+									.createSequentialGroup()
+									.addGap(286)
+									.addComponent(
+										pdfButton,
+										GroupLayout.PREFERRED_SIZE,
+										32,
+										GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(
+										ComponentPlacement.RELATED,
+										29,
+										Short.MAX_VALUE)
+									.addComponent(
+										btnInici,
+										GroupLayout.PREFERRED_SIZE,
+										48,
+										GroupLayout.PREFERRED_SIZE)
+									.addContainerGap()))));
+	gl_panelGrafiques
+		.setVerticalGroup(gl_panelGrafiques
+			.createParallelGroup(Alignment.LEADING)
+			.addGroup(
+				gl_panelGrafiques
+					.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(graficaPanel,
+						GroupLayout.PREFERRED_SIZE,
+						351, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addGroup(
+						gl_panelGrafiques
+							.createParallelGroup(
+								Alignment.BASELINE)
+							.addComponent(
+								chckbxXarxa)
+							.addComponent(
+								chckbxDiscDur)
+							.addComponent(chckbxRam)
+							.addComponent(chckbxGpu)
+							.addComponent(chckbxCpu))
+					.addPreferredGap(
+						ComponentPlacement.RELATED,
+						107, Short.MAX_VALUE)
+					.addGroup(
+						gl_panelGrafiques
+							.createParallelGroup(
+								Alignment.TRAILING,
+								false)
+							.addComponent(
+								pdfButton, 0,
+								0,
+								Short.MAX_VALUE)
+							.addComponent(
+								btnInici,
+								GroupLayout.PREFERRED_SIZE,
+								39,
+								Short.MAX_VALUE))
+					.addContainerGap()));
 	panelGrafiques.setLayout(gl_panelGrafiques);
 	panelDadesGenerals.setBorder(new TitledBorder(null, "Dades generals",
 		TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -157,33 +263,72 @@ public class ResultatAnalisisView extends JPanel {
 	panelHDD.setBorder(new TitledBorder(null, "Disc Dur",
 		TitledBorder.LEADING, TitledBorder.TOP, null, null));
 	GroupLayout gl_panelDadesGenerals = new GroupLayout(panelDadesGenerals);
-	gl_panelDadesGenerals.setHorizontalGroup(
-		gl_panelDadesGenerals.createParallelGroup(Alignment.LEADING)
-			.addGroup(gl_panelDadesGenerals.createSequentialGroup()
+	gl_panelDadesGenerals
+		.setHorizontalGroup(gl_panelDadesGenerals
+			.createParallelGroup(Alignment.LEADING)
+			.addGroup(
+				gl_panelDadesGenerals
+					.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(
+						gl_panelDadesGenerals
+							.createParallelGroup(
+								Alignment.TRAILING)
+							.addComponent(
+								panelNET,
+								Alignment.LEADING,
+								0, 0,
+								Short.MAX_VALUE)
+							.addComponent(
+								panelHDD,
+								Alignment.LEADING,
+								GroupLayout.DEFAULT_SIZE,
+								GroupLayout.DEFAULT_SIZE,
+								Short.MAX_VALUE)
+							.addComponent(
+								panelCPU,
+								Alignment.LEADING,
+								0, 0,
+								Short.MAX_VALUE)
+							.addComponent(
+								panelGPU,
+								Alignment.LEADING,
+								GroupLayout.DEFAULT_SIZE,
+								GroupLayout.DEFAULT_SIZE,
+								Short.MAX_VALUE)
+							.addComponent(
+								panelRAM,
+								Alignment.LEADING,
+								GroupLayout.DEFAULT_SIZE,
+								GroupLayout.DEFAULT_SIZE,
+								Short.MAX_VALUE))
+					.addGap(8)));
+	gl_panelDadesGenerals.setVerticalGroup(gl_panelDadesGenerals
+		.createParallelGroup(Alignment.LEADING).addGroup(
+			gl_panelDadesGenerals
+				.createSequentialGroup()
 				.addContainerGap()
-				.addGroup(gl_panelDadesGenerals.createParallelGroup(Alignment.TRAILING)
-					.addComponent(panelNET, Alignment.LEADING, 0, 0, Short.MAX_VALUE)
-					.addComponent(panelHDD, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addComponent(panelCPU, Alignment.LEADING, 0, 0, Short.MAX_VALUE)
-					.addComponent(panelGPU, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addComponent(panelRAM, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-				.addGap(8))
-	);
-	gl_panelDadesGenerals.setVerticalGroup(
-		gl_panelDadesGenerals.createParallelGroup(Alignment.LEADING)
-			.addGroup(gl_panelDadesGenerals.createSequentialGroup()
-				.addContainerGap()
-				.addComponent(panelCPU, GroupLayout.PREFERRED_SIZE, 105, GroupLayout.PREFERRED_SIZE)
+				.addComponent(panelCPU,
+					GroupLayout.PREFERRED_SIZE, 105,
+					GroupLayout.PREFERRED_SIZE)
 				.addPreferredGap(ComponentPlacement.RELATED)
-				.addComponent(panelGPU, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
+				.addComponent(panelGPU,
+					GroupLayout.PREFERRED_SIZE, 93,
+					GroupLayout.PREFERRED_SIZE)
 				.addPreferredGap(ComponentPlacement.UNRELATED)
-				.addComponent(panelRAM, GroupLayout.PREFERRED_SIZE, 110, GroupLayout.PREFERRED_SIZE)
+				.addComponent(panelRAM,
+					GroupLayout.PREFERRED_SIZE, 110,
+					GroupLayout.PREFERRED_SIZE)
 				.addGap(13)
-				.addComponent(panelHDD, GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE)
+				.addComponent(panelHDD,
+					GroupLayout.PREFERRED_SIZE, 103,
+					GroupLayout.PREFERRED_SIZE)
 				.addPreferredGap(ComponentPlacement.RELATED)
-				.addComponent(panelNET, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE)
-				.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-	);
+				.addComponent(panelNET,
+					GroupLayout.PREFERRED_SIZE, 101,
+					GroupLayout.PREFERRED_SIZE)
+				.addContainerGap(GroupLayout.DEFAULT_SIZE,
+					Short.MAX_VALUE)));
 
 	JLabel labelMitjanaHDD = new JLabel("Mitjana: ");
 	labelMitjanaHDD.setFont(font);
@@ -640,19 +785,52 @@ public class ResultatAnalisisView extends JPanel {
 
     public JFreeChart crearGrafica() {
 
-	DefaultCategoryDataset line_chart_dataset = new DefaultCategoryDataset();
-	line_chart_dataset.addValue(15, "schools", "1970");
-	line_chart_dataset.addValue(30, "schools", "1980");
-	line_chart_dataset.addValue(60, "schools", "1990");
-	line_chart_dataset.addValue(120, "schools", "2000");
-	line_chart_dataset.addValue(240, "schools", "2010");
+	XYSeriesCollection dataset = new XYSeriesCollection();
+	XYSeries cpu = new XYSeries("CPU");
+	XYSeries gpu = new XYSeries("GPU");
+	XYSeries hdd = new XYSeries("Disc dur");
+	XYSeries ram = new XYSeries("Memòria RAM");
+	XYSeries net = new XYSeries("Xarxa");
+	dataset.addSeries(cpu);
+	dataset.addSeries(gpu);
+	dataset.addSeries(hdd);
+	dataset.addSeries(ram);
+	dataset.addSeries(net);
 
 	/* Step -2:Define the JFreeChart object to create line chart */
-	JFreeChart lineChartObject = ChartFactory
-		.createLineChart("Us de components", "Temps (hores)",
-			"Percentatge d'ús (%)", line_chart_dataset,
-			PlotOrientation.VERTICAL, true, true, false);
+	JFreeChart lineChartObject = ChartFactory.createXYLineChart(
+		"Us dels components", "Temps (hores)", "Percentatge d'ús (%)",
+		dataset);
 	return lineChartObject;
     }
 
+    public static void writeChartToPDF(JFreeChart chart, int width, int height,
+	    String fileName) {
+	PdfWriter writer = null;
+
+	Document document = new Document();
+
+	try {
+	    writer = PdfWriter.getInstance(document, new FileOutputStream(
+		    fileName));
+	    document.open();
+	    PdfContentByte contentByte = writer.getDirectContent();
+	    PdfTemplate template = contentByte.createTemplate(width, height);
+	    Graphics2D graphics2d = template.createGraphics(width, height,
+		    new DefaultFontMapper());
+	    Rectangle2D rectangle2d = new Rectangle2D.Double(0, 0, width,
+		    height);
+
+	    chart.draw(graphics2d, rectangle2d);
+
+	    graphics2d.dispose();
+	    contentByte.addTemplate(template, 0, 0);
+
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+	document.close();
+    }
+
+    // TODO botons pdf + inici, opcions checkbox
 }

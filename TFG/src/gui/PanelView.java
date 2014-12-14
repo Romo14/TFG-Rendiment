@@ -21,12 +21,13 @@ public class PanelView extends JPanel {
 	    int confirmar = JOptionPane
 		    .showConfirmDialog(
 			    null,
-			    "<html> Es realitzara un anàlisis de tots<br>  els components del sistema <br> durant "
-				    + t, "Anàlisis complet",JOptionPane.YES_NO_OPTION);
+			    "<html> Vol realitzar un anàlisi de tots<br>  els components del sistema <br> durant "
+				    + t + "?", "Anàlisi complet",
+			    JOptionPane.YES_NO_OPTION);
 	    if (confirmar == 0) {
 		ViewOpcionsController.setAllTrue();
 		ViewAnalisisController.analisisComplet();
-		analisisView = new AnalisisView();
+		new AnalisisView();
 		tanca();
 	    }
 	}
@@ -55,34 +56,33 @@ public class PanelView extends JPanel {
     private static int minuts;
     private static final long serialVersionUID = 2924456615397502338L;
     private static String t = "1 hora/es";
-    private static AnalisisView analisisView;
 
     public PanelView() {
-	analisiCompletButton = new JButton("An\u00E0lisis Complet");
+	analisiCompletButton = new JButton("An\u00E0lisi Complet");
 	analisiCompletButton.addActionListener(analisiCompletListener);
 	analisiCompletButton.setFont(font);
 	analisiCompletLabel = new JLabel(
-		"Realitza un an\u00E0lisis complet del sistema");
+		"Realitza un an\u00E0lisi complet del sistema");
 	analisiCompletLabel.setAlignmentX(1.0f);
 	analisiCompletLabel.setFont(font);
 	analisiPersonalitzatLabel = new JLabel(
-		"Realitza un an\u00E0lisis personalitzat del sistema");
+		"Realitza un an\u00E0lisi personalitzat del sistema");
 	analisiPersonalitzatLabel.setAlignmentX(1.0f);
 	analisiPersonalitzatLabel.setFont(font);
-	analisiPersonalitzatButton = new JButton("An\u00E0lisis Personalitzat");
+	analisiPersonalitzatButton = new JButton("An\u00E0lisi Personalitzat");
 	analisiPersonalitzatButton.setMinimumSize(new Dimension(140, 23));
 	analisiPersonalitzatButton.setMaximumSize(new Dimension(105, 23));
 	analisiPersonalitzatButton
 		.addActionListener(analisiPersonalitzatListener);
 	analisiPersonalitzatButton.setFont(font);
 
-	duracioLabel = new JLabel("Duraci\u00F3 de l'an\u00E0lisis:");
+	duracioLabel = new JLabel("Duraci\u00F3 de l'an\u00E0lisi:");
 	duracioLabel.setFont(font);
 	duracioButton = new JButton("Canvia");
 	duracioButton.addActionListener(editarDuracio);
 	duracioButton.setFont(font);
 
-	duracioLabelEdita = new JLabel("0 dia/es 1 hora/es 0 minut/s");
+	duracioLabelEdita = new JLabel("1 hora/es");
 	duracioLabelEdita.setFont(font);
 
 	JLabel lblOriolGassetRomo = new JLabel("Oriol Gasset Romo - UPC FIB");
@@ -90,7 +90,7 @@ public class PanelView extends JPanel {
 	GroupLayout groupLayout = new GroupLayout(this);
 	groupLayout
 		.setHorizontalGroup(groupLayout
-			.createParallelGroup(Alignment.LEADING)
+			.createParallelGroup(Alignment.TRAILING)
 			.addGroup(
 				groupLayout
 					.createSequentialGroup()
@@ -102,7 +102,7 @@ public class PanelView extends JPanel {
 							.addComponent(
 								analisiCompletLabel,
 								GroupLayout.DEFAULT_SIZE,
-								430,
+								415,
 								Short.MAX_VALUE)
 							.addGroup(
 								groupLayout
@@ -114,7 +114,7 @@ public class PanelView extends JPanel {
 											.addComponent(
 												analisiPersonalitzatLabel,
 												GroupLayout.DEFAULT_SIZE,
-												430,
+												415,
 												Short.MAX_VALUE)
 											.addGroup(
 												groupLayout
@@ -132,20 +132,9 @@ public class PanelView extends JPanel {
 										ComponentPlacement.RELATED)))
 					.addGap(166))
 			.addGroup(
-				Alignment.TRAILING,
 				groupLayout.createSequentialGroup().addGap(285)
 					.addComponent(lblOriolGassetRomo)
-					.addContainerGap(124, Short.MAX_VALUE))
-			.addGroup(
-				groupLayout
-					.createSequentialGroup()
-					.addGap(173)
-					.addComponent(
-						analisiPersonalitzatButton,
-						GroupLayout.PREFERRED_SIZE,
-						GroupLayout.DEFAULT_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(178, Short.MAX_VALUE))
+					.addContainerGap(184, Short.MAX_VALUE))
 			.addGroup(
 				groupLayout
 					.createSequentialGroup()
@@ -153,11 +142,21 @@ public class PanelView extends JPanel {
 					.addComponent(analisiCompletButton,
 						GroupLayout.PREFERRED_SIZE,
 						193, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(179, Short.MAX_VALUE))
+					.addContainerGap(239, Short.MAX_VALUE))
 			.addGroup(
 				groupLayout.createSequentialGroup().addGap(72)
 					.addComponent(duracioButton)
-					.addContainerGap(389, Short.MAX_VALUE)));
+					.addContainerGap(455, Short.MAX_VALUE))
+			.addGroup(
+				Alignment.LEADING,
+				groupLayout
+					.createSequentialGroup()
+					.addGap(173)
+					.addComponent(
+						analisiPersonalitzatButton,
+						GroupLayout.PREFERRED_SIZE,
+						193, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(180, Short.MAX_VALUE)));
 	groupLayout
 		.setVerticalGroup(groupLayout
 			.createParallelGroup(Alignment.LEADING)
@@ -166,7 +165,7 @@ public class PanelView extends JPanel {
 					.createSequentialGroup()
 					.addGap(24)
 					.addComponent(analisiCompletLabel,
-						GroupLayout.DEFAULT_SIZE, 22,
+						GroupLayout.DEFAULT_SIZE, 23,
 						Short.MAX_VALUE)
 					.addPreferredGap(
 						ComponentPlacement.UNRELATED)
@@ -177,7 +176,7 @@ public class PanelView extends JPanel {
 						ComponentPlacement.UNRELATED)
 					.addComponent(
 						analisiPersonalitzatLabel,
-						GroupLayout.DEFAULT_SIZE, 22,
+						GroupLayout.DEFAULT_SIZE, 23,
 						Short.MAX_VALUE)
 					.addPreferredGap(
 						ComponentPlacement.UNRELATED)
@@ -210,15 +209,21 @@ public class PanelView extends JPanel {
 	minuts = duracioPopUp.getMinuts();
 	hores = duracioPopUp.getHores();
 	dies = duracioPopUp.getDies();
-	t = dies + " dia/es " + hores + " hora/es " + minuts + " minut/s";
+	t = "";
+	if (dies != 0)
+	    t += dies + " dia/es ";
+	if (hores != 0)
+	    t += hores + " hora/es ";
+	if (minuts != 0)
+	    t += minuts + " minut/s";
 	duracioLabelEdita.setText(t);
     }
-    
+
     private void tanca() {
-	MainController.view.dispose(); 
+	MainController.view.dispose();
     }
-    
-    public String getTempsLabel (){
+
+    public String getTempsLabel() {
 	return t;
     }
 }

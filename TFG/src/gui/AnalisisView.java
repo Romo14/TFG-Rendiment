@@ -7,6 +7,7 @@ import java.awt.Point;
 
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -49,6 +50,8 @@ public class AnalisisView extends JPanel {
 
 	}
     };
+    private JButton btnTornaAComenar;
+    private JButton btnInici;
 
     public AnalisisView() {
 	analisis = new JDialog(MainController.view.getOwner(),
@@ -64,23 +67,25 @@ public class AnalisisView extends JPanel {
 	analisis.setSize(min);
 	analisis.setResizable(false);
 	lblTempsRestantDescripcio = new JLabel("Temps restant: ");
+	lblTempsRestantDescripcio.setAlignmentX(Component.CENTER_ALIGNMENT);
 	lblTempsRestantDescripcio.setFont(font);
 	lblTempsRestant = new JLabel("");
-	lblTempsRestant.setAlignmentX(Component.RIGHT_ALIGNMENT);
+	lblTempsRestant.setAlignmentX(Component.CENTER_ALIGNMENT);
 	lblTempsRestant.setFont(font);
 	btnAtura = new JButton("Atura");
 	btnAtura.addActionListener(atura);
 	btnAtura.setFont(font);
 	btnVeureResultats = new JButton("Veure resultats");
 	btnVeureResultats.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-		    new ResultatAnalisisView();
-		    analisis.dispose();
-		}
+	    public void actionPerformed(ActionEvent e) {
+		new ResultatAnalisisView();
+		analisis.dispose();
+	    }
 	});
 	btnVeureResultats.setEnabled(false);
 	btnVeureResultats.setFont(font);
-	temps = 1;//ViewOpcionsController.getTemps(); //TODO cambiar temps!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	temps = ViewOpcionsController.getTemps(); // TODO cambiar
+						  // temps!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	comptador = 0;
 	lblTempsRestant.setText(getTemps());
 	progressBar = new JProgressBar(0, temps);
@@ -101,47 +106,67 @@ public class AnalisisView extends JPanel {
 
 	    }
 	});
+
+	btnTornaAComenar = new JButton("Torna a comen\u00E7ar");
+	btnTornaAComenar.setEnabled(false);
+	btnTornaAComenar.addActionListener(new ActionListener() {
+	    public void actionPerformed(ActionEvent arg0) {
+	    }
+	});
+
+	btnInici = new JButton();
+	btnInici.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+		    int a = JOptionPane.showConfirmDialog(null, "Vols cancel·lar l'anàlisi i tornar al menú principal?", "", JOptionPane.YES_NO_OPTION);
+		    if(a==0){
+			MainController.main(null);
+			analisis.dispose();
+			ViewAnalisisController.stop();
+		    }
+		}
+	});
+	btnInici.setIcon(new ImageIcon(this.getClass().getResource(
+		"/images/home-icon.png")));
 	GroupLayout groupLayout = new GroupLayout(analisis.getContentPane());
 	groupLayout.setHorizontalGroup(
-		groupLayout.createParallelGroup(Alignment.LEADING)
+		groupLayout.createParallelGroup(Alignment.TRAILING)
 			.addGroup(groupLayout.createSequentialGroup()
 				.addGap(23)
 				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-					.addGroup(groupLayout.createSequentialGroup()
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addComponent(progressBar, GroupLayout.PREFERRED_SIZE, 378, GroupLayout.PREFERRED_SIZE)
+					.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+							.addComponent(btnInici, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
 							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(20)
-								.addComponent(btnAtura, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(lblTempsRestantDescripcio, GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
-								.addPreferredGap(ComponentPlacement.RELATED)))
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(0)
-								.addComponent(lblTempsRestant, GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
-								.addGap(181))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGap(41)
-								.addComponent(btnVeureResultats, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)
-								.addContainerGap())))
-					.addGroup(groupLayout.createSequentialGroup()
-						.addComponent(progressBar, GroupLayout.PREFERRED_SIZE, 378, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(43, Short.MAX_VALUE))))
+								.addComponent(btnAtura, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(btnVeureResultats, GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(btnTornaAComenar))
+							.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+								.addComponent(lblTempsRestantDescripcio, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(lblTempsRestant, GroupLayout.PREFERRED_SIZE, 260, GroupLayout.PREFERRED_SIZE)))
+						.addGap(39)))
+				.addGap(10))
 	);
 	groupLayout.setVerticalGroup(
 		groupLayout.createParallelGroup(Alignment.LEADING)
 			.addGroup(groupLayout.createSequentialGroup()
 				.addGap(40)
-				.addComponent(progressBar, GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
-				.addGap(18)
+				.addComponent(progressBar, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 				.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-					.addComponent(lblTempsRestant)
-					.addComponent(lblTempsRestantDescripcio))
+					.addComponent(lblTempsRestantDescripcio)
+					.addComponent(lblTempsRestant, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
 				.addGap(26)
 				.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 					.addComponent(btnAtura, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addComponent(btnVeureResultats))
-				.addGap(33))
+					.addComponent(btnVeureResultats)
+					.addComponent(btnTornaAComenar, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
+				.addGap(8)
+				.addComponent(btnInici, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
+				.addContainerGap())
 	);
 	analisis.getContentPane().setLayout(groupLayout);
 	analisis.setVisible(true);
