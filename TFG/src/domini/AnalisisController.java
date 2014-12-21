@@ -1,15 +1,15 @@
 package domini;
 
+import java.text.DecimalFormat;
+
 public class AnalisisController {
 
     private static OpcionsController opcionsController;
-    private static int segons;
     private AnalisisCPU cpu;
     private AnalisisGPU gpu;
     private AnalisisHDD hdd;
     private AnalisisNET net;
     private AnalisisRAM ram;
-    private boolean stop = false;
 
     public AnalisisController(OpcionsController oc) {
 	cpu = new AnalisisCPU();
@@ -20,43 +20,21 @@ public class AnalisisController {
 	opcionsController = oc;
     }
 
-    public static int convertTemps() {
-	segons = 0;
-	segons += opcionsController.getMinuts() * 60;
-	segons += opcionsController.getHores() * 3600;
-	segons += opcionsController.getDies() * 86400;
-	return segons;
-    }
-
-    public void analisisComplet() {
-	System.out.println("analisi complet");
-	segons = convertTemps();
-	while (segons > 0 && !stop) {
-	    if (segons % 10 == 0) {
-
-	    }
-	    --segons;
+    public void analitzar() {
+	if (opcionsController.isCpu()) {
+	    cpu.updateCPU();
 	}
-	guardaResultats();
-    }
-
-    public void analisisPersonalitzat() {
-	System.out.println("analisis personalitzat");
-	segons = convertTemps();
-	while (segons > 0 && !stop) {
-	    if (segons % 10 == 0) {
-		if (opcionsController.isCpu()) {
-		}
-		if (opcionsController.isGpu()) {
-		}
-		if (opcionsController.isHdd()) {
-		}
-		if (opcionsController.isNet()) {
-		}
-		if (opcionsController.isRam()) {
-		}
-	    }
-	    --segons;
+	if (opcionsController.isGpu()) {
+	    gpu.updateGPU();
+	}
+	if (opcionsController.isHdd()) {
+	    ram.updateRAM();
+	}
+	if (opcionsController.isNet()) {
+	    net.updateNET();
+	}
+	if (opcionsController.isRam()) {
+	    hdd.updateHDD();
 	}
 	guardaResultats();
     }
@@ -65,12 +43,25 @@ public class AnalisisController {
 
     }
 
-    public void stop() {
-	stop = true;	
+    public String[] getRamInfo() {
+	DecimalFormat df = new DecimalFormat("0.00");
+	String[] res = new String[3];
+	res[0] = df.format(ram.getAvgPercentatge()) + "% (" + ram.getAvgTotal()
+		/ ram.getContador() + " MB)";
+	res[1] = df.format(ram.getMaxPercentatge()) + "% (" + ram.getMaxTotal()
+		+ " MB)";
+	res[2] = df.format(ram.getMinPercentatge()) + "% (" + ram.getMinTotal()
+		+ " MB)";
+	return res;
     }
-    
-    public void start(){
-	stop = false;
+
+    public String[] getCpuInfo() {
+	DecimalFormat df = new DecimalFormat("0.00");
+	String[] res = new String[3];
+	res[0] = df.format(cpu.getAvgPercentatge()) + "%";
+	res[1] = df.format(cpu.getMaxPercentatge()) + "%";
+	res[2] = df.format(cpu.getMinPercentatge()) + "%";
+	return res;
     }
 
 }

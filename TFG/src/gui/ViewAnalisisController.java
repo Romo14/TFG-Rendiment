@@ -11,22 +11,16 @@ public class ViewAnalisisController {
 		MainController.opcionsController.getOpcions());
     }
 
-    public static void analisisPersonalitzat() {
-	analisisController.analisisPersonalitzat();
-
+    public static void updateSystemData() {
+	analisisController.analitzar();
     }
 
-    public static void analisisComplet() {
-	analisisController.analisisComplet();
+    public String[] getRamInfo() {
+	return analisisController.getRamInfo();
     }
 
-    public static void stop() {
-	analisisController.stop();
-
-    }
-
-    public static void start() {
-	analisisController.start();
+    public String[] getCpuInfo() {
+	return analisisController.getCpuInfo();
     }
 
 }

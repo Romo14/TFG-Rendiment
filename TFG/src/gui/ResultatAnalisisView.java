@@ -8,10 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.Date;
 
 import javax.swing.ImageIcon;
@@ -28,7 +25,6 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 import com.itextpdf.awt.DefaultFontMapper;
 import com.itextpdf.text.Document;
-import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -62,6 +58,20 @@ public class ResultatAnalisisView extends JPanel {
     private JCheckBox chckbxXarxa;
     private JButton btnInici;
     private JButton pdfButton;
+    private JPanel panelDadesGenerals;
+    private ChartPanel graficaPanel;
+    private JLabel ramAvg;
+    private JLabel ramMax;
+    private JLabel ramMin;
+    private JLabel netAvg;
+    private JLabel netMax;
+    private JLabel netMin;
+    private JLabel gpuAvg;
+    private JLabel gpuMax;
+    private JLabel gpuMin;
+    private JLabel cpuAvg;
+    private JLabel cpuMax;
+    private JLabel cpuMin;
 
     public ResultatAnalisisView() {
 	resultat = new JDialog(MainController.view.getOwner(),
@@ -92,7 +102,7 @@ public class ResultatAnalisisView extends JPanel {
 		TitledBorder.LEADING, TitledBorder.TOP, null, null));
 	resultat.getContentPane().add(panelGrafiques);
 
-	JPanel panelDadesGenerals = new JPanel();
+	panelDadesGenerals = new JPanel();
 	springLayout.putConstraint(SpringLayout.WEST, panelDadesGenerals, 10,
 		SpringLayout.WEST, resultat.getContentPane());
 	springLayout.putConstraint(SpringLayout.EAST, panelDadesGenerals, -6,
@@ -111,7 +121,7 @@ public class ResultatAnalisisView extends JPanel {
 	chckbxXarxa = new JCheckBox("Xarxa");
 
 	grafica = crearGrafica();
-	ChartPanel graficaPanel = new ChartPanel(grafica);
+	graficaPanel = new ChartPanel(grafica);
 	btnInici = new JButton();
 	btnInici.setIcon(new ImageIcon(this.getClass().getResource(
 		"/images/home-icon.png")));
@@ -129,10 +139,11 @@ public class ResultatAnalisisView extends JPanel {
 
 	pdfButton = new JButton("");
 	pdfButton.addActionListener(new ActionListener() {
+	    @SuppressWarnings("deprecation")
 	    public void actionPerformed(ActionEvent e) {
 		long t = new Date().getDate();
 		System.out.println(t);
-		writeChartToPDF(grafica, 500, 400, String.valueOf(t)+".pdf");
+		writeChartToPDF(grafica, 500, 400, String.valueOf(t) + ".pdf");
 	    }
 	});
 	pdfButton.setBorder(null);
@@ -330,430 +341,224 @@ public class ResultatAnalisisView extends JPanel {
 				.addContainerGap(GroupLayout.DEFAULT_SIZE,
 					Short.MAX_VALUE)));
 
-	JLabel labelMitjanaHDD = new JLabel("Mitjana: ");
-	labelMitjanaHDD.setFont(font);
-	JLabel labelMaxHDD = new JLabel("M\u00E0xim:");
-	labelMaxHDD.setFont(font);
-	JLabel labelMinHDD = new JLabel("M\u00EDnim: ");
-	labelMinHDD.setFont(font);
+	JLabel hddAvg = new JLabel("Mitjana: ");
+	hddAvg.setFont(font);
+	JLabel hddMax = new JLabel("M\u00E0xim:  ");
+	hddMax.setFont(font);
+	JLabel hddMin = new JLabel("M\u00EDnim:   ");
+	hddMin.setFont(font);
 
 	JLabel estatHDD = new JLabel("");
 
 	JPanel panel_2 = new JPanel();
 	GroupLayout gl_panelHDD = new GroupLayout(panelHDD);
-	gl_panelHDD
-		.setHorizontalGroup(gl_panelHDD
-			.createParallelGroup(Alignment.LEADING)
-			.addGroup(
-				gl_panelHDD
-					.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(
-						gl_panelHDD
-							.createParallelGroup(
-								Alignment.LEADING)
-							.addGroup(
-								gl_panelHDD
-									.createSequentialGroup()
-									.addComponent(
-										labelMaxHDD)
-									.addPreferredGap(
-										ComponentPlacement.RELATED,
-										23,
-										Short.MAX_VALUE)
-									.addComponent(
-										estatHDD))
-							.addComponent(
-								labelMitjanaHDD,
-								GroupLayout.PREFERRED_SIZE,
-								73,
-								GroupLayout.PREFERRED_SIZE)
-							.addComponent(
-								labelMinHDD))
-					.addGap(100)
-					.addComponent(panel_2,
-						GroupLayout.PREFERRED_SIZE, 90,
-						GroupLayout.PREFERRED_SIZE)
-					.addContainerGap()));
-	gl_panelHDD
-		.setVerticalGroup(gl_panelHDD
-			.createParallelGroup(Alignment.LEADING)
-			.addGroup(
-				gl_panelHDD
-					.createSequentialGroup()
-					.addGroup(
-						gl_panelHDD
-							.createParallelGroup(
-								Alignment.TRAILING,
-								false)
-							.addGroup(
-								gl_panelHDD
-									.createSequentialGroup()
-									.addContainerGap()
-									.addComponent(
-										panel_2,
-										GroupLayout.DEFAULT_SIZE,
-										GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE))
-							.addGroup(
-								Alignment.LEADING,
-								gl_panelHDD
-									.createSequentialGroup()
-									.addGap(8)
-									.addComponent(
-										labelMitjanaHDD)
-									.addPreferredGap(
-										ComponentPlacement.RELATED)
-									.addGroup(
-										gl_panelHDD
-											.createParallelGroup(
-												Alignment.BASELINE)
-											.addComponent(
-												labelMaxHDD)
-											.addComponent(
-												estatHDD))
-									.addPreferredGap(
-										ComponentPlacement.RELATED)
-									.addComponent(
-										labelMinHDD)))
-					.addContainerGap()));
+	gl_panelHDD.setHorizontalGroup(
+		gl_panelHDD.createParallelGroup(Alignment.LEADING)
+			.addGroup(gl_panelHDD.createSequentialGroup()
+				.addContainerGap()
+				.addGroup(gl_panelHDD.createParallelGroup(Alignment.TRAILING)
+					.addComponent(hddAvg, GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
+					.addGroup(gl_panelHDD.createSequentialGroup()
+						.addGroup(gl_panelHDD.createParallelGroup(Alignment.TRAILING)
+							.addComponent(hddMin, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+							.addComponent(hddMax, GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(estatHDD)))
+				.addGap(18)
+				.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+				.addContainerGap())
+	);
+	gl_panelHDD.setVerticalGroup(
+		gl_panelHDD.createParallelGroup(Alignment.LEADING)
+			.addGroup(gl_panelHDD.createSequentialGroup()
+				.addGroup(gl_panelHDD.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panelHDD.createSequentialGroup()
+						.addGap(8)
+						.addComponent(hddAvg)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(gl_panelHDD.createParallelGroup(Alignment.BASELINE)
+							.addComponent(hddMax)
+							.addComponent(estatHDD))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(hddMin))
+					.addComponent(panel_2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+				.addContainerGap())
+	);
 	panelHDD.setLayout(gl_panelHDD);
 
-	JLabel labelMitjanaGPU = new JLabel("Mitjana: ");
-	labelMitjanaGPU.setFont(font);
-	JLabel labelMaxGPU = new JLabel("M\u00E0xim:");
-	labelMaxGPU.setFont(font);
-	JLabel labelMinGPU = new JLabel("M\u00EDnim: ");
-	labelMinGPU.setFont(font);
+	ramAvg = new JLabel("Mitjana: ");
+	ramAvg.setFont(font);
+	ramMax = new JLabel("M\u00E0xim:  ");
+	ramMax.setFont(font);
+	ramMin = new JLabel("M\u00EDnim:   ");
+	ramMin.setFont(font);
 
 	JPanel estatRAM = new JPanel();
 	ImageIcon icon = new ImageIcon("/images/ok-icon.png");
 	icon = new ImageIcon(icon.getImage().getScaledInstance(100, 100,
 		BufferedImage.SCALE_SMOOTH));
 	GroupLayout gl_panelRAM = new GroupLayout(panelRAM);
-	gl_panelRAM.setHorizontalGroup(gl_panelRAM.createParallelGroup(
-		Alignment.LEADING).addGroup(
-		gl_panelRAM
-			.createSequentialGroup()
-			.addContainerGap()
-			.addGroup(
-				gl_panelRAM
-					.createParallelGroup(Alignment.LEADING)
-					.addComponent(labelMitjanaGPU)
-					.addComponent(labelMaxGPU,
-						GroupLayout.DEFAULT_SIZE, 109,
-						Short.MAX_VALUE)
-					.addComponent(labelMinGPU,
-						GroupLayout.DEFAULT_SIZE, 109,
-						Short.MAX_VALUE))
-			.addGap(66)
-			.addComponent(estatRAM, GroupLayout.PREFERRED_SIZE, 90,
-				GroupLayout.PREFERRED_SIZE).addContainerGap()));
-	gl_panelRAM
-		.setVerticalGroup(gl_panelRAM
-			.createParallelGroup(Alignment.LEADING)
-			.addGroup(
-				gl_panelRAM
-					.createSequentialGroup()
-					.addGap(6)
-					.addGroup(
-						gl_panelRAM
-							.createParallelGroup(
-								Alignment.LEADING)
-							.addGroup(
-								gl_panelRAM
-									.createSequentialGroup()
-									.addComponent(
-										estatRAM,
-										GroupLayout.DEFAULT_SIZE,
-										70,
-										Short.MAX_VALUE)
-									.addContainerGap())
-							.addGroup(
-								gl_panelRAM
-									.createSequentialGroup()
-									.addComponent(
-										labelMitjanaGPU)
-									.addPreferredGap(
-										ComponentPlacement.RELATED,
-										GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)
-									.addComponent(
-										labelMaxGPU)
-									.addPreferredGap(
-										ComponentPlacement.RELATED)
-									.addComponent(
-										labelMinGPU)
-									.addGap(9)))));
+	gl_panelRAM.setHorizontalGroup(
+		gl_panelRAM.createParallelGroup(Alignment.LEADING)
+			.addGroup(gl_panelRAM.createSequentialGroup()
+				.addContainerGap()
+				.addGroup(gl_panelRAM.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panelRAM.createSequentialGroup()
+						.addGroup(gl_panelRAM.createParallelGroup(Alignment.LEADING)
+							.addComponent(ramMax, GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
+							.addComponent(ramAvg, GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE))
+						.addGap(10))
+					.addGroup(gl_panelRAM.createSequentialGroup()
+						.addComponent(ramMin, GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
+						.addPreferredGap(ComponentPlacement.RELATED)))
+				.addComponent(estatRAM, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+				.addContainerGap())
+	);
+	gl_panelRAM.setVerticalGroup(
+		gl_panelRAM.createParallelGroup(Alignment.LEADING)
+			.addGroup(gl_panelRAM.createSequentialGroup()
+				.addGap(6)
+				.addGroup(gl_panelRAM.createParallelGroup(Alignment.TRAILING)
+					.addGroup(gl_panelRAM.createSequentialGroup()
+						.addComponent(ramAvg)
+						.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(ramMax)
+						.addGap(4)
+						.addComponent(ramMin))
+					.addComponent(estatRAM, GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE))
+				.addContainerGap())
+	);
 	panelRAM.setLayout(gl_panelRAM);
 
-	JLabel label_3 = new JLabel("Mitjana: ");
-	label_3.setFont(font);
-	JLabel label_7 = new JLabel("M\u00E0xim:");
-	label_7.setFont(font);
-	JLabel label_11 = new JLabel("M\u00EDnim: ");
-	label_11.setFont(font);
+	netAvg = new JLabel("Mitjana: ");
+	netAvg.setFont(font);
+	netMax = new JLabel("M\u00E0xim:  ");
+	netMax.setFont(font);
+	netMin = new JLabel("M\u00EDnim:   ");
+	netMin.setFont(font);
 
 	JLabel estatNET = new JLabel("");
 
 	JPanel panel_3 = new JPanel();
 	GroupLayout gl_panelNET = new GroupLayout(panelNET);
-	gl_panelNET
-		.setHorizontalGroup(gl_panelNET
-			.createParallelGroup(Alignment.LEADING)
-			.addGroup(
-				gl_panelNET
-					.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(
-						gl_panelNET
-							.createParallelGroup(
-								Alignment.TRAILING)
-							.addGroup(
-								gl_panelNET
-									.createSequentialGroup()
-									.addComponent(
-										label_3,
-										GroupLayout.DEFAULT_SIZE,
-										GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)
-									.addGap(122))
-							.addGroup(
-								Alignment.LEADING,
-								gl_panelNET
-									.createParallelGroup(
-										Alignment.TRAILING,
-										false)
-									.addComponent(
-										label_7,
-										Alignment.LEADING,
-										GroupLayout.DEFAULT_SIZE,
-										GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)
-									.addComponent(
-										label_11,
-										Alignment.LEADING,
-										GroupLayout.DEFAULT_SIZE,
-										63,
-										Short.MAX_VALUE)))
-					.addPreferredGap(
-						ComponentPlacement.RELATED)
-					.addComponent(panel_3,
-						GroupLayout.PREFERRED_SIZE, 85,
-						GroupLayout.PREFERRED_SIZE)
-					.addGap(100).addComponent(estatNET)
-					.addGap(81)));
-	gl_panelNET
-		.setVerticalGroup(gl_panelNET
-			.createParallelGroup(Alignment.LEADING)
-			.addGroup(
-				gl_panelNET
-					.createSequentialGroup()
-					.addGroup(
-						gl_panelNET
-							.createParallelGroup(
-								Alignment.TRAILING)
-							.addGroup(
-								gl_panelNET
-									.createSequentialGroup()
-									.addContainerGap()
-									.addComponent(
-										panel_3,
-										GroupLayout.DEFAULT_SIZE,
-										72,
-										Short.MAX_VALUE))
-							.addGroup(
-								Alignment.LEADING,
-								gl_panelNET
-									.createSequentialGroup()
-									.addComponent(
-										label_3)
-									.addPreferredGap(
-										ComponentPlacement.RELATED)
-									.addGroup(
-										gl_panelNET
-											.createParallelGroup(
-												Alignment.BASELINE)
-											.addComponent(
-												label_7)
-											.addComponent(
-												estatNET))
-									.addPreferredGap(
-										ComponentPlacement.RELATED)
-									.addComponent(
-										label_11)))
-					.addContainerGap()));
+	gl_panelNET.setHorizontalGroup(
+		gl_panelNET.createParallelGroup(Alignment.LEADING)
+			.addGroup(gl_panelNET.createSequentialGroup()
+				.addContainerGap()
+				.addGroup(gl_panelNET.createParallelGroup(Alignment.LEADING)
+					.addGroup(Alignment.TRAILING, gl_panelNET.createSequentialGroup()
+						.addComponent(estatNET)
+						.addGap(99))
+					.addGroup(gl_panelNET.createSequentialGroup()
+						.addGroup(gl_panelNET.createParallelGroup(Alignment.LEADING)
+							.addComponent(netMax, GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+							.addComponent(netAvg, GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+							.addComponent(netMin, GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE))
+						.addGap(18)
+						.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap())))
+	);
+	gl_panelNET.setVerticalGroup(
+		gl_panelNET.createParallelGroup(Alignment.LEADING)
+			.addGroup(gl_panelNET.createSequentialGroup()
+				.addGroup(gl_panelNET.createParallelGroup(Alignment.TRAILING)
+					.addComponent(panel_3, GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+					.addGroup(Alignment.LEADING, gl_panelNET.createSequentialGroup()
+						.addComponent(netAvg)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(netMax)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(netMin)))
+				.addPreferredGap(ComponentPlacement.RELATED)
+				.addComponent(estatNET)
+				.addGap(46))
+	);
 	panelNET.setLayout(gl_panelNET);
 
-	JLabel label = new JLabel("Mitjana: ");
-	label.setFont(font);
-	JLabel label_4 = new JLabel("M\u00E0xim:");
-	label_4.setFont(font);
-	JLabel label_8 = new JLabel("M\u00EDnim: ");
-	label_8.setFont(font);
+	gpuAvg = new JLabel("Mitjana: ");
+	gpuAvg.setFont(font);
+	gpuMax = new JLabel("M\u00E0xim:  ");
+	gpuMax.setFont(font);
+	gpuMin = new JLabel("M\u00EDnim:   ");
+	gpuMin.setFont(font);
 
 	JLabel estatGPU = new JLabel("");
 
 	JPanel panel_1 = new JPanel();
 	GroupLayout gl_panelGPU = new GroupLayout(panelGPU);
-	gl_panelGPU
-		.setHorizontalGroup(gl_panelGPU
-			.createParallelGroup(Alignment.LEADING)
-			.addGroup(
-				gl_panelGPU
-					.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(
-						gl_panelGPU
-							.createParallelGroup(
-								Alignment.LEADING)
-							.addGroup(
-								gl_panelGPU
-									.createParallelGroup(
-										Alignment.TRAILING,
-										false)
-									.addComponent(
-										label,
-										Alignment.LEADING,
-										GroupLayout.DEFAULT_SIZE,
-										GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)
-									.addComponent(
-										label_4,
-										Alignment.LEADING,
-										GroupLayout.DEFAULT_SIZE,
-										GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE))
-							.addComponent(
-								label_8,
-								GroupLayout.DEFAULT_SIZE,
-								GroupLayout.DEFAULT_SIZE,
-								Short.MAX_VALUE))
-					.addPreferredGap(
-						ComponentPlacement.RELATED)
-					.addComponent(estatGPU)
-					.addPreferredGap(
-						ComponentPlacement.RELATED)
-					.addComponent(panel_1,
-						GroupLayout.PREFERRED_SIZE, 90,
-						GroupLayout.PREFERRED_SIZE)
-					.addContainerGap()));
-	gl_panelGPU
-		.setVerticalGroup(gl_panelGPU
-			.createParallelGroup(Alignment.TRAILING)
-			.addGroup(
-				Alignment.LEADING,
-				gl_panelGPU
-					.createSequentialGroup()
-					.addGroup(
-						gl_panelGPU
-							.createParallelGroup(
-								Alignment.TRAILING)
-							.addComponent(estatGPU)
-							.addGroup(
-								gl_panelGPU
-									.createSequentialGroup()
-									.addComponent(
-										label)
-									.addPreferredGap(
-										ComponentPlacement.RELATED)
-									.addComponent(
-										label_4)
-									.addPreferredGap(
-										ComponentPlacement.RELATED)
-									.addComponent(
-										label_8)
-									.addPreferredGap(
-										ComponentPlacement.RELATED)))
-					.addGap(26))
-			.addComponent(panel_1, Alignment.LEADING,
-				GroupLayout.PREFERRED_SIZE, 70,
-				GroupLayout.PREFERRED_SIZE));
+	gl_panelGPU.setHorizontalGroup(
+		gl_panelGPU.createParallelGroup(Alignment.LEADING)
+			.addGroup(gl_panelGPU.createSequentialGroup()
+				.addContainerGap()
+				.addGroup(gl_panelGPU.createParallelGroup(Alignment.LEADING, false)
+					.addComponent(gpuMin, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(estatGPU, Alignment.TRAILING)
+					.addComponent(gpuAvg, GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
+					.addComponent(gpuMax, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+				.addPreferredGap(ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+				.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+				.addContainerGap())
+	);
+	gl_panelGPU.setVerticalGroup(
+		gl_panelGPU.createParallelGroup(Alignment.LEADING)
+			.addGroup(gl_panelGPU.createSequentialGroup()
+				.addGroup(gl_panelGPU.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panelGPU.createSequentialGroup()
+						.addComponent(gpuAvg)
+						.addGap(5)
+						.addComponent(gpuMax)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(gpuMin)
+						.addGap(12)
+						.addComponent(estatGPU))
+					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE))
+				.addGap(26))
+	);
 	panelGPU.setLayout(gl_panelGPU);
 
-	JLabel lblMitjanaCPU = new JLabel("Mitjana: ");
-	lblMitjanaCPU.setFont(font);
-	JLabel lblMximCPU = new JLabel("M\u00E0xim:");
-	lblMximCPU.setFont(font);
-	JLabel lblMnimCPU = new JLabel("M\u00EDnim: ");
-	lblMnimCPU.setFont(font);
+	cpuAvg = new JLabel("Mitjana: ");
+	cpuAvg.setFont(font);
+	cpuMax = new JLabel("M\u00E0xim:  ");
+	cpuMax.setFont(font);
+	cpuMin = new JLabel("M\u00EDnim:   ");
+	cpuMin.setFont(font);
 
 	JLabel estatCPU = new JLabel("");
 
 	JPanel panel = new JPanel();
 	GroupLayout gl_panelCPU = new GroupLayout(panelCPU);
-	gl_panelCPU
-		.setHorizontalGroup(gl_panelCPU
-			.createParallelGroup(Alignment.LEADING)
-			.addGroup(
-				gl_panelCPU
-					.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(
-						gl_panelCPU
-							.createParallelGroup(
-								Alignment.LEADING)
-							.addGroup(
-								gl_panelCPU
-									.createSequentialGroup()
-									.addComponent(
-										lblMximCPU)
-									.addPreferredGap(
-										ComponentPlacement.RELATED,
-										177,
-										Short.MAX_VALUE)
-									.addComponent(
-										estatCPU))
-							.addGroup(
-								gl_panelCPU
-									.createParallelGroup(
-										Alignment.LEADING)
-									.addComponent(
-										lblMitjanaCPU)
-									.addComponent(
-										lblMnimCPU)))
-					.addPreferredGap(
-						ComponentPlacement.RELATED)
-					.addComponent(panel,
-						GroupLayout.PREFERRED_SIZE, 90,
-						GroupLayout.PREFERRED_SIZE)
-					.addContainerGap()));
-	gl_panelCPU
-		.setVerticalGroup(gl_panelCPU
-			.createParallelGroup(Alignment.LEADING)
-			.addGroup(
-				gl_panelCPU
-					.createSequentialGroup()
-					.addGap(6)
-					.addGroup(
-						gl_panelCPU
-							.createParallelGroup(
-								Alignment.TRAILING)
-							.addComponent(
-								panel,
-								GroupLayout.PREFERRED_SIZE,
-								58,
-								GroupLayout.PREFERRED_SIZE)
-							.addGroup(
-								gl_panelCPU
-									.createSequentialGroup()
-									.addComponent(
-										lblMitjanaCPU)
-									.addPreferredGap(
-										ComponentPlacement.RELATED)
-									.addGroup(
-										gl_panelCPU
-											.createParallelGroup(
-												Alignment.BASELINE)
-											.addComponent(
-												lblMximCPU)
-											.addComponent(
-												estatCPU))
-									.addPreferredGap(
-										ComponentPlacement.RELATED)
-									.addComponent(
-										lblMnimCPU)))
-					.addContainerGap()));
+	gl_panelCPU.setHorizontalGroup(
+		gl_panelCPU.createParallelGroup(Alignment.LEADING)
+			.addGroup(gl_panelCPU.createSequentialGroup()
+				.addContainerGap()
+				.addGroup(gl_panelCPU.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panelCPU.createSequentialGroup()
+						.addComponent(cpuMin, GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(estatCPU))
+					.addGroup(gl_panelCPU.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(cpuMax, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(cpuAvg, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)))
+				.addGap(10)
+				.addComponent(panel, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+				.addContainerGap())
+	);
+	gl_panelCPU.setVerticalGroup(
+		gl_panelCPU.createParallelGroup(Alignment.LEADING)
+			.addGroup(gl_panelCPU.createSequentialGroup()
+				.addContainerGap()
+				.addGroup(gl_panelCPU.createParallelGroup(Alignment.LEADING)
+					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 61, Short.MAX_VALUE)
+					.addGroup(gl_panelCPU.createSequentialGroup()
+						.addComponent(cpuAvg)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(gl_panelCPU.createParallelGroup(Alignment.BASELINE)
+							.addComponent(cpuMax)
+							.addComponent(estatCPU))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(cpuMin)))
+				.addContainerGap())
+	);
 	panelCPU.setLayout(gl_panelCPU);
 	panelDadesGenerals.setLayout(gl_panelDadesGenerals);
 	resultat.setVisible(true);
@@ -764,10 +569,16 @@ public class ResultatAnalisisView extends JPanel {
 	if (!ViewOpcionsController.isCpu()) {
 	    chckbxCpu.setVisible(false);
 	    panelCPU.setVisible(false);
+	} else {
+	    String[] cpuStats = MainController.analisisController.getCpuInfo();
+	    cpuAvg.setText(cpuAvg.getText()+cpuStats[0]);
+	    cpuMax.setText(cpuMax.getText()+cpuStats[1]);
+	    cpuMin.setText(cpuMin.getText()+cpuStats[2]);
 	}
 	if (!ViewOpcionsController.isGpu()) {
 	    chckbxGpu.setVisible(false);
 	    panelGPU.setVisible(false);
+	    
 	}
 	if (!ViewOpcionsController.isHdd()) {
 	    chckbxDiscDur.setVisible(false);
@@ -780,6 +591,11 @@ public class ResultatAnalisisView extends JPanel {
 	if (!ViewOpcionsController.isRam()) {
 	    chckbxRam.setVisible(false);
 	    panelRAM.setVisible(false);
+	} else {
+	    String[] ramStats = MainController.analisisController.getRamInfo();
+	    ramAvg.setText(ramAvg.getText()+ramStats[0]);
+	    ramMax.setText(ramMax.getText()+ramStats[1]);
+	    ramMin.setText(ramMin.getText()+ramStats[2]);
 	}
     }
 
@@ -804,6 +620,7 @@ public class ResultatAnalisisView extends JPanel {
 	return lineChartObject;
     }
 
+    @SuppressWarnings("deprecation")
     public static void writeChartToPDF(JFreeChart chart, int width, int height,
 	    String fileName) {
 	PdfWriter writer = null;
@@ -831,6 +648,4 @@ public class ResultatAnalisisView extends JPanel {
 	}
 	document.close();
     }
-
-    // TODO botons pdf + inici, opcions checkbox
 }

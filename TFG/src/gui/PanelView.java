@@ -26,7 +26,6 @@ public class PanelView extends JPanel {
 			    JOptionPane.YES_NO_OPTION);
 	    if (confirmar == 0) {
 		ViewOpcionsController.setAllTrue();
-		ViewAnalisisController.analisisComplet();
 		new AnalisisView();
 		tanca();
 	    }
@@ -84,7 +83,6 @@ public class PanelView extends JPanel {
 
 	duracioLabelEdita = new JLabel("1 hora/es");
 	duracioLabelEdita.setFont(font);
-
 	JLabel lblOriolGassetRomo = new JLabel("Oriol Gasset Romo - UPC FIB");
 
 	GroupLayout groupLayout = new GroupLayout(this);

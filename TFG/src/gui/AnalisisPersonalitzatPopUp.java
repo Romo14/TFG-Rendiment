@@ -54,7 +54,6 @@ public class AnalisisPersonalitzatPopUp extends JPanel {
 		    ViewOpcionsController.setHdd(discDurCheckBox.isSelected());
 		    ViewOpcionsController.setCpu(cpuCheckBox.isSelected());
 		    ViewOpcionsController.setRam(ramCheckBox.isSelected());
-		    ViewAnalisisController.analisisPersonalitzat();
 		    options.dispose();
 		    new AnalisisView();
 		    MainController.view.dispose();
