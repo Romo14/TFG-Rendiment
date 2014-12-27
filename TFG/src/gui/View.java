@@ -8,7 +8,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import java.awt.Dimension;
 import java.awt.Image;
 
-
 public class View extends JFrame {
 
 	PanelView panel;

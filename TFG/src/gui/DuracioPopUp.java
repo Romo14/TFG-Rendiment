@@ -22,6 +22,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import java.awt.Color;
 
 public class DuracioPopUp extends JPanel {
 
@@ -68,6 +69,7 @@ public class DuracioPopUp extends JPanel {
 	public DuracioPopUp() {
 		duracio = new JDialog(MainController.view.getOwner(),
 				"Duració de l'anàlisi" + "");
+		duracio.getContentPane().setBackground(Color.WHITE);
 		Image img = new ImageIcon(this.getClass().getResource(
 				"/images/app-icon.png")).getImage();
 		duracio.setIconImage(img);
@@ -97,7 +99,6 @@ public class DuracioPopUp extends JPanel {
 		minutsLabel.setFont(font);
 		diesLabel = new JLabel("Dies (0-7):");
 		diesLabel.setFont(font);
-
 		horesSpinner = new JSpinner();
 		horesSpinner.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
@@ -110,7 +111,6 @@ public class DuracioPopUp extends JPanel {
 		horesSpinner.setModel(new SpinnerNumberModel(ViewOpcionsController
 				.getHores(), 0, 24, 1));
 		horesSpinner.setFont(font);
-
 		diesSpinner = new JSpinner();
 		diesSpinner.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
@@ -127,12 +127,12 @@ public class DuracioPopUp extends JPanel {
 		diesSpinner.setModel(new SpinnerNumberModel(ViewOpcionsController
 				.getDies(), 0, null, 1));
 		diesSpinner.setFont(font);
-
 		JButton acceptaButton = new JButton("Accepta");
+		acceptaButton.setBackground(Color.DARK_GRAY);
 		acceptaButton.setFont(font);
 		acceptaButton.addActionListener(accepta);
-
 		JButton btnCancellar = new JButton("Cancel\u00B7lar");
+		btnCancellar.setBackground(Color.DARK_GRAY);
 		btnCancellar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				duracio.dispose();
@@ -231,7 +231,6 @@ public class DuracioPopUp extends JPanel {
 																btnCancellar))
 										.addGap(31)));
 		duracio.getContentPane().setLayout(groupLayout);
-
 	}
 
 	public int getDies() {

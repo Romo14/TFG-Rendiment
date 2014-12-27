@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
@@ -107,6 +108,7 @@ public class AnalisisPersonalitzatPopUp extends JPanel {
 		options.setResizable(false);
 		options.setVisible(true);
 		JPanel WindowPanel = new JPanel();
+		WindowPanel.setBackground(Color.WHITE);
 		GroupLayout groupLayout = new GroupLayout(options.getContentPane());
 		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(
 				Alignment.LEADING).addComponent(WindowPanel,
@@ -131,10 +133,13 @@ public class AnalisisPersonalitzatPopUp extends JPanel {
 						.addContainerGap(50, Short.MAX_VALUE)));
 
 		JPanel popUpPanel = new JPanel();
+		popUpPanel.setBackground(Color.WHITE);
 		popUpLayout.add(popUpPanel);
 		JButton cancelaButton = new JButton("Cancel·lar");
+		cancelaButton.setBackground(Color.DARK_GRAY);
 		cancelaButton.setFont(font);
 		JButton analitzaButton = new JButton("Analitzar");
+		analitzaButton.setBackground(Color.DARK_GRAY);
 		analitzaButton.setFont(font);
 		internetCheckBox = new JCheckBox("Targeta de xarxa");
 

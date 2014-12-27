@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.Point;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -19,10 +20,14 @@ import javax.swing.Timer;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.Component;
+import java.awt.Color;
 
 public class AnalisisView extends JPanel {
 
+	private Object[] opcions = { "Si", "No" };
 	private static final long serialVersionUID = 7388902221110453680L;
 	private JDialog analisis;
 	private JProgressBar progressBar;
@@ -38,11 +43,13 @@ public class AnalisisView extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			if (btnAtura.getText().equalsIgnoreCase("Atura")) {
 				btnAtura.setText("Segueix");
+				btnTornaAComenar.setEnabled(true);
 				btnVeureResultats.setEnabled(true);
 				t.stop();
 			} else {
 				btnAtura.setText("Atura");
 				btnVeureResultats.setEnabled(false);
+				btnTornaAComenar.setEnabled(false);
 				t.start();
 			}
 
@@ -55,6 +62,7 @@ public class AnalisisView extends JPanel {
 	public AnalisisView() {
 		analisis = new JDialog(MainController.view.getOwner(),
 				"Anàlisis del sistema");
+		analisis.getContentPane().setBackground(Color.WHITE);
 		Image img = new ImageIcon(this.getClass().getResource(
 				"/images/app-icon.png")).getImage();
 		analisis.setIconImage(img);
@@ -72,9 +80,11 @@ public class AnalisisView extends JPanel {
 		lblTempsRestant.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblTempsRestant.setFont(font);
 		btnAtura = new JButton("Atura");
+		btnAtura.setBackground(Color.DARK_GRAY);
 		btnAtura.addActionListener(atura);
 		btnAtura.setFont(font);
 		btnVeureResultats = new JButton("Veure resultats");
+		btnVeureResultats.setBackground(Color.DARK_GRAY);
 		btnVeureResultats.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new ResultatAnalisisView();
@@ -83,18 +93,18 @@ public class AnalisisView extends JPanel {
 		});
 		btnVeureResultats.setEnabled(false);
 		btnVeureResultats.setFont(font);
-		temps = 3; // ViewOpcionsController.getTemps();
+		temps = ViewOpcionsController.getTemps();
 		comptador = 0;
 		lblTempsRestant.setText(getTemps());
 		progressBar = new JProgressBar(0, temps);
 		progressBar.setStringPainted(true);
 		progressBar.setFont(font);
 		t = new Timer(1000, new ActionListener() {
-
 			public void actionPerformed(ActionEvent arg0) {
-				if (comptador == Integer.valueOf(temps)) {
+				if (comptador == Long.valueOf(temps)) {
 					t.stop();
 					btnVeureResultats.setEnabled(true);
+					btnTornaAComenar.setEnabled(true);
 					btnAtura.setEnabled(false);
 				} else {
 					++comptador;
@@ -105,22 +115,43 @@ public class AnalisisView extends JPanel {
 
 			}
 		});
-
 		btnTornaAComenar = new JButton("Torna a comen\u00E7ar");
+		btnTornaAComenar.setBackground(Color.DARK_GRAY);
+		btnTornaAComenar.setFont(font);
 		btnTornaAComenar.setEnabled(false);
 		btnTornaAComenar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				int a = JOptionPane
+						.showOptionDialog(null,
+								"Vol tornar a començar l'anàlisi?", "",
+								JOptionPane.YES_NO_OPTION,
+								JOptionPane.QUESTION_MESSAGE, null, opcions,
+								opcions[0]);
+				if (a == 0) {
+					btnTornaAComenar.setEnabled(false);
+					btnVeureResultats.setEnabled(false);
+					btnAtura.setEnabled(true);
+					btnAtura.setText("Atura");
+					progressBar.setValue(0);
+					comptador = 0;
+					lblTempsRestant.setText(getTemps());
+					ViewAnalisisController.updateSystemData();
+					t.restart();
+				}
 			}
 		});
-
 		btnInici = new JButton();
+		btnInici.setBorder(BorderFactory.createEmptyBorder());
+		btnInici.setBorderPainted(false);
 		btnInici.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int a = JOptionPane
-						.showConfirmDialog(
+						.showOptionDialog(
 								null,
-								"Vols cancel·lar l'anàlisi i tornar al menú principal?",
-								"", JOptionPane.YES_NO_OPTION);
+								"Vol cancel·lar l'anàlisi i tornar al menú principal?",
+								"", JOptionPane.YES_NO_OPTION,
+								JOptionPane.QUESTION_MESSAGE, null, opcions,
+								opcions[0]);
 				if (a == 0) {
 					MainController.main(null);
 					analisis.dispose();
@@ -133,7 +164,7 @@ public class AnalisisView extends JPanel {
 		GroupLayout groupLayout = new GroupLayout(analisis.getContentPane());
 		groupLayout
 				.setHorizontalGroup(groupLayout
-						.createParallelGroup(Alignment.TRAILING)
+						.createParallelGroup(Alignment.LEADING)
 						.addGroup(
 								groupLayout
 										.createSequentialGroup()
@@ -142,27 +173,27 @@ public class AnalisisView extends JPanel {
 												groupLayout
 														.createParallelGroup(
 																Alignment.LEADING)
-														.addComponent(
-																progressBar,
-																GroupLayout.PREFERRED_SIZE,
-																378,
-																GroupLayout.PREFERRED_SIZE)
 														.addGroup(
-																Alignment.TRAILING,
+																groupLayout
+																		.createSequentialGroup()
+																		.addComponent(
+																				progressBar,
+																				GroupLayout.PREFERRED_SIZE,
+																				378,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addContainerGap())
+														.addGroup(
 																groupLayout
 																		.createSequentialGroup()
 																		.addGroup(
 																				groupLayout
 																						.createParallelGroup(
-																								Alignment.TRAILING)
-																						.addComponent(
-																								btnInici,
-																								GroupLayout.PREFERRED_SIZE,
-																								36,
-																								GroupLayout.PREFERRED_SIZE)
+																								Alignment.LEADING)
 																						.addGroup(
 																								groupLayout
 																										.createSequentialGroup()
+																										.addPreferredGap(
+																												ComponentPlacement.RELATED)
 																										.addComponent(
 																												btnAtura,
 																												GroupLayout.PREFERRED_SIZE,
@@ -173,20 +204,21 @@ public class AnalisisView extends JPanel {
 																										.addComponent(
 																												btnVeureResultats,
 																												GroupLayout.DEFAULT_SIZE,
-																												160,
+																												GroupLayout.DEFAULT_SIZE,
 																												Short.MAX_VALUE)
 																										.addPreferredGap(
 																												ComponentPlacement.RELATED)
 																										.addComponent(
-																												btnTornaAComenar))
+																												btnTornaAComenar)
+																										.addPreferredGap(
+																												ComponentPlacement.RELATED))
 																						.addGroup(
-																								Alignment.LEADING,
 																								groupLayout
 																										.createSequentialGroup()
 																										.addComponent(
 																												lblTempsRestantDescripcio,
 																												GroupLayout.DEFAULT_SIZE,
-																												GroupLayout.DEFAULT_SIZE,
+																												131,
 																												Short.MAX_VALUE)
 																										.addPreferredGap(
 																												ComponentPlacement.RELATED)
@@ -195,23 +227,28 @@ public class AnalisisView extends JPanel {
 																												GroupLayout.PREFERRED_SIZE,
 																												260,
 																												GroupLayout.PREFERRED_SIZE)))
-																		.addGap(39)))
-										.addGap(10)));
+																		.addGap(49))))
+						.addGroup(
+								groupLayout
+										.createSequentialGroup()
+										.addContainerGap(392, Short.MAX_VALUE)
+										.addComponent(btnInici,
+												GroupLayout.PREFERRED_SIZE, 36,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(41)));
 		groupLayout
 				.setVerticalGroup(groupLayout
 						.createParallelGroup(Alignment.LEADING)
 						.addGroup(
 								groupLayout
 										.createSequentialGroup()
-										.addGap(40)
+										.addGap(35)
 										.addComponent(progressBar,
 												GroupLayout.DEFAULT_SIZE,
 												GroupLayout.DEFAULT_SIZE,
 												Short.MAX_VALUE)
 										.addPreferredGap(
-												ComponentPlacement.RELATED,
-												GroupLayout.DEFAULT_SIZE,
-												Short.MAX_VALUE)
+												ComponentPlacement.UNRELATED)
 										.addGroup(
 												groupLayout
 														.createParallelGroup(
@@ -223,31 +260,51 @@ public class AnalisisView extends JPanel {
 																GroupLayout.PREFERRED_SIZE,
 																27,
 																GroupLayout.PREFERRED_SIZE))
-										.addGap(26)
 										.addGroup(
 												groupLayout
 														.createParallelGroup(
-																Alignment.BASELINE)
-														.addComponent(
-																btnAtura,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																Short.MAX_VALUE)
-														.addComponent(
-																btnVeureResultats)
-														.addComponent(
-																btnTornaAComenar,
-																GroupLayout.PREFERRED_SIZE,
-																28,
-																GroupLayout.PREFERRED_SIZE))
-										.addGap(8)
-										.addComponent(btnInici,
-												GroupLayout.PREFERRED_SIZE, 37,
-												GroupLayout.PREFERRED_SIZE)
+																Alignment.LEADING)
+														.addGroup(
+																groupLayout
+																		.createSequentialGroup()
+																		.addGap(61)
+																		.addComponent(
+																				btnInici,
+																				GroupLayout.PREFERRED_SIZE,
+																				37,
+																				GroupLayout.PREFERRED_SIZE))
+														.addGroup(
+																groupLayout
+																		.createSequentialGroup()
+																		.addGap(18)
+																		.addGroup(
+																				groupLayout
+																						.createParallelGroup(
+																								Alignment.BASELINE)
+																						.addComponent(
+																								btnAtura,
+																								GroupLayout.PREFERRED_SIZE,
+																								33,
+																								GroupLayout.PREFERRED_SIZE)
+																						.addComponent(
+																								btnVeureResultats,
+																								GroupLayout.PREFERRED_SIZE,
+																								35,
+																								GroupLayout.PREFERRED_SIZE)
+																						.addComponent(
+																								btnTornaAComenar,
+																								GroupLayout.PREFERRED_SIZE,
+																								34,
+																								GroupLayout.PREFERRED_SIZE))))
 										.addContainerGap()));
 		analisis.getContentPane().setLayout(groupLayout);
 		analisis.setVisible(true);
 		t.start();
+		analisis.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				System.exit(0);
+			}
+		});
 	}
 
 	private String getTemps() {

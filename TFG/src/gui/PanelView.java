@@ -13,6 +13,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+import java.awt.Color;
+
 public class PanelView extends JPanel {
 	private Object[] opcions = { "Si", "No" };
 	private JButton analisiCompletButton;
@@ -60,7 +62,9 @@ public class PanelView extends JPanel {
 	private static String t = "1 hora/es";
 
 	public PanelView() {
+		setBackground(Color.WHITE);
 		analisiCompletButton = new JButton("An\u00E0lisi Complet");
+		analisiCompletButton.setBackground(Color.DARK_GRAY);
 		analisiCompletButton.addActionListener(analisiCompletListener);
 		analisiCompletButton.setFont(font);
 		analisiCompletLabel = new JLabel(
@@ -72,6 +76,7 @@ public class PanelView extends JPanel {
 		analisiPersonalitzatLabel.setAlignmentX(1.0f);
 		analisiPersonalitzatLabel.setFont(font);
 		analisiPersonalitzatButton = new JButton("An\u00E0lisi Personalitzat");
+		analisiPersonalitzatButton.setBackground(Color.DARK_GRAY);
 		analisiPersonalitzatButton.setMinimumSize(new Dimension(140, 23));
 		analisiPersonalitzatButton.setMaximumSize(new Dimension(105, 23));
 		analisiPersonalitzatButton
@@ -81,6 +86,7 @@ public class PanelView extends JPanel {
 		duracioLabel = new JLabel("Duraci\u00F3 de l'an\u00E0lisi:");
 		duracioLabel.setFont(font);
 		duracioButton = new JButton("Canvia");
+		duracioButton.setBackground(Color.DARK_GRAY);
 		duracioButton.addActionListener(editarDuracio);
 		duracioButton.setFont(font);
 
