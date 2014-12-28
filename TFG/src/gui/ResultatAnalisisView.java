@@ -12,8 +12,8 @@ import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
+import java.text.DecimalFormat;
 import java.util.Date;
 
 import javax.swing.ImageIcon;
@@ -24,12 +24,9 @@ import javax.swing.border.TitledBorder;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
 
 import com.itextpdf.awt.DefaultFontMapper;
 import com.itextpdf.text.Document;
@@ -56,8 +53,6 @@ public class ResultatAnalisisView extends JPanel {
 	private JDialog resultat;
 	private JPanel panelGrafiques;
 	private Font font = new Font(getFont().getName(), getFont().getStyle(), 16);
-	private JLabel ok;
-	private JLabel ko;
 	private JPanel panelCPU;
 	private JPanel panelGPU;
 	private JPanel panelNET;
@@ -84,13 +79,20 @@ public class ResultatAnalisisView extends JPanel {
 	private JLabel cpuAvg;
 	private JLabel cpuMax;
 	private JLabel cpuMin;
-	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+	private JTabbedPane tabbedPane;
 	private TimeSeriesCollection dataset;
 	private TimeSeries cpu;
 	private TimeSeries gpu;
 	private TimeSeries ram;
 	private TimeSeries net;
 	private TimeSeries hdd;
+	private JPanel estatRAM;
+	private JPanel estatGPU;
+	private JPanel estatCPU;
+	private ImageIcon okIcon;
+	private ImageIcon koIcon;
+	private String okText = "El dispositiu funciona correctament i aguanta perfectament la càrrega de treball que s'hi realitza";
+	private String koText = "El dispositiu té una mitjana d'ús de més del 75%, pel que es pot determinar que és necessari revisar";
 
 	public ResultatAnalisisView() {
 		resultat = new JDialog(MainController.view.getOwner(),
@@ -102,26 +104,20 @@ public class ResultatAnalisisView extends JPanel {
 		resultat.setSize(new Dimension(650, 430));
 		resultat.setResizable(false);
 		resultat.setLocationRelativeTo(null);
-		ok = new JLabel(new ImageIcon(this.getClass().getResource(
-				"/images/ok-icon.png")));
-		ok.setToolTipText("El dispositiu funciona correctament i aguanta perfectament la càrrega de treball que s'hi realitza");
-		ko = new JLabel(new ImageIcon(this.getClass().getResource(
-				"/images/ko-icon.png")));
-		ko.setToolTipText("El dispositiu té una mitjana d'ús de més del 75%, pel que es pot determinar que és necessari revisar");
+		okIcon = new ImageIcon(this.getClass().getResource(
+				"/images/ok-icon.png"));
+		koIcon = new ImageIcon(this.getClass().getResource(
+				"/images/ko-icon.png"));
 		grafica = crearGrafica();
-		ImageIcon icon = new ImageIcon("/images/ok-icon.png");
-		icon = new ImageIcon(icon.getImage().getScaledInstance(100, 100,
-				BufferedImage.SCALE_SMOOTH));
 		resultat.setVisible(true);
+		tabbedPane = new JTabbedPane();
 		tabbedPane.setBackground(Color.WHITE);
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		tabbedPane.setAlignmentY(Component.TOP_ALIGNMENT);
 		tabbedPane.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		panelGrafiques = new JPanel();
+		panelGrafiques.setSize(new Dimension(650, 430));
 		panelGrafiques.setBackground(Color.WHITE);
-		panelGrafiques.setAlignmentX(Component.LEFT_ALIGNMENT);
-		panelGrafiques.setAlignmentY(Component.TOP_ALIGNMENT);
-		panelGrafiques.setMaximumSize(new Dimension(100, 100));
 		tabbedPane.addTab("Gràfica", panelGrafiques);
 		tabbedPane.setEnabledAt(0, true);
 		chckbxGpu = new JCheckBox("GPU");
@@ -134,7 +130,6 @@ public class ResultatAnalisisView extends JPanel {
 		chckbxXarxa.setSelected(true);
 		chckbxCpu = new JCheckBox("CPU");
 		chckbxCpu.setSelected(true);
-		addCheckBoxListeners();
 		btnInici = new JButton();
 		btnInici.setBorder(BorderFactory.createEmptyBorder());
 		btnInici.setBorderPainted(false);
@@ -282,164 +277,14 @@ public class ResultatAnalisisView extends JPanel {
 																GroupLayout.PREFERRED_SIZE))
 										.addContainerGap(72, Short.MAX_VALUE)));
 		panelGrafiques.setLayout(gl_panelGrafiques);
-
 		panelDadesGenerals = new JPanel();
 		panelDadesGenerals.setBackground(Color.WHITE);
-		tabbedPane.addTab("Dades Generals", null, panelDadesGenerals, null);
+		tabbedPane.addTab("Dades Generals", panelDadesGenerals);
 
 		panelCPU = new JPanel();
 		panelCPU.setAlignmentX(Component.LEFT_ALIGNMENT);
 		panelCPU.setBorder(new TitledBorder(null, "CPU", TitledBorder.LEADING,
 				TitledBorder.TOP, null, null));
-
-		panelGPU = new JPanel();
-		panelGPU.setAlignmentX(Component.LEFT_ALIGNMENT);
-		panelGPU.setBorder(new TitledBorder(null, "GPU", TitledBorder.LEADING,
-				TitledBorder.TOP, null, null));
-
-		panelNET = new JPanel();
-		panelNET.setBorder(new TitledBorder(null, "Xarxa",
-				TitledBorder.LEADING, TitledBorder.TOP, null, null));
-
-		panelRAM = new JPanel();
-		panelRAM.setBorder(new TitledBorder(null, "RAM", TitledBorder.LEADING,
-				TitledBorder.TOP, null, null));
-
-		panelHDD = new JPanel();
-		panelHDD.setBorder(new TitledBorder(null, "Disc Dur",
-				TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		GroupLayout gl_panelDadesGenerals = new GroupLayout(panelDadesGenerals);
-		gl_panelDadesGenerals
-				.setHorizontalGroup(gl_panelDadesGenerals
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								gl_panelDadesGenerals
-										.createSequentialGroup()
-										.addGroup(
-												gl_panelDadesGenerals
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addComponent(
-																panelRAM,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																Short.MAX_VALUE)
-														.addComponent(
-																panelHDD,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																Short.MAX_VALUE)
-														.addComponent(
-																panelCPU,
-																GroupLayout.DEFAULT_SIZE,
-																626,
-																Short.MAX_VALUE)
-														.addComponent(
-																panelGPU,
-																GroupLayout.DEFAULT_SIZE,
-																626,
-																Short.MAX_VALUE)
-														.addComponent(
-																panelNET,
-																Alignment.TRAILING,
-																GroupLayout.DEFAULT_SIZE,
-																626,
-																Short.MAX_VALUE))
-										.addContainerGap()));
-		gl_panelDadesGenerals.setVerticalGroup(gl_panelDadesGenerals
-				.createParallelGroup(Alignment.LEADING).addGroup(
-						gl_panelDadesGenerals
-								.createSequentialGroup()
-								.addComponent(panelCPU,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(panelGPU,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(panelRAM,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(panelHDD,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(panelNET,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addContainerGap(150, Short.MAX_VALUE)));
-
-		JLabel hddAvg = new JLabel("Mitjana: ");
-		hddAvg.setFont(font);
-		JLabel hddMax = new JLabel("M\u00E0xim:  ");
-		hddMax.setFont(font);
-		JLabel hddMin = new JLabel("M\u00EDnim:   ");
-		hddMin.setFont(font);
-
-		JLabel estatHDD = new JLabel("");
-
-		JPanel panel_2 = new JPanel();
-		panelHDD.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
-		panelHDD.add(hddAvg);
-		panelHDD.add(hddMin);
-		panelHDD.add(hddMax);
-		panelHDD.add(estatHDD);
-		panelHDD.add(panel_2);
-
-		ramAvg = new JLabel("Mitjana: ");
-		ramAvg.setFont(font);
-		ramMax = new JLabel("M\u00E0xim:  ");
-		ramMax.setFont(font);
-		ramMin = new JLabel("M\u00EDnim:   ");
-		ramMin.setFont(font);
-
-		JPanel estatRAM = new JPanel();
-		panelRAM.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
-		panelRAM.add(ramMax);
-		panelRAM.add(ramAvg);
-		panelRAM.add(ramMin);
-		panelRAM.add(estatRAM);
-
-		netAvg = new JLabel("Mitjana: ");
-		netAvg.setFont(font);
-		netMax = new JLabel("M\u00E0xim:  ");
-		netMax.setFont(font);
-		netMin = new JLabel("M\u00EDnim:   ");
-		netMin.setFont(font);
-
-		JLabel estatNET = new JLabel("");
-
-		JPanel panel_3 = new JPanel();
-		panelNET.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
-		panelNET.add(estatNET);
-		panelNET.add(netMax);
-		panelNET.add(netAvg);
-		panelNET.add(netMin);
-		panelNET.add(panel_3);
-
-		gpuAvg = new JLabel("Mitjana: ");
-		gpuAvg.setFont(font);
-		gpuMax = new JLabel("M\u00E0xim:  ");
-		gpuMax.setFont(font);
-		gpuMin = new JLabel("M\u00EDnim:   ");
-		gpuMin.setFont(font);
-
-		JLabel estatGPU = new JLabel("");
-
-		JPanel panel_1 = new JPanel();
-		panelGPU.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
-		panelGPU.add(gpuMin);
-		panelGPU.add(estatGPU);
-		panelGPU.add(gpuAvg);
-		panelGPU.add(gpuMax);
-		panelGPU.add(panel_1);
 
 		cpuAvg = new JLabel("Mitjana: ");
 		cpuAvg.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -452,17 +297,155 @@ public class ResultatAnalisisView extends JPanel {
 		cpuMin.setAlignmentX(Component.CENTER_ALIGNMENT);
 		cpuMin.setFont(font);
 
-		JLabel estatCPU = new JLabel("");
-
-		JPanel panel = new JPanel();
-		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
+		estatCPU = new JPanel();
+		estatCPU.setMaximumSize(new Dimension(10, 10));
+		FlowLayout flowLayout = (FlowLayout) estatCPU.getLayout();
 		flowLayout.setAlignment(FlowLayout.RIGHT);
 		panelCPU.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		panelCPU.add(cpuMin);
-		panelCPU.add(estatCPU);
 		panelCPU.add(cpuMax);
 		panelCPU.add(cpuAvg);
-		panelCPU.add(panel);
+		panelCPU.add(estatCPU);
+
+		panelGPU = new JPanel();
+		panelGPU.setAlignmentX(Component.LEFT_ALIGNMENT);
+		panelGPU.setBorder(new TitledBorder(null, "GPU", TitledBorder.LEADING,
+				TitledBorder.TOP, null, null));
+
+		gpuAvg = new JLabel("Mitjana: ");
+		gpuAvg.setFont(font);
+		gpuMax = new JLabel("M\u00E0xim:  ");
+		gpuMax.setFont(font);
+		gpuMin = new JLabel("M\u00EDnim:   ");
+		gpuMin.setFont(font);
+
+		estatGPU = new JPanel();
+		panelGPU.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+		panelGPU.add(gpuMin);
+		panelGPU.add(gpuAvg);
+		panelGPU.add(gpuMax);
+		panelGPU.add(estatGPU);
+
+		panelRAM = new JPanel();
+		panelRAM.setBorder(new TitledBorder(null, "RAM", TitledBorder.LEADING,
+				TitledBorder.TOP, null, null));
+
+		ramAvg = new JLabel("Mitjana: ");
+		ramAvg.setFont(font);
+		ramMax = new JLabel("M\u00E0xim:  ");
+		ramMax.setFont(font);
+		ramMin = new JLabel("M\u00EDnim:   ");
+		ramMin.setFont(font);
+
+		estatRAM = new JPanel();
+		panelRAM.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+		panelRAM.add(ramMax);
+		panelRAM.add(ramAvg);
+		panelRAM.add(ramMin);
+		panelRAM.add(estatRAM);
+
+		panelHDD = new JPanel();
+		panelHDD.setBorder(new TitledBorder(null, "Disc Dur",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
+
+		JLabel hddAvg = new JLabel("Mitjana: ");
+		hddAvg.setFont(font);
+		JLabel hddMin = new JLabel("M\u00EDnim:   ");
+		hddMin.setFont(font);
+
+		JPanel estatHDD = new JPanel();
+		panelHDD.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+		panelHDD.add(hddAvg);
+		panelHDD.add(hddMin);
+		JLabel hddMax = new JLabel("M\u00E0xim:  ");
+		hddMax.setFont(font);
+		panelHDD.add(hddMax);
+		panelHDD.add(estatHDD);
+
+		panelNET = new JPanel();
+		panelNET.setBorder(new TitledBorder(null, "Xarxa",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
+
+		netAvg = new JLabel("Mitjana: ");
+		netAvg.setFont(font);
+		netMax = new JLabel("M\u00E0xim:  ");
+		netMax.setFont(font);
+		netMin = new JLabel("M\u00EDnim:   ");
+		netMin.setFont(font);
+
+		JPanel estatNET = new JPanel();
+		panelNET.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+		panelNET.add(netMax);
+		panelNET.add(netAvg);
+		panelNET.add(netMin);
+		panelNET.add(estatNET);
+		GroupLayout gl_panelDadesGenerals = new GroupLayout(panelDadesGenerals);
+		gl_panelDadesGenerals
+				.setHorizontalGroup(gl_panelDadesGenerals
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								gl_panelDadesGenerals
+										.createSequentialGroup()
+										.addContainerGap()
+										.addGroup(
+												gl_panelDadesGenerals
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addComponent(
+																panelCPU,
+																Alignment.TRAILING,
+																GroupLayout.DEFAULT_SIZE,
+																616,
+																Short.MAX_VALUE)
+														.addComponent(
+																panelGPU,
+																Alignment.TRAILING,
+																GroupLayout.DEFAULT_SIZE,
+																616,
+																Short.MAX_VALUE)
+														.addComponent(
+																panelRAM,
+																Alignment.TRAILING,
+																GroupLayout.DEFAULT_SIZE,
+																616,
+																Short.MAX_VALUE)
+														.addComponent(
+																panelHDD,
+																GroupLayout.DEFAULT_SIZE,
+																626,
+																Short.MAX_VALUE)
+														.addComponent(
+																panelNET,
+																GroupLayout.DEFAULT_SIZE,
+																626,
+																Short.MAX_VALUE))
+										.addContainerGap()));
+		gl_panelDadesGenerals.setVerticalGroup(gl_panelDadesGenerals
+				.createParallelGroup(Alignment.LEADING).addGroup(
+						gl_panelDadesGenerals
+								.createSequentialGroup()
+								.addComponent(panelCPU,
+										GroupLayout.PREFERRED_SIZE, 65,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(panelGPU,
+										GroupLayout.PREFERRED_SIZE, 68,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(panelRAM,
+										GroupLayout.PREFERRED_SIZE, 71,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(panelHDD,
+										GroupLayout.PREFERRED_SIZE, 74,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED,
+										GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)
+								.addComponent(panelNET,
+										GroupLayout.PREFERRED_SIZE, 68,
+										GroupLayout.PREFERRED_SIZE)
+								.addContainerGap()));
 		panelDadesGenerals.setLayout(gl_panelDadesGenerals);
 		GroupLayout groupLayout = new GroupLayout(resultat.getContentPane());
 		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(
@@ -474,12 +457,8 @@ public class ResultatAnalisisView extends JPanel {
 						.addContainerGap(GroupLayout.DEFAULT_SIZE,
 								Short.MAX_VALUE)));
 		groupLayout.setVerticalGroup(groupLayout.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				groupLayout
-						.createSequentialGroup()
-						.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE,
-								470, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(163, Short.MAX_VALUE)));
+				Alignment.LEADING).addComponent(tabbedPane,
+				GroupLayout.PREFERRED_SIZE, 401, Short.MAX_VALUE));
 		resultat.getContentPane().setLayout(groupLayout);
 		resultat.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
@@ -487,6 +466,7 @@ public class ResultatAnalisisView extends JPanel {
 			}
 		});
 		mostraResultats();
+		addCheckBoxListeners();
 	}
 
 	private void addCheckBoxListeners() {
@@ -538,14 +518,25 @@ public class ResultatAnalisisView extends JPanel {
 	}
 
 	private void mostraResultats() {
+		DecimalFormat df = new DecimalFormat("0.00");
 		if (!ViewOpcionsController.isCpu()) {
 			chckbxCpu.setVisible(false);
 			panelCPU.setVisible(false);
 		} else {
-			String[] cpuStats = MainController.analisisController.getCpuInfo();
-			cpuAvg.setText(cpuAvg.getText() + cpuStats[0]);
-			cpuMax.setText(cpuMax.getText() + cpuStats[1]);
-			cpuMin.setText(cpuMin.getText() + cpuStats[2]);
+			Float[] cpuStats = MainController.analisisController.getCpuInfo();
+			cpuAvg.setText(cpuAvg.getText() + df.format(cpuStats[0]) + "%");
+			cpuMax.setText(cpuMax.getText() + df.format(cpuStats[1]) + "%");
+			cpuMin.setText(cpuMin.getText() + df.format(cpuStats[2]) + "%");
+			JLabel a = new JLabel();
+			if (cpuStats[0] > 70) {
+				a.setIcon(koIcon);
+				a.setToolTipText(koText);
+				estatCPU.add(a);
+			} else {
+				a.setIcon(okIcon);
+				a.setToolTipText(okText);
+				estatCPU.add(a);
+			}
 		}
 		if (!ViewOpcionsController.isGpu()) {
 			chckbxGpu.setVisible(false);
@@ -563,10 +554,23 @@ public class ResultatAnalisisView extends JPanel {
 			chckbxRam.setVisible(false);
 			panelRAM.setVisible(false);
 		} else {
-			String[] ramStats = MainController.analisisController.getRamInfo();
-			ramAvg.setText(ramAvg.getText() + ramStats[0]);
-			ramMax.setText(ramMax.getText() + ramStats[1]);
-			ramMin.setText(ramMin.getText() + ramStats[2]);
+			Float[] ramStats = MainController.analisisController.getRamInfo();
+			ramAvg.setText(ramAvg.getText() + df.format(ramStats[0]) + "% ("
+					+ ramStats[1] + ")");
+			ramMax.setText(ramMax.getText() + df.format(ramStats[2]) + "% ("
+					+ ramStats[3] + ")");
+			ramMin.setText(ramMin.getText() + df.format(ramStats[4]) + "% ("
+					+ ramStats[5] + ")");
+			JLabel a = new JLabel();
+			if (ramStats[0] > 70) {
+				a.setIcon(koIcon);
+				a.setToolTipText(koText);
+				estatRAM.add(a);
+			} else {
+				a.setIcon(okIcon);
+				a.setToolTipText(okText);
+				estatRAM.add(a);
+			}
 		}
 	}
 
@@ -595,7 +599,7 @@ public class ResultatAnalisisView extends JPanel {
 		JFreeChart lineChartObject = ChartFactory.createTimeSeriesChart(
 				"Us dels components", "Temps (segons)", "Percentatge d'ús (%)",
 				dataset);
-		lineChartObject.setBackgroundPaint(Color.DARK_GRAY);
+		lineChartObject.setBackgroundPaint(Color.WHITE);
 		return lineChartObject;
 	}
 

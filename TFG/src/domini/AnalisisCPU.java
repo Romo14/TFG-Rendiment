@@ -2,7 +2,6 @@ package domini;
 
 import java.util.ArrayList;
 
-import org.hyperic.sigar.Cpu;
 import org.hyperic.sigar.CpuPerc;
 import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarException;
@@ -123,29 +122,26 @@ public class AnalisisCPU {
 	}
 
 	public void updateCPU() {
-		Cpu cpuTotal = null;
 		CpuPerc cpuPerc = null;
 		try {
 			cpuPerc = cpuSigar.getCpuPerc();
-			cpuTotal = cpuSigar.getCpu();
 		} catch (SigarException se) {
 			se.printStackTrace();
 		}
-		long used = (cpuTotal.getSys() + cpuTotal.getSys()) / 1024 / 1024;
+		long used = (long) (cpuPerc.getCombined() * 100);
 		graf.add((float) (cpuPerc.getCombined() * 100));
 		temps.add(segon);
 		segon = (Second) segon.next();
 		if (used > maxTotal) {
-			maxPercentatge = (float) cpuPerc.getCombined() * 100;
+			maxPercentatge = (float) (cpuPerc.getCombined() * 100);
 			maxTotal = used;
 		}
 		if (used < minTotal) {
-			minPercentatge = (float) cpuPerc.getCombined() * 100;
+			minPercentatge = (float) (cpuPerc.getCombined() * 100);
 			minTotal = used;
 		}
 		++contador;
 		avgTotal += used;
-		avgPercentatge = (float) (avgTotal * 100 / contador)
-				/ (cpuTotal.getTotal() / 1024 / 1024);
+		avgPercentatge = (float) (avgTotal / contador);
 	}
 }

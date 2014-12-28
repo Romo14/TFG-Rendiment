@@ -1,7 +1,6 @@
 package gui;
 
 import org.jfree.data.time.TimeSeries;
-import org.jfree.data.xy.XYSeries;
 
 import domini.AnalisisController;
 
@@ -18,11 +17,11 @@ public class ViewAnalisisController {
 		analisisController.analitzar();
 	}
 
-	public String[] getRamInfo() {
+	public Float[] getRamInfo() {
 		return analisisController.getRamInfo();
 	}
 
-	public String[] getCpuInfo() {
+	public Float[] getCpuInfo() {
 		return analisisController.getCpuInfo();
 	}
 

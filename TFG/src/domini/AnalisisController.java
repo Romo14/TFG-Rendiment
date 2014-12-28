@@ -1,13 +1,10 @@
 package domini;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeriesDataItem;
-import org.jfree.data.xy.XYSeries;
 
 public class AnalisisController {
 
@@ -50,24 +47,22 @@ public class AnalisisController {
 
 	}
 
-	public String[] getRamInfo() {
-		DecimalFormat df = new DecimalFormat("0.00");
-		String[] res = new String[3];
-		res[0] = df.format(ram.getAvgPercentatge()) + "% (" + ram.getAvgTotal()
-				/ ram.getContador() + " MB)";
-		res[1] = df.format(ram.getMaxPercentatge()) + "% (" + ram.getMaxTotal()
-				+ " MB)";
-		res[2] = df.format(ram.getMinPercentatge()) + "% (" + ram.getMinTotal()
-				+ " MB)";
+	public Float[] getRamInfo() {
+		Float[] res = new Float[6];
+		res[0] = ram.getAvgPercentatge();
+		res[1] = (float) (ram.getAvgTotal() / ram.getContador());
+		res[2] = ram.getMaxPercentatge();
+		res[3] = (float) ram.getMaxTotal();
+		res[4] = ram.getMinPercentatge();
+		res[5] = (float) ram.getMinTotal();
 		return res;
 	}
 
-	public String[] getCpuInfo() {
-		DecimalFormat df = new DecimalFormat("0.00");
-		String[] res = new String[3];
-		res[0] = df.format(cpu.getAvgPercentatge()) + "%";
-		res[1] = df.format(cpu.getMaxPercentatge()) + "%";
-		res[2] = df.format(cpu.getMinPercentatge()) + "%";
+	public Float[] getCpuInfo() {
+		Float[] res = new Float[3];
+		res[0] = cpu.getAvgPercentatge();
+		res[1] = cpu.getMaxPercentatge();
+		res[2] = cpu.getMinPercentatge();
 		return res;
 	}
 
@@ -86,18 +81,18 @@ public class AnalisisController {
 			aux = gpu.getGraf();
 			temps = gpu.getTemps();
 			break;
-//		case "HDD":
-//			aux = hdd.getGraf();
-//			temps = hdd.getTemps();
-//			break;
+		// case "HDD":
+		// aux = hdd.getGraf();
+		// temps = hdd.getTemps();
+		// break;
 		case "RAM":
 			aux = ram.getGraf();
 			temps = ram.getTemps();
 			break;
-//		case "NET":
-//			aux = net.getGraf();
-//			temps = net.getTemps();
-//			break;
+		// case "NET":
+		// aux = net.getGraf();
+		// temps = net.getTemps();
+		// break;
 		}
 		itAux = aux.iterator();
 		itTemps = temps.iterator();
