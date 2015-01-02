@@ -111,15 +111,15 @@ public class ResultatAnalisisView extends JPanel {
 		grafica = crearGrafica();
 		resultat.setVisible(true);
 		tabbedPane = new JTabbedPane();
+		tabbedPane.setForeground(Color.GRAY);
 		tabbedPane.setBackground(Color.WHITE);
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		tabbedPane.setAlignmentY(Component.TOP_ALIGNMENT);
-		tabbedPane.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		panelGrafiques = new JPanel();
 		panelGrafiques.setSize(new Dimension(650, 430));
 		panelGrafiques.setBackground(Color.WHITE);
 		tabbedPane.addTab("Gràfica", panelGrafiques);
 		tabbedPane.setEnabledAt(0, true);
+		tabbedPane.setBackgroundAt(0, Color.WHITE);
 		chckbxGpu = new JCheckBox("GPU");
 		chckbxGpu.setSelected(true);
 		chckbxRam = new JCheckBox("RAM");
@@ -280,12 +280,12 @@ public class ResultatAnalisisView extends JPanel {
 		panelDadesGenerals = new JPanel();
 		panelDadesGenerals.setBackground(Color.WHITE);
 		tabbedPane.addTab("Dades Generals", panelDadesGenerals);
-
 		panelCPU = new JPanel();
+		panelCPU.setBackground(Color.WHITE);
 		panelCPU.setAlignmentX(Component.LEFT_ALIGNMENT);
 		panelCPU.setBorder(new TitledBorder(null, "CPU", TitledBorder.LEADING,
 				TitledBorder.TOP, null, null));
-
+		resultat.getContentPane().setBackground(Color.WHITE);
 		cpuAvg = new JLabel("Mitjana: ");
 		cpuAvg.setAlignmentX(Component.CENTER_ALIGNMENT);
 		cpuAvg.setFont(font);
@@ -308,6 +308,7 @@ public class ResultatAnalisisView extends JPanel {
 		panelCPU.add(estatCPU);
 
 		panelGPU = new JPanel();
+		panelGPU.setBackground(Color.LIGHT_GRAY);
 		panelGPU.setAlignmentX(Component.LEFT_ALIGNMENT);
 		panelGPU.setBorder(new TitledBorder(null, "GPU", TitledBorder.LEADING,
 				TitledBorder.TOP, null, null));
@@ -327,6 +328,7 @@ public class ResultatAnalisisView extends JPanel {
 		panelGPU.add(estatGPU);
 
 		panelRAM = new JPanel();
+		panelRAM.setBackground(Color.LIGHT_GRAY);
 		panelRAM.setBorder(new TitledBorder(null, "RAM", TitledBorder.LEADING,
 				TitledBorder.TOP, null, null));
 
@@ -345,6 +347,7 @@ public class ResultatAnalisisView extends JPanel {
 		panelRAM.add(estatRAM);
 
 		panelHDD = new JPanel();
+		panelHDD.setBackground(Color.LIGHT_GRAY);
 		panelHDD.setBorder(new TitledBorder(null, "Disc Dur",
 				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
@@ -363,6 +366,7 @@ public class ResultatAnalisisView extends JPanel {
 		panelHDD.add(estatHDD);
 
 		panelNET = new JPanel();
+		panelNET.setBackground(Color.LIGHT_GRAY);
 		panelNET.setBorder(new TitledBorder(null, "Xarxa",
 				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
@@ -448,17 +452,16 @@ public class ResultatAnalisisView extends JPanel {
 								.addContainerGap()));
 		panelDadesGenerals.setLayout(gl_panelDadesGenerals);
 		GroupLayout groupLayout = new GroupLayout(resultat.getContentPane());
-		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				groupLayout
-						.createSequentialGroup()
-						.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE,
-								641, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(GroupLayout.DEFAULT_SIZE,
-								Short.MAX_VALUE)));
-		groupLayout.setVerticalGroup(groupLayout.createParallelGroup(
-				Alignment.LEADING).addComponent(tabbedPane,
-				GroupLayout.PREFERRED_SIZE, 401, Short.MAX_VALUE));
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 668, Short.MAX_VALUE)
+					.addGap(0))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 401, Short.MAX_VALUE)
+		);
 		resultat.getContentPane().setLayout(groupLayout);
 		resultat.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {

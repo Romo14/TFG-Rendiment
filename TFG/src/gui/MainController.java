@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.Color;
 import java.awt.EventQueue;
 import java.text.ParseException;
 
@@ -46,10 +45,11 @@ public class MainController {
 			UnsupportedLookAndFeelException {
 		try {
 			UIManager.setLookAndFeel(new SyntheticaAluOxideLookAndFeel());
+			UIManager.put("Synthetica.tabbedPane.keepOpacity", true);
+
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		UIManager.put("OptionPane.background", Color.white);
 		view = new View();
 		opcionsController = new ViewOpcionsController();
 		analisisController = new ViewAnalisisController();
