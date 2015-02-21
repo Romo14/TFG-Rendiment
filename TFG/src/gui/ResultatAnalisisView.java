@@ -12,12 +12,12 @@ import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.geom.Rectangle2D;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.DecimalFormat;
-import java.util.Date;
 
 import javax.swing.ImageIcon;
-import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.TitledBorder;
@@ -25,17 +25,22 @@ import javax.swing.border.TitledBorder;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 
-import com.itextpdf.awt.DefaultFontMapper;
+import com.itextpdf.awt.PdfGraphics2D;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -46,11 +51,13 @@ import javax.swing.JTabbedPane;
 import java.awt.FlowLayout;
 import java.awt.Component;
 
+import javax.swing.BoxLayout;
+
 public class ResultatAnalisisView extends JPanel {
 
 	private static final long serialVersionUID = 9073846157870757887L;
 	private JFreeChart grafica;
-	private JDialog resultat;
+	private JFrame resultat;
 	private JPanel panelGrafiques;
 	private Font font = new Font(getFont().getName(), getFont().getStyle(), 16);
 	private JPanel panelCPU;
@@ -95,20 +102,20 @@ public class ResultatAnalisisView extends JPanel {
 	private String koText = "El dispositiu té una mitjana d'ús de més del 75%, pel que es pot determinar que és necessari revisar";
 
 	public ResultatAnalisisView() {
-		resultat = new JDialog(MainController.view.getOwner(),
-				"Resultats de l'anàlisi");
+		resultat = new JFrame("Resultats de l'anàlisi");
+		resultat.setResizable(false);
 		resultat.getContentPane().setBackground(Color.WHITE);
 		Image img = new ImageIcon(this.getClass().getResource(
 				"/images/app-icon.png")).getImage();
 		resultat.setIconImage(img);
-		resultat.setSize(new Dimension(650, 430));
-		resultat.setResizable(false);
+		resultat.setSize(new Dimension(697, 430));
 		resultat.setLocationRelativeTo(null);
 		okIcon = new ImageIcon(this.getClass().getResource(
 				"/images/ok-icon.png"));
 		koIcon = new ImageIcon(this.getClass().getResource(
 				"/images/ko-icon.png"));
 		grafica = crearGrafica();
+		actualitzaColors();
 		resultat.setVisible(true);
 		tabbedPane = new JTabbedPane();
 		tabbedPane.setForeground(Color.GRAY);
@@ -149,9 +156,20 @@ public class ResultatAnalisisView extends JPanel {
 		pdfButton = new JButton("");
 		pdfButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Date t = new Date();
-				System.out.println(t);
-				writeChartToPDF(grafica, 500, 400, String.valueOf(t) + ".pdf");
+				JFileChooser chooser = new JFileChooser();
+				chooser.setCurrentDirectory(new java.io.File("."));
+				chooser.setMultiSelectionEnabled(false);
+				chooser.setAcceptAllFileFilterUsed(false);
+				chooser.setDialogTitle("Guardar");
+				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				if (chooser.showSaveDialog(pdfButton) == JFileChooser.APPROVE_OPTION) {
+					try {
+						writeChartToPDF(grafica, chooser.getSelectedFile()
+								.toString());
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				}
 			}
 		});
 		pdfButton.setBorder(null);
@@ -281,8 +299,8 @@ public class ResultatAnalisisView extends JPanel {
 		panelDadesGenerals.setBackground(Color.WHITE);
 		tabbedPane.addTab("Dades Generals", panelDadesGenerals);
 		panelCPU = new JPanel();
+		panelCPU.setPreferredSize(new Dimension(619, 67));
 		panelCPU.setBackground(Color.WHITE);
-		panelCPU.setAlignmentX(Component.LEFT_ALIGNMENT);
 		panelCPU.setBorder(new TitledBorder(null, "CPU", TitledBorder.LEADING,
 				TitledBorder.TOP, null, null));
 		resultat.getContentPane().setBackground(Color.WHITE);
@@ -298,7 +316,7 @@ public class ResultatAnalisisView extends JPanel {
 		cpuMin.setFont(font);
 
 		estatCPU = new JPanel();
-		estatCPU.setMaximumSize(new Dimension(10, 10));
+		estatCPU.setOpaque(false);
 		FlowLayout flowLayout = (FlowLayout) estatCPU.getLayout();
 		flowLayout.setAlignment(FlowLayout.RIGHT);
 		panelCPU.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
@@ -308,8 +326,8 @@ public class ResultatAnalisisView extends JPanel {
 		panelCPU.add(estatCPU);
 
 		panelGPU = new JPanel();
-		panelGPU.setBackground(Color.LIGHT_GRAY);
-		panelGPU.setAlignmentX(Component.LEFT_ALIGNMENT);
+		panelGPU.setPreferredSize(new Dimension(619, 67));
+		panelGPU.setBackground(Color.WHITE);
 		panelGPU.setBorder(new TitledBorder(null, "GPU", TitledBorder.LEADING,
 				TitledBorder.TOP, null, null));
 
@@ -321,6 +339,7 @@ public class ResultatAnalisisView extends JPanel {
 		gpuMin.setFont(font);
 
 		estatGPU = new JPanel();
+		estatGPU.setOpaque(false);
 		panelGPU.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		panelGPU.add(gpuMin);
 		panelGPU.add(gpuAvg);
@@ -328,7 +347,8 @@ public class ResultatAnalisisView extends JPanel {
 		panelGPU.add(estatGPU);
 
 		panelRAM = new JPanel();
-		panelRAM.setBackground(Color.LIGHT_GRAY);
+		panelRAM.setPreferredSize(new Dimension(619, 67));
+		panelRAM.setBackground(Color.WHITE);
 		panelRAM.setBorder(new TitledBorder(null, "RAM", TitledBorder.LEADING,
 				TitledBorder.TOP, null, null));
 
@@ -340,6 +360,7 @@ public class ResultatAnalisisView extends JPanel {
 		ramMin.setFont(font);
 
 		estatRAM = new JPanel();
+		estatRAM.setOpaque(false);
 		panelRAM.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		panelRAM.add(ramMax);
 		panelRAM.add(ramAvg);
@@ -347,7 +368,8 @@ public class ResultatAnalisisView extends JPanel {
 		panelRAM.add(estatRAM);
 
 		panelHDD = new JPanel();
-		panelHDD.setBackground(Color.LIGHT_GRAY);
+		panelHDD.setPreferredSize(new Dimension(619, 67));
+		panelHDD.setBackground(Color.WHITE);
 		panelHDD.setBorder(new TitledBorder(null, "Disc Dur",
 				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
@@ -357,6 +379,7 @@ public class ResultatAnalisisView extends JPanel {
 		hddMin.setFont(font);
 
 		JPanel estatHDD = new JPanel();
+		estatHDD.setOpaque(false);
 		panelHDD.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		panelHDD.add(hddAvg);
 		panelHDD.add(hddMin);
@@ -366,7 +389,8 @@ public class ResultatAnalisisView extends JPanel {
 		panelHDD.add(estatHDD);
 
 		panelNET = new JPanel();
-		panelNET.setBackground(Color.LIGHT_GRAY);
+		panelNET.setPreferredSize(new Dimension(619, 67));
+		panelNET.setBackground(Color.WHITE);
 		panelNET.setBorder(new TitledBorder(null, "Xarxa",
 				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
@@ -378,90 +402,29 @@ public class ResultatAnalisisView extends JPanel {
 		netMin.setFont(font);
 
 		JPanel estatNET = new JPanel();
+		estatNET.setOpaque(false);
 		panelNET.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		panelNET.add(netMax);
 		panelNET.add(netAvg);
 		panelNET.add(netMin);
 		panelNET.add(estatNET);
-		GroupLayout gl_panelDadesGenerals = new GroupLayout(panelDadesGenerals);
-		gl_panelDadesGenerals
-				.setHorizontalGroup(gl_panelDadesGenerals
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								gl_panelDadesGenerals
-										.createSequentialGroup()
-										.addContainerGap()
-										.addGroup(
-												gl_panelDadesGenerals
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addComponent(
-																panelCPU,
-																Alignment.TRAILING,
-																GroupLayout.DEFAULT_SIZE,
-																616,
-																Short.MAX_VALUE)
-														.addComponent(
-																panelGPU,
-																Alignment.TRAILING,
-																GroupLayout.DEFAULT_SIZE,
-																616,
-																Short.MAX_VALUE)
-														.addComponent(
-																panelRAM,
-																Alignment.TRAILING,
-																GroupLayout.DEFAULT_SIZE,
-																616,
-																Short.MAX_VALUE)
-														.addComponent(
-																panelHDD,
-																GroupLayout.DEFAULT_SIZE,
-																626,
-																Short.MAX_VALUE)
-														.addComponent(
-																panelNET,
-																GroupLayout.DEFAULT_SIZE,
-																626,
-																Short.MAX_VALUE))
-										.addContainerGap()));
-		gl_panelDadesGenerals.setVerticalGroup(gl_panelDadesGenerals
-				.createParallelGroup(Alignment.LEADING).addGroup(
-						gl_panelDadesGenerals
-								.createSequentialGroup()
-								.addComponent(panelCPU,
-										GroupLayout.PREFERRED_SIZE, 65,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(panelGPU,
-										GroupLayout.PREFERRED_SIZE, 68,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(panelRAM,
-										GroupLayout.PREFERRED_SIZE, 71,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(panelHDD,
-										GroupLayout.PREFERRED_SIZE, 74,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED,
-										GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)
-								.addComponent(panelNET,
-										GroupLayout.PREFERRED_SIZE, 68,
-										GroupLayout.PREFERRED_SIZE)
-								.addContainerGap()));
-		panelDadesGenerals.setLayout(gl_panelDadesGenerals);
+		panelDadesGenerals.setLayout(new BoxLayout(panelDadesGenerals,
+				BoxLayout.Y_AXIS));
+		panelDadesGenerals.add(panelCPU);
+		panelDadesGenerals.add(panelGPU);
+		panelDadesGenerals.add(panelRAM);
+		panelDadesGenerals.add(panelHDD);
+		panelDadesGenerals.add(panelNET);
 		GroupLayout groupLayout = new GroupLayout(resultat.getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 668, Short.MAX_VALUE)
-					.addGap(0))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 401, Short.MAX_VALUE)
-		);
+		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(
+				Alignment.LEADING).addGroup(
+				groupLayout
+						.createSequentialGroup()
+						.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE,
+								668, Short.MAX_VALUE).addGap(0)));
+		groupLayout.setVerticalGroup(groupLayout.createParallelGroup(
+				Alignment.LEADING).addComponent(tabbedPane,
+				GroupLayout.PREFERRED_SIZE, 401, Short.MAX_VALUE));
 		resultat.getContentPane().setLayout(groupLayout);
 		resultat.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
@@ -480,6 +443,7 @@ public class ResultatAnalisisView extends JPanel {
 				} else {
 					dataset.removeSeries(cpu);
 				}
+				actualitzaColors();
 			}
 		});
 		chckbxGpu.addItemListener(new ItemListener() {
@@ -489,6 +453,7 @@ public class ResultatAnalisisView extends JPanel {
 				} else {
 					dataset.removeSeries(gpu);
 				}
+				actualitzaColors();
 			}
 		});
 		chckbxRam.addItemListener(new ItemListener() {
@@ -498,6 +463,7 @@ public class ResultatAnalisisView extends JPanel {
 				} else {
 					dataset.removeSeries(ram);
 				}
+				actualitzaColors();
 			}
 		});
 		chckbxDiscDur.addItemListener(new ItemListener() {
@@ -507,6 +473,7 @@ public class ResultatAnalisisView extends JPanel {
 				} else {
 					dataset.removeSeries(hdd);
 				}
+				actualitzaColors();
 			}
 		});
 		chckbxXarxa.addItemListener(new ItemListener() {
@@ -516,6 +483,7 @@ public class ResultatAnalisisView extends JPanel {
 				} else {
 					dataset.removeSeries(net);
 				}
+				actualitzaColors();
 			}
 		});
 	}
@@ -559,11 +527,11 @@ public class ResultatAnalisisView extends JPanel {
 		} else {
 			Float[] ramStats = MainController.analisisController.getRamInfo();
 			ramAvg.setText(ramAvg.getText() + df.format(ramStats[0]) + "% ("
-					+ ramStats[1] + ")");
+					+ ramStats[1] + "MB)");
 			ramMax.setText(ramMax.getText() + df.format(ramStats[2]) + "% ("
-					+ ramStats[3] + ")");
+					+ ramStats[3] + "MB)");
 			ramMin.setText(ramMin.getText() + df.format(ramStats[4]) + "% ("
-					+ ramStats[5] + ")");
+					+ ramStats[5] + "MB)");
 			JLabel a = new JLabel();
 			if (ramStats[0] > 70) {
 				a.setIcon(koIcon);
@@ -599,6 +567,7 @@ public class ResultatAnalisisView extends JPanel {
 			net = MainController.analisisController.getEvol("NET");
 			dataset.addSeries(net);
 		}
+
 		JFreeChart lineChartObject = ChartFactory.createTimeSeriesChart(
 				"Us dels components", "Temps (segons)", "Percentatge d'ús (%)",
 				dataset);
@@ -606,32 +575,61 @@ public class ResultatAnalisisView extends JPanel {
 		return lineChartObject;
 	}
 
-	@SuppressWarnings("deprecation")
-	public static void writeChartToPDF(JFreeChart chart, int width, int height,
-			String fileName) {
-		PdfWriter writer = null;
+	public void writeChartToPDF(JFreeChart chart, String fileName) {
+//		Document document = new Document();
+//		PdfWriter writer;
+//		try {
+//			writer = PdfWriter.getInstance(document, new FileOutputStream(
+//					fileName + ".pdf"));
+//			document.open();
+//			PdfContentByte cb = writer.getDirectContent();
+//			float width = PageSize.A4.getWidth()- 20;
+//			float height = PageSize.A4.getHeight() / 2;
+//			PdfTemplate bar = cb.createTemplate(width, height);
+//			Graphics2D g2d2 = new PdfGraphics2D(bar, width, height);
+//			Rectangle2D r2d2 = new Rectangle2D.Double(0, 0, width, height);
+//			grafica.draw(g2d2, r2d2);
+//			g2d2.dispose();
+//			cb.addTemplate(bar, 0, 0);
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		} catch (DocumentException e) {
+//			e.printStackTrace();
+//		}
+//		document.close();
+		
+		      try {
+		         report()
+		            .setTemplate(Templates.reportTemplate)
+		            .columns(orderDateColumn, quantityColumn, priceColumn)
+		            .title(Templates.createTitleComponent("TimeSeriesChart"))
+		            .summary(
+		               cht.timeSeriesChart()
+		                  .setTitle("Time series chart")
+		                  .setTitleFont(boldFont)
+		                  .setTimePeriod(orderDateColumn)
+		                  .setTimePeriodType(TimePeriod.MONTH)
+		                  .series(
+		                     cht.serie(quantityColumn), cht.serie(priceColumn))
+		                  .setTimeAxisFormat(
+		                     cht.axisFormat().setLabel("Date")))
+		            .pageFooter(Templates.footerComponent)
+		            .setDataSource(createDataSource())
+		            .show();
+		      } catch (DRException e) {
+		         e.printStackTrace();
+		      }
 
-		Document document = new Document();
+	}
 
-		try {
-			writer = PdfWriter.getInstance(document, new FileOutputStream(
-					fileName));
-			document.open();
-			PdfContentByte contentByte = writer.getDirectContent();
-			PdfTemplate template = contentByte.createTemplate(width, height);
-			Graphics2D graphics2d = template.createGraphics(width, height,
-					new DefaultFontMapper());
-			Rectangle2D rectangle2d = new Rectangle2D.Double(0, 0, width,
-					height);
-
-			chart.draw(graphics2d, rectangle2d);
-
-			graphics2d.dispose();
-			contentByte.addTemplate(template, 0, 0);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		document.close();
+	private void actualitzaColors() {
+		XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true, true);
+		renderer.setSeriesPaint(0, Color.BLUE);
+		renderer.setSeriesPaint(1, Color.RED);
+		renderer.setSeriesPaint(2, Color.GREEN);
+		renderer.setSeriesPaint(3, Color.YELLOW);
+		renderer.setSeriesPaint(4, Color.CYAN);
+		XYPlot p = grafica.getXYPlot();
+		p.setRenderer(renderer);
 	}
 }

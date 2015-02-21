@@ -6,7 +6,7 @@ import java.awt.Image;
 import java.awt.Point;
 
 import javax.swing.ImageIcon;
-import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.GroupLayout;
@@ -22,6 +22,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+
 import java.awt.Color;
 
 public class DuracioPopUp extends JPanel {
@@ -46,7 +47,7 @@ public class DuracioPopUp extends JPanel {
 				setHores((int) horesSpinner.getValue());
 				setDies((int) diesSpinner.getValue());
 				setMinuts((int) minutsSpinner.getValue());
-				PanelView.updateDuracioLabel();
+				MainController.view.panel.updateDuracioLabel();
 				ViewOpcionsController.setHores(hores);
 				ViewOpcionsController.setMinuts(minuts);
 				ViewOpcionsController.setDies(dies);
@@ -57,7 +58,7 @@ public class DuracioPopUp extends JPanel {
 	public int dies;
 	private JLabel diesLabel;
 	private JSpinner diesSpinner;
-	private JDialog duracio;
+	private JFrame duracio;
 	public int hores;
 	private JLabel horesLabel;
 	private JSpinner horesSpinner;
@@ -67,8 +68,7 @@ public class DuracioPopUp extends JPanel {
 	private JSpinner minutsSpinner;
 
 	public DuracioPopUp() {
-		duracio = new JDialog(MainController.view.getOwner(),
-				"Duració de l'anàlisi" + "");
+		duracio = new JFrame("Duració de l'anàlisi" + "");
 		duracio.getContentPane().setBackground(Color.WHITE);
 		Image img = new ImageIcon(this.getClass().getResource(
 				"/images/app-icon.png")).getImage();
@@ -80,7 +80,6 @@ public class DuracioPopUp extends JPanel {
 		duracio.setLocation(aqui);
 		duracio.setSize(min);
 		duracio.setResizable(false);
-		duracio.setVisible(true);
 		minutsSpinner = new JSpinner();
 		minutsSpinner.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
@@ -136,6 +135,7 @@ public class DuracioPopUp extends JPanel {
 		btnCancellar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				duracio.dispose();
+				MainController.view.setVisible(true);
 			}
 		});
 		btnCancellar.setFont(font);
@@ -231,6 +231,8 @@ public class DuracioPopUp extends JPanel {
 																btnCancellar))
 										.addGap(31)));
 		duracio.getContentPane().setLayout(groupLayout);
+		duracio.setVisible(true);
+
 	}
 
 	public int getDies() {

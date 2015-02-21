@@ -7,6 +7,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Dialog.ModalExclusionType;
 
 public class View extends JFrame {
 
@@ -20,6 +21,7 @@ public class View extends JFrame {
 	public View() throws ClassNotFoundException, InstantiationException,
 			IllegalAccessException, UnsupportedLookAndFeelException {
 		super("Análisi de rendiment");
+		setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
 		Image img = new ImageIcon(this.getClass().getResource(
 				"/images/app-icon.png")).getImage();
 		setIconImage(img);

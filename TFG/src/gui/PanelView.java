@@ -21,9 +21,10 @@ public class PanelView extends JPanel {
 	private JLabel analisiCompletLabel;
 	private ActionListener analisiCompletListener = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
+			desactivaBotons();
 			int confirmar = JOptionPane
 					.showOptionDialog(
-							null,
+							MainController.view,
 							"<html> Vol realitzar un anàlisi de tots<br>  els components del sistema <br> durant "
 									+ t + "?", "Anàlisi complet",
 							JOptionPane.YES_NO_OPTION,
@@ -33,7 +34,21 @@ public class PanelView extends JPanel {
 				ViewOpcionsController.setAllTrue();
 				new AnalisisView();
 				tanca();
+			} else {
+				activaBotons();
 			}
+		}
+
+		private void activaBotons() {
+			analisiCompletButton.setEnabled(true);
+			analisiPersonalitzatButton.setEnabled(true);
+			duracioButton.setEnabled(true);
+		}
+
+		private void desactivaBotons() {
+			analisiCompletButton.setEnabled(false);
+			analisiPersonalitzatButton.setEnabled(false);
+			duracioButton.setEnabled(false);
 		}
 	};
 	private JButton analisiPersonalitzatButton;
@@ -43,14 +58,16 @@ public class PanelView extends JPanel {
 	private ActionListener editarDuracio = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			duracioPopUp = new DuracioPopUp();
+			amaga();
 		}
 	};
 	private Font font = new Font(getFont().getName(), getFont().getStyle(), 16);
-	private static ActionListener analisiPersonalitzatListener = new ActionListener() {
+	private ActionListener analisiPersonalitzatListener = new ActionListener() {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			new AnalisisPersonalitzatPopUp();
+			amaga();
 		}
 	};
 	private static int dies;
@@ -238,7 +255,8 @@ public class PanelView extends JPanel {
 		setLayout(groupLayout);
 	}
 
-	public static void updateDuracioLabel() {
+	public void updateDuracioLabel() {
+		mostra();
 		minuts = duracioPopUp.getMinuts();
 		hores = duracioPopUp.getHores();
 		dies = duracioPopUp.getDies();
@@ -250,6 +268,14 @@ public class PanelView extends JPanel {
 		if (minuts != 0)
 			t += minuts + " minut/s";
 		duracioLabelEdita.setText(t);
+	}
+
+	private void amaga() {
+		MainController.view.setVisible(false);
+	}
+
+	private void mostra() {
+		MainController.view.setVisible(true);
 	}
 
 	private void tanca() {

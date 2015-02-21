@@ -7,7 +7,7 @@ import java.awt.Point;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.GroupLayout;
@@ -29,7 +29,7 @@ public class AnalisisView extends JPanel {
 
 	private Object[] opcions = { "Si", "No" };
 	private static final long serialVersionUID = 7388902221110453680L;
-	private JDialog analisis;
+	private JFrame analisis;
 	private JProgressBar progressBar;
 	private JLabel lblTempsRestantDescripcio;
 	private JLabel lblTempsRestant;
@@ -60,8 +60,7 @@ public class AnalisisView extends JPanel {
 	private int restant;
 
 	public AnalisisView() {
-		analisis = new JDialog(MainController.view.getOwner(),
-				"Anàlisis del sistema");
+		analisis = new JFrame("Anàlisis del sistema");
 		analisis.getContentPane().setBackground(Color.WHITE);
 		Image img = new ImageIcon(this.getClass().getResource(
 				"/images/app-icon.png")).getImage();

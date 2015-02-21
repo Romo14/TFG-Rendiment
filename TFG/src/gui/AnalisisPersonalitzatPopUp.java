@@ -80,6 +80,7 @@ public class AnalisisPersonalitzatPopUp extends JPanel {
 	private ActionListener cancelaListener = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			options.dispose();
+			MainController.view.setVisible(true);
 		}
 	};
 	private static JCheckBox cpuCheckBox;
@@ -88,12 +89,11 @@ public class AnalisisPersonalitzatPopUp extends JPanel {
 	private static JCheckBox internetCheckBox;
 	private static JCheckBox ramCheckBox;
 	private static final long serialVersionUID = -1893117450756795448L;
-	private JDialog options;
+	private JFrame options;
 	private Font font = new Font(getFont().getName(), getFont().getStyle(), 16);
 
 	public AnalisisPersonalitzatPopUp() {
-		options = new JDialog(MainController.view.getOwner(),
-				"Anàlisi Personalitzat" + "");
+		options = new JFrame("Anàlisi Personalitzat" + "");
 		options.setFont(font);
 		Image img = new ImageIcon(this.getClass().getResource(
 				"/images/app-icon.png")).getImage();
