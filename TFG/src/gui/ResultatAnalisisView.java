@@ -3,7 +3,6 @@ package gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,9 +10,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.geom.Rectangle2D;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 
 import javax.swing.ImageIcon;
@@ -29,14 +25,6 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
-
-import com.itextpdf.awt.PdfGraphics2D;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfTemplate;
-import com.itextpdf.text.pdf.PdfWriter;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -56,50 +44,53 @@ import javax.swing.BoxLayout;
 public class ResultatAnalisisView extends JPanel {
 
 	private static final long serialVersionUID = 9073846157870757887L;
-	private JFreeChart grafica;
-	private JFrame resultat;
-	private JPanel panelGrafiques;
-	private Font font = new Font(getFont().getName(), getFont().getStyle(), 16);
-	private JPanel panelCPU;
-	private JPanel panelGPU;
-	private JPanel panelNET;
-	private JPanel panelRAM;
-	private JPanel panelHDD;
+	private JButton btnInici;
 	private JCheckBox chckbxCpu;
+	private JCheckBox chckbxDiscDur;
 	private JCheckBox chckbxGpu;
 	private JCheckBox chckbxRam;
-	private JCheckBox chckbxDiscDur;
 	private JCheckBox chckbxXarxa;
-	private JButton btnInici;
-	private JButton pdfButton;
-	private JPanel panelDadesGenerals;
-	private ChartPanel graficaPanel;
-	private JLabel ramAvg;
-	private JLabel ramMax;
-	private JLabel ramMin;
-	private JLabel netAvg;
-	private JLabel netMax;
-	private JLabel netMin;
-	private JLabel gpuAvg;
-	private JLabel gpuMax;
-	private JLabel gpuMin;
+	private TimeSeries cpu;
 	private JLabel cpuAvg;
 	private JLabel cpuMax;
 	private JLabel cpuMin;
-	private JTabbedPane tabbedPane;
 	private TimeSeriesCollection dataset;
-	private TimeSeries cpu;
-	private TimeSeries gpu;
-	private TimeSeries ram;
-	private TimeSeries net;
-	private TimeSeries hdd;
-	private JPanel estatRAM;
-	private JPanel estatGPU;
 	private JPanel estatCPU;
-	private ImageIcon okIcon;
+	private JPanel estatGPU;
+	private JPanel estatRAM;
+	private Font font = new Font(getFont().getName(), getFont().getStyle(), 16);
+	private TimeSeries gpu;
+	private JLabel gpuAvg;
+	private JLabel gpuMax;
+	private JLabel gpuMin;
+	private JFreeChart grafica;
+	private ChartPanel graficaPanel;
+	private TimeSeries hdd;
+	private JLabel hddAvg;
+	private JLabel hddMax;
+	private JLabel hddMin;
 	private ImageIcon koIcon;
-	private String okText = "El dispositiu funciona correctament i aguanta perfectament la càrrega de treball que s'hi realitza";
 	private String koText = "El dispositiu té una mitjana d'ús de més del 75%, pel que es pot determinar que és necessari revisar";
+	private TimeSeries net;
+	private JLabel netAvg;
+	private JLabel netMax;
+	private JLabel netMin;
+	private ImageIcon okIcon;
+	private String okText = "El dispositiu funciona correctament i aguanta perfectament la càrrega de treball que s'hi realitza";
+	private JPanel panelCPU;
+	private JPanel panelDadesGenerals;
+	private JPanel panelGPU;
+	private JPanel panelGrafiques;
+	private JPanel panelHDD;
+	private JPanel panelNET;
+	private JPanel panelRAM;
+	private JButton pdfButton;
+	private TimeSeries ram;
+	private JLabel ramAvg;
+	private JLabel ramMax;
+	private JLabel ramMin;
+	private JFrame resultat;
+	private JTabbedPane tabbedPane;
 
 	public ResultatAnalisisView() {
 		resultat = new JFrame("Resultats de l'anàlisi");
@@ -373,9 +364,9 @@ public class ResultatAnalisisView extends JPanel {
 		panelHDD.setBorder(new TitledBorder(null, "Disc Dur",
 				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
-		JLabel hddAvg = new JLabel("Mitjana: ");
+		hddAvg = new JLabel("Mitjana: ");
 		hddAvg.setFont(font);
-		JLabel hddMin = new JLabel("M\u00EDnim:   ");
+		hddMin = new JLabel("M\u00EDnim:   ");
 		hddMin.setFont(font);
 
 		JPanel estatHDD = new JPanel();
@@ -383,7 +374,7 @@ public class ResultatAnalisisView extends JPanel {
 		panelHDD.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		panelHDD.add(hddAvg);
 		panelHDD.add(hddMin);
-		JLabel hddMax = new JLabel("M\u00E0xim:  ");
+		hddMax = new JLabel("M\u00E0xim:  ");
 		hddMax.setFont(font);
 		panelHDD.add(hddMax);
 		panelHDD.add(estatHDD);
@@ -433,6 +424,17 @@ public class ResultatAnalisisView extends JPanel {
 		});
 		mostraResultats();
 		addCheckBoxListeners();
+	}
+
+	private void actualitzaColors() {
+		XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true, true);
+		renderer.setSeriesPaint(0, Color.BLUE);
+		renderer.setSeriesPaint(1, Color.RED);
+		renderer.setSeriesPaint(2, Color.GREEN);
+		renderer.setSeriesPaint(3, Color.YELLOW);
+		renderer.setSeriesPaint(4, Color.CYAN);
+		XYPlot p = grafica.getXYPlot();
+		p.setRenderer(renderer);
 	}
 
 	private void addCheckBoxListeners() {
@@ -488,63 +490,6 @@ public class ResultatAnalisisView extends JPanel {
 		});
 	}
 
-	private void mostraResultats() {
-		DecimalFormat df = new DecimalFormat("0.00");
-		if (!ViewOpcionsController.isCpu()) {
-			chckbxCpu.setVisible(false);
-			panelCPU.setVisible(false);
-		} else {
-			Float[] cpuStats = MainController.analisisController.getCpuInfo();
-			cpuAvg.setText(cpuAvg.getText() + df.format(cpuStats[0]) + "%");
-			cpuMax.setText(cpuMax.getText() + df.format(cpuStats[1]) + "%");
-			cpuMin.setText(cpuMin.getText() + df.format(cpuStats[2]) + "%");
-			JLabel a = new JLabel();
-			if (cpuStats[0] > 70) {
-				a.setIcon(koIcon);
-				a.setToolTipText(koText);
-				estatCPU.add(a);
-			} else {
-				a.setIcon(okIcon);
-				a.setToolTipText(okText);
-				estatCPU.add(a);
-			}
-		}
-		if (!ViewOpcionsController.isGpu()) {
-			chckbxGpu.setVisible(false);
-			panelGPU.setVisible(false);
-		}
-		if (!ViewOpcionsController.isHdd()) {
-			chckbxDiscDur.setVisible(false);
-			panelHDD.setVisible(false);
-		}
-		if (!ViewOpcionsController.isNet()) {
-			chckbxXarxa.setVisible(false);
-			panelNET.setVisible(false);
-		}
-		if (!ViewOpcionsController.isRam()) {
-			chckbxRam.setVisible(false);
-			panelRAM.setVisible(false);
-		} else {
-			Float[] ramStats = MainController.analisisController.getRamInfo();
-			ramAvg.setText(ramAvg.getText() + df.format(ramStats[0]) + "% ("
-					+ ramStats[1] + "MB)");
-			ramMax.setText(ramMax.getText() + df.format(ramStats[2]) + "% ("
-					+ ramStats[3] + "MB)");
-			ramMin.setText(ramMin.getText() + df.format(ramStats[4]) + "% ("
-					+ ramStats[5] + "MB)");
-			JLabel a = new JLabel();
-			if (ramStats[0] > 70) {
-				a.setIcon(koIcon);
-				a.setToolTipText(koText);
-				estatRAM.add(a);
-			} else {
-				a.setIcon(okIcon);
-				a.setToolTipText(okText);
-				estatRAM.add(a);
-			}
-		}
-	}
-
 	public JFreeChart crearGrafica() {
 		dataset = new TimeSeriesCollection();
 		if (ViewOpcionsController.isCpu()) {
@@ -575,61 +520,122 @@ public class ResultatAnalisisView extends JPanel {
 		return lineChartObject;
 	}
 
-	public void writeChartToPDF(JFreeChart chart, String fileName) {
-//		Document document = new Document();
-//		PdfWriter writer;
-//		try {
-//			writer = PdfWriter.getInstance(document, new FileOutputStream(
-//					fileName + ".pdf"));
-//			document.open();
-//			PdfContentByte cb = writer.getDirectContent();
-//			float width = PageSize.A4.getWidth()- 20;
-//			float height = PageSize.A4.getHeight() / 2;
-//			PdfTemplate bar = cb.createTemplate(width, height);
-//			Graphics2D g2d2 = new PdfGraphics2D(bar, width, height);
-//			Rectangle2D r2d2 = new Rectangle2D.Double(0, 0, width, height);
-//			grafica.draw(g2d2, r2d2);
-//			g2d2.dispose();
-//			cb.addTemplate(bar, 0, 0);
-//		} catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//		} catch (DocumentException e) {
-//			e.printStackTrace();
-//		}
-//		document.close();
-		
-		      try {
-		         report()
-		            .setTemplate(Templates.reportTemplate)
-		            .columns(orderDateColumn, quantityColumn, priceColumn)
-		            .title(Templates.createTitleComponent("TimeSeriesChart"))
-		            .summary(
-		               cht.timeSeriesChart()
-		                  .setTitle("Time series chart")
-		                  .setTitleFont(boldFont)
-		                  .setTimePeriod(orderDateColumn)
-		                  .setTimePeriodType(TimePeriod.MONTH)
-		                  .series(
-		                     cht.serie(quantityColumn), cht.serie(priceColumn))
-		                  .setTimeAxisFormat(
-		                     cht.axisFormat().setLabel("Date")))
-		            .pageFooter(Templates.footerComponent)
-		            .setDataSource(createDataSource())
-		            .show();
-		      } catch (DRException e) {
-		         e.printStackTrace();
-		      }
-
+	private void mostraResultats() {
+		DecimalFormat df = new DecimalFormat("0.00");
+		if (!ViewOpcionsController.isCpu()) {
+			chckbxCpu.setVisible(false);
+			panelCPU.setVisible(false);
+		} else {
+			Float[] cpuStats = MainController.analisisController.getCpuInfo();
+			cpuAvg.setText(cpuAvg.getText() + df.format(cpuStats[0]) + "%");
+			cpuMax.setText(cpuMax.getText() + df.format(cpuStats[1]) + "%");
+			cpuMin.setText(cpuMin.getText() + df.format(cpuStats[2]) + "%");
+			JLabel a = new JLabel();
+			if (cpuStats[0] > 70) {
+				a.setIcon(koIcon);
+				a.setToolTipText(koText);
+				estatCPU.add(a);
+			} else {
+				a.setIcon(okIcon);
+				a.setToolTipText(okText);
+				estatCPU.add(a);
+			}
+		}
+		if (!ViewOpcionsController.isGpu()) {
+			chckbxGpu.setVisible(false);
+			panelGPU.setVisible(false);
+		}
+		if (!ViewOpcionsController.isHdd()) {
+			chckbxDiscDur.setVisible(false);
+			panelHDD.setVisible(false);
+		} else {
+			Float[] hddStats = MainController.analisisController.getHddInfo();
+			hddAvg.setText(cpuAvg.getText() + df.format(hddStats[0]) + "%");
+			hddMax.setText(cpuMax.getText() + df.format(hddStats[1]) + "%");
+			hddMin.setText(cpuMin.getText() + df.format(hddStats[2]) + "%");
+			JLabel a = new JLabel();
+			if (hddStats[0] > 70) {
+				a.setIcon(koIcon);
+				a.setToolTipText(koText);
+				estatRAM.add(a);
+			} else {
+				a.setIcon(okIcon);
+				a.setToolTipText(okText);
+				estatRAM.add(a);
+			}
+		}
+		if (!ViewOpcionsController.isNet()) {
+			chckbxXarxa.setVisible(false);
+			panelNET.setVisible(false);
+		}
+		if (!ViewOpcionsController.isRam()) {
+			chckbxRam.setVisible(false);
+			panelRAM.setVisible(false);
+		} else {
+			Float[] ramStats = MainController.analisisController.getRamInfo();
+			ramAvg.setText(ramAvg.getText() + df.format(ramStats[0]) + "% ("
+					+ ramStats[1] + "MB)");
+			ramMax.setText(ramMax.getText() + df.format(ramStats[2]) + "% ("
+					+ ramStats[3] + "MB)");
+			ramMin.setText(ramMin.getText() + df.format(ramStats[4]) + "% ("
+					+ ramStats[5] + "MB)");
+			JLabel a = new JLabel();
+			if (ramStats[0] > 70) {
+				a.setIcon(koIcon);
+				a.setToolTipText(koText);
+				estatRAM.add(a);
+			} else {
+				a.setIcon(okIcon);
+				a.setToolTipText(okText);
+				estatRAM.add(a);
+			}
+		}
 	}
 
-	private void actualitzaColors() {
-		XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true, true);
-		renderer.setSeriesPaint(0, Color.BLUE);
-		renderer.setSeriesPaint(1, Color.RED);
-		renderer.setSeriesPaint(2, Color.GREEN);
-		renderer.setSeriesPaint(3, Color.YELLOW);
-		renderer.setSeriesPaint(4, Color.CYAN);
-		XYPlot p = grafica.getXYPlot();
-		p.setRenderer(renderer);
+	public void writeChartToPDF(JFreeChart chart, String fileName) {
+		// Document document = new Document();
+		// PdfWriter writer;
+		// try {
+		// writer = PdfWriter.getInstance(document, new FileOutputStream(
+		// fileName + ".pdf"));
+		// document.open();
+		// PdfContentByte cb = writer.getDirectContent();
+		// float width = PageSize.A4.getWidth()- 20;
+		// float height = PageSize.A4.getHeight() / 2;
+		// PdfTemplate bar = cb.createTemplate(width, height);
+		// Graphics2D g2d2 = new PdfGraphics2D(bar, width, height);
+		// Rectangle2D r2d2 = new Rectangle2D.Double(0, 0, width, height);
+		// grafica.draw(g2d2, r2d2);
+		// g2d2.dispose();
+		// cb.addTemplate(bar, 0, 0);
+		// } catch (FileNotFoundException e) {
+		// e.printStackTrace();
+		// } catch (DocumentException e) {
+		// e.printStackTrace();
+		// }
+		// document.close();
+
+		// try {
+		// report()
+		// .setTemplate(Templates.reportTemplate)
+		// .columns(orderDateColumn, quantityColumn, priceColumn)
+		// .title(Templates.createTitleComponent("TimeSeriesChart"))
+		// .summary(
+		// cht.timeSeriesChart()
+		// .setTitle("Time series chart")
+		// .setTitleFont(boldFont)
+		// .setTimePeriod(orderDateColumn)
+		// .setTimePeriodType(TimePeriod.MONTH)
+		// .series(
+		// cht.serie(quantityColumn), cht.serie(priceColumn))
+		// .setTimeAxisFormat(
+		// cht.axisFormat().setLabel("Date")))
+		// .pageFooter(Templates.footerComponent)
+		// .setDataSource(createDataSource())
+		// .show();
+		// } catch (DRException e) {
+		// e.printStackTrace();
+		// }
+
 	}
 }

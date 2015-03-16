@@ -16,7 +16,16 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.Color;
 
 public class PanelView extends JPanel {
-	private Object[] opcions = { "Si", "No" };
+	private static int dies;
+	private static JLabel duracioLabelEdita;
+	private static DuracioPopUp duracioPopUp;
+	private static int hores;
+
+	private static int minuts;
+
+	private static final long serialVersionUID = 2924456615397502338L;
+
+	private static String t = "1 hora/es";
 	private JButton analisiCompletButton;
 	private JLabel analisiCompletLabel;
 	private ActionListener analisiCompletListener = new ActionListener() {
@@ -39,45 +48,27 @@ public class PanelView extends JPanel {
 			}
 		}
 
-		private void activaBotons() {
-			analisiCompletButton.setEnabled(true);
-			analisiPersonalitzatButton.setEnabled(true);
-			duracioButton.setEnabled(true);
-		}
-
-		private void desactivaBotons() {
-			analisiCompletButton.setEnabled(false);
-			analisiPersonalitzatButton.setEnabled(false);
-			duracioButton.setEnabled(false);
-		}
 	};
 	private JButton analisiPersonalitzatButton;
 	private JLabel analisiPersonalitzatLabel;
-	private JButton duracioButton;
-	private JLabel duracioLabel;
-	private ActionListener editarDuracio = new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			duracioPopUp = new DuracioPopUp();
-			amaga();
-		}
-	};
-	private Font font = new Font(getFont().getName(), getFont().getStyle(), 16);
 	private ActionListener analisiPersonalitzatListener = new ActionListener() {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			new AnalisisPersonalitzatPopUp();
-			amaga();
+			desactivaBotons();
 		}
 	};
-	private static int dies;
-	private static JLabel duracioLabelEdita;
-	private static DuracioPopUp duracioPopUp;
-	private static int hores;
-	private static int minuts;
-	private static final long serialVersionUID = 2924456615397502338L;
-	private static String t = "1 hora/es";
-
+	private JButton duracioButton;
+	private JLabel duracioLabel;
+	private ActionListener editarDuracio = new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			duracioPopUp = new DuracioPopUp();
+			desactivaBotons();
+		}
+	};
+	private Font font = new Font(getFont().getName(), getFont().getStyle(), 16);
+	private Object[] opcions = { "Si", "No" };
 	public PanelView() {
 		setBackground(Color.WHITE);
 		analisiCompletButton = new JButton("An\u00E0lisi Complet");
@@ -254,6 +245,29 @@ public class PanelView extends JPanel {
 										.addContainerGap()));
 		setLayout(groupLayout);
 	}
+	public void activaBotons() {
+		analisiCompletButton.setEnabled(true);
+		analisiPersonalitzatButton.setEnabled(true);
+		duracioButton.setEnabled(true);
+	}
+
+	public void desactivaBotons() {
+		analisiCompletButton.setEnabled(false);
+		analisiPersonalitzatButton.setEnabled(false);
+		duracioButton.setEnabled(false);
+	}
+
+	public String getTempsLabel() {
+		return t;
+	}
+
+	private void mostra() {
+		MainController.view.setVisible(true);
+	}
+
+	private void tanca() {
+		MainController.view.dispose();
+	}
 
 	public void updateDuracioLabel() {
 		mostra();
@@ -268,21 +282,5 @@ public class PanelView extends JPanel {
 		if (minuts != 0)
 			t += minuts + " minut/s";
 		duracioLabelEdita.setText(t);
-	}
-
-	private void amaga() {
-		MainController.view.setVisible(false);
-	}
-
-	private void mostra() {
-		MainController.view.setVisible(true);
-	}
-
-	private void tanca() {
-		MainController.view.dispose();
-	}
-
-	public String getTempsLabel() {
-		return t;
 	}
 }

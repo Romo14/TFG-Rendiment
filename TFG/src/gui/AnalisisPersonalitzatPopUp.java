@@ -69,20 +69,22 @@ public class AnalisisPersonalitzatPopUp extends JPanel {
 					ViewOpcionsController.setHdd(discDurCheckBox.isSelected());
 					ViewOpcionsController.setCpu(cpuCheckBox.isSelected());
 					ViewOpcionsController.setRam(ramCheckBox.isSelected());
-					options.dispose();
 					new AnalisisView();
+					options.dispose();
 					MainController.view.dispose();
 				}
 			}
 
 		}
 	};
+
 	private ActionListener cancelaListener = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			options.dispose();
-			MainController.view.setVisible(true);
+			MainController.view.panel.activaBotons();
 		}
 	};
+
 	private static JCheckBox cpuCheckBox;
 	private static JCheckBox discDurCheckBox;
 	private static JCheckBox gpuCheckBox;

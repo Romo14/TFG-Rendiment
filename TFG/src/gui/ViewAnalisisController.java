@@ -8,17 +8,13 @@ public class ViewAnalisisController {
 
 	private static AnalisisController analisisController;
 
-	public ViewAnalisisController() {
-		analisisController = new AnalisisController(
-				MainController.opcionsController.getOpcions());
-	}
-
 	public static void updateSystemData() {
 		analisisController.analitzar();
 	}
 
-	public Float[] getRamInfo() {
-		return analisisController.getRamInfo();
+	public ViewAnalisisController() {
+		analisisController = new AnalisisController(
+				MainController.opcionsController.getOpcions());
 	}
 
 	public Float[] getCpuInfo() {
@@ -27,6 +23,14 @@ public class ViewAnalisisController {
 
 	public TimeSeries getEvol(String string) {
 		return analisisController.getEvol(string);
+	}
+
+	public Float[] getHddInfo() {
+		return analisisController.getHddInfo();
+	}
+
+	public Float[] getRamInfo() {
+		return analisisController.getRamInfo();
 	}
 
 }

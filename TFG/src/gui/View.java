@@ -11,12 +11,12 @@ import java.awt.Dialog.ModalExclusionType;
 
 public class View extends JFrame {
 
-	PanelView panel;
-
 	/**
      * 
      */
 	private static final long serialVersionUID = 1L;
+
+	PanelView panel;
 
 	public View() throws ClassNotFoundException, InstantiationException,
 			IllegalAccessException, UnsupportedLookAndFeelException {

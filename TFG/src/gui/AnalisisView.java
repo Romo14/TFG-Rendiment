@@ -27,18 +27,8 @@ import java.awt.Color;
 
 public class AnalisisView extends JPanel {
 
-	private Object[] opcions = { "Si", "No" };
 	private static final long serialVersionUID = 7388902221110453680L;
 	private JFrame analisis;
-	private JProgressBar progressBar;
-	private JLabel lblTempsRestantDescripcio;
-	private JLabel lblTempsRestant;
-	private int temps;
-	private int comptador;
-	private JButton btnAtura;
-	private JButton btnVeureResultats;
-	private Font font = new Font(getFont().getName(), getFont().getStyle(), 16);
-	private Timer t;
 	private ActionListener atura = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (btnAtura.getText().equalsIgnoreCase("Atura")) {
@@ -55,9 +45,19 @@ public class AnalisisView extends JPanel {
 
 		}
 	};
-	private JButton btnTornaAComenar;
+	private JButton btnAtura;
 	private JButton btnInici;
+	private JButton btnTornaAComenar;
+	private JButton btnVeureResultats;
+	private int comptador;
+	private Font font = new Font(getFont().getName(), getFont().getStyle(), 16);
+	private JLabel lblTempsRestant;
+	private JLabel lblTempsRestantDescripcio;
+	private Object[] opcions = { "Si", "No" };
+	private JProgressBar progressBar;
 	private int restant;
+	private Timer t;
+	private int temps;
 
 	public AnalisisView() {
 		analisis = new JFrame("Anàlisis del sistema");

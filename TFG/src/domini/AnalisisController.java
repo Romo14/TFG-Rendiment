@@ -43,21 +43,6 @@ public class AnalisisController {
 		guardaResultats();
 	}
 
-	private void guardaResultats() {
-
-	}
-
-	public Float[] getRamInfo() {
-		Float[] res = new Float[6];
-		res[0] = ram.getAvgPercentatge();
-		res[1] = (float) (ram.getAvgTotal() / ram.getContador());
-		res[2] = ram.getMaxPercentatge();
-		res[3] = (float) ram.getMaxTotal();
-		res[4] = ram.getMinPercentatge();
-		res[5] = (float) ram.getMinTotal();
-		return res;
-	}
-
 	public Float[] getCpuInfo() {
 		Float[] res = new Float[3];
 		res[0] = cpu.getAvgPercentatge();
@@ -81,10 +66,10 @@ public class AnalisisController {
 			aux = gpu.getGraf();
 			temps = gpu.getTemps();
 			break;
-		// case "HDD":
-		// aux = hdd.getGraf();
-		// temps = hdd.getTemps();
-		// break;
+		case "HDD":
+			aux = hdd.getGraf();
+			temps = hdd.getTemps();
+			break;
 		case "RAM":
 			aux = ram.getGraf();
 			temps = ram.getTemps();
@@ -100,5 +85,28 @@ public class AnalisisController {
 			res.add(itTemps.next(), itAux.next());
 		}
 		return res;
+	}
+
+	public Float[] getHddInfo() {
+		Float[] res = new Float[3];
+		res[0] = hdd.getAvgPercentatge();
+		res[1] = hdd.getMaxPercentatge();
+		res[2] = hdd.getMinPercentatge();
+		return res;
+	}
+
+	public Float[] getRamInfo() {
+		Float[] res = new Float[6];
+		res[0] = ram.getAvgPercentatge();
+		res[1] = (float) (ram.getAvgTotal() / ram.getContador());
+		res[2] = ram.getMaxPercentatge();
+		res[3] = (float) ram.getMaxTotal();
+		res[4] = ram.getMinPercentatge();
+		res[5] = (float) ram.getMinTotal();
+		return res;
+	}
+
+	private void guardaResultats() {
+
 	}
 }
