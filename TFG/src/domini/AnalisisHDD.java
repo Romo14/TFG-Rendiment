@@ -9,138 +9,138 @@ import org.jfree.data.time.Second;
 
 public class AnalisisHDD {
 
-	private float avgPercentatge;
+    private long avgTotal;
 
-	private long avgTotal;
+    private long contador;
 
-	private long contador;
+    private ArrayList<Float> graf;
 
-	private ArrayList<Float> graf;
+    private Sigar hddSigar;
 
-	private Sigar hddSigar;
+    private float inicial;
 
-	private float maxPercentatge;
+    private float maxTotal;
+    
+    private float minTotal;
 
-	private long maxTotal;
+    private Second segon;
 
-	private float minPercentatge;
+    private ArrayList<Second> temps;
 
-	private long minTotal;
+    public AnalisisHDD() {
+	this.avgTotal = 0;
+	this.graf = new ArrayList<Float>();
+	this.maxTotal = 0;
+	this.minTotal = Long.MAX_VALUE;
+	this.hddSigar = new Sigar();
+	this.contador = 0;
+	this.temps = new ArrayList<Second>();
+	this.segon = new Second();
+	this.inicial = 0;
+    }
 
-	private Second segon;
+    public long getAvgTotal() {
+	return avgTotal;
+    }
 
-	private ArrayList<Second> temps;
+    public long getContador() {
+	return contador;
+    }
 
-	public AnalisisHDD() {
-		this.avgPercentatge = 0;
-		this.avgTotal = 0;
-		this.graf = new ArrayList<Float>();
-		this.maxPercentatge = 0;
-		this.maxTotal = 0;
-		this.minPercentatge = 100;
-		this.minTotal = Long.MAX_VALUE;
-		this.hddSigar = new Sigar();
-		this.contador = 0;
-		this.temps = new ArrayList<Second>();
-		this.segon = new Second();
+    public ArrayList<Float> getGraf() {
+	return graf;
+    }
+
+    public float getInicial() {
+	return inicial;
+    }
+
+    public float getMaxTotal() {
+	return maxTotal;
+    }
+
+    public float getMinTotal() {
+	return minTotal;
+    }
+
+    public Sigar getRamSigar() {
+	return hddSigar;
+    }
+
+    public Second getSegon() {
+	return segon;
+    }
+
+    public ArrayList<Second> getTemps() {
+	return temps;
+    }
+
+    public void setAvgTotal(long avgTotal) {
+	this.avgTotal = avgTotal;
+    }
+
+    public void setContador(long contador) {
+	this.contador = contador;
+    }
+
+    public void setGraf(ArrayList<Float> graf) {
+	this.graf = graf;
+    }
+
+    public void setInicial(float inicial) {
+	this.inicial = inicial;
+    }
+
+    public void setMaxTotal(float maxTotal) {
+	this.maxTotal = maxTotal;
+    }
+
+    public void setMaxTotal(long maxTotal) {
+	this.maxTotal = maxTotal;
+    }
+
+    public void setMinTotal(float minTotal) {
+	this.minTotal = minTotal;
+    }
+
+    public void setMinTotal(long minTotal) {
+	this.minTotal = minTotal;
+    }
+
+    public void setRamSigar(Sigar hddSigar) {
+	this.hddSigar = hddSigar;
+    }
+
+    public void setSegon(Second segon) {
+	this.segon = segon;
+    }
+
+    public void setTemps(ArrayList<Second> temps) {
+	this.temps = temps;
+    }
+
+    public void updateHDD() {
+	FileSystemUsage hdd = null;
+	try {
+	    hdd = hddSigar.getFileSystemUsage("C:");
+	} catch (SigarException se) {
+	    se.printStackTrace();
 	}
-
-	public float getAvgPercentatge() {
-		return avgPercentatge;
+	float used = 0;
+	if (avgTotal != 0) {
+	    used = (float)((hdd.getDiskReadBytes() + hdd.getDiskWriteBytes() - avgTotal) / 1024.00 / 1024.00);
+	} else {
+	    avgTotal = (hdd.getDiskReadBytes() + hdd.getDiskWriteBytes());
+	    inicial = avgTotal;
 	}
-
-	public long getAvgTotal() {
-		return avgTotal;
-	}
-
-	public long getContador() {
-		return contador;
-	}
-
-	public ArrayList<Float> getGraf() {
-		return graf;
-	}
-
-	public float getMaxPercentatge() {
-		return maxPercentatge;
-	}
-
-	public long getMaxTotal() {
-		return maxTotal;
-	}
-
-	public float getMinPercentatge() {
-		return minPercentatge;
-	}
-
-	public long getMinTotal() {
-		return minTotal;
-	}
-
-	public Sigar getRamSigar() {
-		return hddSigar;
-	}
-
-	public ArrayList<Second> getTemps() {
-		return temps;
-	}
-
-	public void setAvgPercentatge(float avgPercentatge) {
-		this.avgPercentatge = avgPercentatge;
-	}
-
-	public void setAvgTotal(long avgTotal) {
-		this.avgTotal = avgTotal;
-	}
-
-	public void setGraf(ArrayList<Float> graf) {
-		this.graf = graf;
-	}
-
-	public void setMaxPercentatge(float maxPercentatge) {
-		this.maxPercentatge = maxPercentatge;
-	}
-
-	public void setMaxTotal(long maxTotal) {
-		this.maxTotal = maxTotal;
-	}
-
-	public void setMinPercentatge(float minPercentatge) {
-		this.minPercentatge = minPercentatge;
-	}
-
-	public void setMinTotal(long minTotal) {
-		this.minTotal = minTotal;
-	}
-
-	public void setRamSigar(Sigar hddSigar) {
-		this.hddSigar = hddSigar;
-	}
-
-	public void updateHDD() {
-		FileSystemUsage hdd = null;
-		try {
-			hdd = hddSigar.getFileSystemUsage("C:");
-		} catch (SigarException se) {
-			se.printStackTrace();
-		}
-		long used = (hdd.getUsed() / 1024 / 1024);
-		graf.add((float) used);
-		temps.add(segon);
-		segon = (Second) segon.next();
-		if (used > maxTotal) {
-			maxPercentatge = (float) used * 100
-					/ (hdd.getTotal() / 1024 / 1024);
-			maxTotal = used;
-		}
-		if (used < minTotal) {
-			minPercentatge = (float) used * 100
-					/ (hdd.getTotal() / 1024 / 1024);
-			minTotal = used;
-		}
-		++contador;
-		avgTotal += used;
-		avgPercentatge = (float) (avgTotal * 100 / contador)
-				/ (hdd.getTotal() / 1024 / 1024);
-	}
+	graf.add(used);
+	temps.add(segon);
+	segon = (Second) segon.next();
+	if (used > maxTotal)
+	    maxTotal = used;
+	if (used < minTotal)
+	    minTotal = used;
+	++contador;
+	avgTotal = hdd.getDiskReadBytes() + hdd.getDiskWriteBytes();
+    }
 }

@@ -10,8 +10,6 @@
 	<classpathentry kind="lib" path="lib/jfreechart-1.0.19.jar"/>
 	<classpathentry kind="lib" path="lib/sigar.jar"/>
 	<classpathentry kind="lib" path="lib/syntheticaAluOxide.jar"/>
-	<classpathentry kind="lib" path="lib/syntheticaSimple2D.jar"/>
 	<classpathentry kind="lib" path="lib/synthetica.jar"/>
-	<classpathentry kind="lib" path="lib/syntheticaBlueLight.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
