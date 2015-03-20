@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package domini;
 
 import java.util.ArrayList;
@@ -19,10 +22,10 @@ public class AnalisisRAM {
     /** The avg total. */
     private long avgTotal;
 
-    /** The contador. */
-    private long contador;
+    /** The comptador. */
+    private long comptador;
 
-    /** The graf. */
+    /** Llista de valors obtinguts en el temps. */
     private ArrayList<Float> graf;
 
     /** The max percentatge. */
@@ -58,7 +61,7 @@ public class AnalisisRAM {
 	this.minPercentatge = 100;
 	this.minTotal = Long.MAX_VALUE;
 	this.ramSigar = new Sigar();
-	this.contador = 0;
+	this.comptador = 0;
 	this.temps = new ArrayList<Second>();
 	this.segon = new Second();
     }
@@ -75,19 +78,19 @@ public class AnalisisRAM {
     /**
      * Gets the avg total.
      *
-     * @return the avg total
+     * @return the ${e.g(1).rsfl()}
      */
     public long getAvgTotal() {
 	return avgTotal;
     }
 
     /**
-     * Gets the contador.
+     * Gets the comptador.
      *
-     * @return the contador
+     * @return the comptador
      */
-    public long getContador() {
-	return contador;
+    public long getComptador() {
+	return comptador;
     }
 
     /**
@@ -172,12 +175,12 @@ public class AnalisisRAM {
     }
 
     /**
-     * Sets the contador.
+     * Sets the comptador.
      *
-     * @param contador the new contador
+     * @param comptador the new comptador
      */
-    public void setContador(long contador) {
-	this.contador = contador;
+    public void setcomptador(long comptador) {
+	this.comptador = comptador;
     }
 
     /**
@@ -267,9 +270,9 @@ public class AnalisisRAM {
 		    / (mem.getTotal() / 1024 / 1024);
 	    minTotal = used;
 	}
-	++contador;
+	++comptador;
 	avgTotal += used;
-	avgPercentatge = (float) (avgTotal * 100 / contador)
+	avgPercentatge = (float) (avgTotal * 100 / comptador)
 		/ (mem.getTotal() / 1024 / 1024);
     }
 }

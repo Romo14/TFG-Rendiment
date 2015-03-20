@@ -1,3 +1,4 @@
+
 package domini;
 
 import java.util.ArrayList;
@@ -7,47 +8,50 @@ import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarException;
 import org.jfree.data.time.Second;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class AnalisisCPU.
+ * Classe encarregada d'obtenir la informació de la CPU de l'ordinador i guardar les dades obtenides.
+ */
+/**
+ * @author Oriol Gasset Romo <oriol.gasset@est.fib.upc.edu>
+ *
  */
 public class AnalisisCPU {
 
-    /** The avg percentatge. */
+    /** La mitjana d'ús de CPU en percentatge. */
     private float avgPercentatge;
 
-    /** The avg total. */
+    /** La mitjana d'ús de CPU en valors totals. */
     private long avgTotal;
 
-    /** The contador. */
-    private long contador;
+    /** Comptador de les vegades que s'actualitza la informació de la CPU. */
+    private long comptador;
 
-    /** The cpu sigar. */
+    /** Element que ens permet accedir a la informació de la CPU. */
     private Sigar cpuSigar;
 
-    /** The graf. */
+    /** Llista de valors obtinguts en el temps */
     private ArrayList<Float> graf;
 
-    /** The max percentatge. */
+    /** Màxim ús de la CPU en percentatge. */
     private float maxPercentatge;
 
-    /** The max total. */
+    /** Màxim ús de la CPU en total. */
     private long maxTotal;
 
-    /** The min percentatge. */
+    /** Mínim ús de la CPU en percentatge. */
     private float minPercentatge;
 
-    /** The min total. */
+    /** Mínim ús de la CPU en total. */
     private long minTotal;
 
-    /** The segon. */
+    /** Hora del dia en què es realitza l'obtenció de les dades. */
     private Second segon;
 
-    /** The temps. */
+    /** Llistat de les hores en que s'obté les dades. */
     private ArrayList<Second> temps;
 
     /**
-     * Instantiates a new analisis cpu.
+     * Inicialitza tots els valors dels atributs per defecte.
      */
     public AnalisisCPU() {
 	this.avgPercentatge = 0;
@@ -58,184 +62,184 @@ public class AnalisisCPU {
 	this.minPercentatge = 100;
 	this.minTotal = Long.MAX_VALUE;
 	this.cpuSigar = new Sigar();
-	this.contador = 0;
+	this.comptador = 0;
 	this.temps = new ArrayList<Second>();
 	this.segon = new Second();
     }
 
     /**
-     * Gets the avg percentatge.
+     * Obté el avg percentatge.
      *
-     * @return the avg percentatge
+     * @return el avg percentatge
      */
     public float getAvgPercentatge() {
 	return avgPercentatge;
     }
 
     /**
-     * Gets the avg total.
+     * Obté el avg total.
      *
-     * @return the avg total
+     * @return el avg total
      */
     public long getAvgTotal() {
 	return avgTotal;
     }
 
     /**
-     * Gets the contador.
+     * Obté el comptador.
      *
-     * @return the contador
+     * @return el comptador
      */
-    public long getContador() {
-	return contador;
+    public long getcomptador() {
+	return comptador;
     }
 
     /**
-     * Gets the graf.
+     * Obté el graf.
      *
-     * @return the graf
+     * @return el graf
      */
     public ArrayList<Float> getGraf() {
 	return graf;
     }
 
     /**
-     * Gets the max percentatge.
+     * Obté el max percentatge.
      *
-     * @return the max percentatge
+     * @return el max percentatge
      */
     public float getMaxPercentatge() {
 	return maxPercentatge;
     }
 
     /**
-     * Gets the max total.
+     * Obté el max total.
      *
-     * @return the max total
+     * @return el max total
      */
     public long getMaxTotal() {
 	return maxTotal;
     }
 
     /**
-     * Gets the min percentatge.
+     * Obté el min percentatge.
      *
-     * @return the min percentatge
+     * @return el min percentatge
      */
     public float getMinPercentatge() {
 	return minPercentatge;
     }
 
     /**
-     * Gets the min total.
+     * Obté el min total.
      *
-     * @return the min total
+     * @return el min total
      */
     public long getMinTotal() {
 	return minTotal;
     }
 
     /**
-     * Gets the ram sigar.
+     * Obté el ram sigar.
      *
-     * @return the ram sigar
+     * @return el ram sigar
      */
     public Sigar getRamSigar() {
 	return cpuSigar;
     }
 
     /**
-     * Gets the temps.
+     * Obté el temps.
      *
-     * @return the temps
+     * @return el temps
      */
     public ArrayList<Second> getTemps() {
 	return temps;
     }
 
     /**
-     * Sets the avg percentatge.
+     * Defineix el avg percentatge.
      *
-     * @param avgPercentatge the new avg percentatge
+     * @param avgPercentatge el nou avg percentatge
      */
     public void setAvgPercentatge(float avgPercentatge) {
 	this.avgPercentatge = avgPercentatge;
     }
 
     /**
-     * Sets the avg total.
+     * Defineix el avg total.
      *
-     * @param avgTotal the new avg total
+     * @param avgTotal el nou avg total
      */
     public void setAvgTotal(long avgTotal) {
 	this.avgTotal = avgTotal;
     }
 
     /**
-     * Sets the graf.
+     * Defineix el graf.
      *
-     * @param graf the new graf
+     * @param graf el nou graf
      */
     public void setGraf(ArrayList<Float> graf) {
 	this.graf = graf;
     }
 
     /**
-     * Sets the max percentatge.
+     * Defineix el max percentatge.
      *
-     * @param maxPercentatge the new max percentatge
+     * @param maxPercentatge el nou max percentatge
      */
     public void setMaxPercentatge(float maxPercentatge) {
 	this.maxPercentatge = maxPercentatge;
     }
 
     /**
-     * Sets the max total.
+     * Defineix el max total.
      *
-     * @param maxTotal the new max total
+     * @param maxTotal el nou max total
      */
     public void setMaxTotal(long maxTotal) {
 	this.maxTotal = maxTotal;
     }
 
     /**
-     * Sets the min percentatge.
+     * Defineix el min percentatge.
      *
-     * @param minPercentatge the new min percentatge
+     * @param minPercentatge el nou min percentatge
      */
     public void setMinPercentatge(float minPercentatge) {
 	this.minPercentatge = minPercentatge;
     }
 
     /**
-     * Sets the min total.
+     * Defineix el min total.
      *
-     * @param minTotal the new min total
+     * @param minTotal el nou min total
      */
     public void setMinTotal(long minTotal) {
 	this.minTotal = minTotal;
     }
 
     /**
-     * Sets the ram sigar.
+     * Defineix el ram sigar.
      *
-     * @param cpuSigar the new ram sigar
+     * @param cpuSigar el nou ram sigar
      */
     public void setRamSigar(Sigar cpuSigar) {
 	this.cpuSigar = cpuSigar;
     }
 
     /**
-     * Sets the temps.
+     * Defineix el temps.
      *
-     * @param temps the new temps
+     * @param temps el nou temps
      */
     public void setTemps(ArrayList<Second> temps) {
 	this.temps = temps;
     }
 
     /**
-     * Update cpu.
+     * Obté i actualitza la informació de la CPU.
      */
     public void updateCPU() {
 	CpuPerc cpuPerc = null;
@@ -256,8 +260,8 @@ public class AnalisisCPU {
 	    minPercentatge = (float) (cpuPerc.getCombined() * 100);
 	    minTotal = used;
 	}
-	++contador;
+	++comptador;
 	avgTotal += used;
-	avgPercentatge = (float) (avgTotal / contador);
+	avgPercentatge = (float) (avgTotal / comptador);
     }
 }

@@ -14,13 +14,12 @@ import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarException;
 import org.jfree.data.time.Second;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class AnalisisNET.
  */
 public class AnalisisNET {
 
-    /** The rx change map. */
+    /** The la targeta de xarxa sigar. */
     static Map<String, List<Long>> rxChangeMap = new HashMap<String, List<Long>>();
 
     /** The rx current map. */
@@ -32,42 +31,40 @@ public class AnalisisNET {
     /** The tx current map. */
     static Map<String, Long> txCurrentMap = new HashMap<String, Long>();
 
-    /** The avg percentatge. */
+    /** La mitjana d'ús de la targeta de xarxa en percentatge. */
     private float avgPercentatge;
 
-    /** The avg total. */
+    /** La mitjana d'ús de la targeta de xarxa en valors totals. */
     private long avgTotal;
 
-    /** The contador. */
-    private long contador;
+    /** Comptador de les vegades que s'actualitza la informació de la la targeta de xarxa. */
+    private long comptador;
 
-    /** The graf. */
-    private ArrayList<Float> graf;
-
-    /** The max percentatge. */
-    private float maxPercentatge;
-
-    /** The max total. */
-    private long maxTotal;
-
-    /** The min percentatge. */
-    private float minPercentatge;
-
-    /** The min total. */
-    private long minTotal;
-
-    /** The net sigar. */
+    /** Element que ens permet accedir a la informació de la la targeta de xarxa. */
     private Sigar netSigar;
 
-    /** The segon. */
+    /** Llista de valors obtinguts en el temps */
+    private ArrayList<Float> graf;
+
+    /** Màxim ús de la la targeta de xarxa en percentatge. */
+    private float maxPercentatge;
+
+    /** Màxim ús de la la targeta de xarxa en total. */
+    private long maxTotal;
+
+    /** Mínim ús de la la targeta de xarxa en percentatge. */
+    private float minPercentatge;
+
+    /** Mínim ús de la la targeta de xarxa en total. */
+    private long minTotal;
+
+    /** Hora del dia en què es realitza l'obtenció de les dades. */
     private Second segon;
 
-    /** The speed. */
-    private long speed;
-
-    /** The temps. */
+    /** Llistat de les hores en que s'obté les dades. */
     private ArrayList<Second> temps;
-
+/** The speed. */
+    private long speed;
     /**
      * Instantiates a new analisis net.
      */
@@ -80,7 +77,7 @@ public class AnalisisNET {
 	this.minPercentatge = 100;
 	this.minTotal = Long.MAX_VALUE;
 	this.netSigar = new Sigar();
-	this.contador = 0;
+	this.comptador = 0;
 	this.temps = new ArrayList<Second>();
 	this.segon = new Second();
     }
@@ -104,12 +101,12 @@ public class AnalisisNET {
     }
 
     /**
-     * Gets the contador.
+     * Gets the comptador.
      *
-     * @return the contador
+     * @return the comptador
      */
-    public long getContador() {
-	return contador;
+    public long getComptador() {
+	return comptador;
     }
 
     /**
@@ -239,7 +236,7 @@ public class AnalisisNET {
     /**
      * Gets the speed.
      *
-     * @return the speed
+     * @return the min total
      */
     public long getSpeed() {
 	return speed;
@@ -297,12 +294,12 @@ public class AnalisisNET {
     }
 
     /**
-     * Sets the contador.
+     * Sets the comptador.
      *
-     * @param contador the new contador
+     * @param comptador the new comptador
      */
-    public void setContador(long contador) {
-	this.contador = contador;
+    public void setcomptador(long comptador) {
+	this.comptador = comptador;
     }
 
     /**
@@ -403,9 +400,9 @@ public class AnalisisNET {
 	    minPercentatge = (float) ((total * 100) / speed);
 	    minTotal = (long) total;
 	}
-	++contador;
+	++comptador;
 	avgTotal += total;
-	avgPercentatge = (float) (avgTotal * 100 / contador) / speed;
+	avgPercentatge = (float) (avgTotal * 100 / comptador) / speed;
 
     }
 }

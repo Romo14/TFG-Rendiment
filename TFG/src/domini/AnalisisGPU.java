@@ -1,13 +1,16 @@
+/*
+ * 
+ */
 package domini;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class AnalisisGPU.
+ * Classe que s'encarrega d'ontenir la informació relacionada amb la GPU: model, marca, característiques...
  */
 public class AnalisisGPU {
 
     /**
-     * Gets the info.
+     * Obté la informació de la gpu.
      *
      * @return the info
      */

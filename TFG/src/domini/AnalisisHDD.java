@@ -7,25 +7,24 @@ import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarException;
 import org.jfree.data.time.Second;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class AnalisisHDD.
  */
 public class AnalisisHDD {
 
-	/** The avg total. */
+	/** La mitjana d'ús del HDD en percentatge. */
 	private long avgTotal;
 
-	/** The contador. */
-	private long contador;
+	/** Comptador de les vegades que s'actualitza la informació del HDD. */
+	private long comptador;
 
-	/** The graf. */
+	/** Llista de valors obtinguts en el temps. */
 	private ArrayList<Float> graf;
 
-	/** The hdd sigar. */
+	/** Element que ens permet accedir a la informació del disc dur. */
 	private Sigar hddSigar;
 
-	/** The inicial. */
+	/** Dade. */
 	private float inicial;
 
 	/** The max total. */
@@ -41,7 +40,7 @@ public class AnalisisHDD {
 	private ArrayList<Second> temps;
 
 	/**
-	 * Instantiates a new analisis hdd.
+	 * Instantiates a nou analisis hdd.
 	 */
 	public AnalisisHDD() {
 		this.avgTotal = 0;
@@ -49,187 +48,187 @@ public class AnalisisHDD {
 		this.maxTotal = 0;
 		this.minTotal = Long.MAX_VALUE;
 		this.hddSigar = new Sigar();
-		this.contador = 0;
+		this.comptador = 0;
 		this.temps = new ArrayList<Second>();
 		this.segon = new Second();
 		this.inicial = 0;
 	}
 
 	/**
-	 * Gets the avg total.
+	 * Obté el avg total.
 	 *
-	 * @return the avg total
+	 * @return el avg total
 	 */
 	public long getAvgTotal() {
 		return avgTotal;
 	}
 
 	/**
-	 * Gets the contador.
+	 * Obté el comptador.
 	 *
-	 * @return the contador
+	 * @return el comptador
 	 */
-	public long getContador() {
-		return contador;
+	public long getcomptador() {
+		return comptador;
 	}
 
 	/**
-	 * Gets the graf.
+	 * Obté el graf.
 	 *
-	 * @return the graf
+	 * @return el graf
 	 */
 	public ArrayList<Float> getGraf() {
 		return graf;
 	}
 
 	/**
-	 * Gets the inicial.
+	 * Obté el inicial.
 	 *
-	 * @return the inicial
+	 * @return el inicial
 	 */
 	public float getInicial() {
 		return inicial;
 	}
 
 	/**
-	 * Gets the max total.
+	 * Obté el max total.
 	 *
-	 * @return the max total
+	 * @return el max total
 	 */
 	public float getMaxTotal() {
 		return maxTotal;
 	}
 
 	/**
-	 * Gets the min total.
+	 * Obté el min total.
 	 *
-	 * @return the min total
+	 * @return el min total
 	 */
 	public float getMinTotal() {
 		return minTotal;
 	}
 
 	/**
-	 * Gets the ram sigar.
+	 * Obté el ram sigar.
 	 *
-	 * @return the ram sigar
+	 * @return el ram sigar
 	 */
 	public Sigar getRamSigar() {
 		return hddSigar;
 	}
 
 	/**
-	 * Gets the segon.
+	 * Obté el segon.
 	 *
-	 * @return the segon
+	 * @return el segon
 	 */
 	public Second getSegon() {
 		return segon;
 	}
 
 	/**
-	 * Gets the temps.
+	 * Obté el temps.
 	 *
-	 * @return the temps
+	 * @return el temps
 	 */
 	public ArrayList<Second> getTemps() {
 		return temps;
 	}
 
 	/**
-	 * Sets the avg total.
+	 * Defineix el avg total.
 	 *
-	 * @param avgTotal the new avg total
+	 * @param avgTotal el nou avg total
 	 */
 	public void setAvgTotal(long avgTotal) {
 		this.avgTotal = avgTotal;
 	}
 
 	/**
-	 * Sets the contador.
+	 * Defineix el comptador.
 	 *
-	 * @param contador the new contador
+	 * @param comptador el nou comptador
 	 */
-	public void setContador(long contador) {
-		this.contador = contador;
+	public void setcomptador(long comptador) {
+		this.comptador = comptador;
 	}
 
 	/**
-	 * Sets the graf.
+	 * Defineix el graf.
 	 *
-	 * @param graf the new graf
+	 * @param graf el nou graf
 	 */
 	public void setGraf(ArrayList<Float> graf) {
 		this.graf = graf;
 	}
 
 	/**
-	 * Sets the inicial.
+	 * Defineix el inicial.
 	 *
-	 * @param inicial the new inicial
+	 * @param inicial el nou inicial
 	 */
 	public void setInicial(float inicial) {
 		this.inicial = inicial;
 	}
 
 	/**
-	 * Sets the max total.
+	 * Defineix el max total.
 	 *
-	 * @param maxTotal the new max total
+	 * @param maxTotal el nou max total
 	 */
 	public void setMaxTotal(float maxTotal) {
 		this.maxTotal = maxTotal;
 	}
 
 	/**
-	 * Sets the max total.
+	 * Defineix el max total.
 	 *
-	 * @param maxTotal the new max total
+	 * @param maxTotal el nou max total
 	 */
 	public void setMaxTotal(long maxTotal) {
 		this.maxTotal = maxTotal;
 	}
 
 	/**
-	 * Sets the min total.
+	 * Defineix el min total.
 	 *
-	 * @param minTotal the new min total
+	 * @param minTotal el nou min total
 	 */
 	public void setMinTotal(float minTotal) {
 		this.minTotal = minTotal;
 	}
 
 	/**
-	 * Sets the min total.
+	 * Defineix el min total.
 	 *
-	 * @param minTotal the new min total
+	 * @param minTotal el nou min total
 	 */
 	public void setMinTotal(long minTotal) {
 		this.minTotal = minTotal;
 	}
 
 	/**
-	 * Sets the ram sigar.
+	 * Defineix el ram sigar.
 	 *
-	 * @param hddSigar the new ram sigar
+	 * @param hddSigar el nou ram sigar
 	 */
 	public void setRamSigar(Sigar hddSigar) {
 		this.hddSigar = hddSigar;
 	}
 
 	/**
-	 * Sets the segon.
+	 * Defineix el segon.
 	 *
-	 * @param segon the new segon
+	 * @param segon el nou segon
 	 */
 	public void setSegon(Second segon) {
 		this.segon = segon;
 	}
 
 	/**
-	 * Sets the temps.
+	 * Defineix el temps.
 	 *
-	 * @param temps the new temps
+	 * @param temps el nou temps
 	 */
 	public void setTemps(ArrayList<Second> temps) {
 		this.temps = temps;
@@ -270,6 +269,6 @@ public class AnalisisHDD {
 			maxTotal = used;
 		if (used < minTotal)
 			minTotal = used;
-		++contador;
+		++comptador;
 	}
 }

@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package domini;
 
 // TODO: Auto-generated Javadoc

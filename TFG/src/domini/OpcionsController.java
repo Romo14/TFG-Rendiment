@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package domini;
 
 // TODO: Auto-generated Javadoc
@@ -161,7 +164,7 @@ public class OpcionsController {
     }
 
     /**
-     * Sets the all true.
+     * Define el valor de all true.
      */
     public void setAllTrue() {
 	opcions.setCpu(true);

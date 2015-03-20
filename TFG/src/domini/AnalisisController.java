@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package domini;
 
 import java.util.ArrayList;
@@ -6,44 +9,37 @@ import java.util.Iterator;
 import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class AnalisisController.
- *
- * @author Oriol
+ * Controlador de l'anàlisis dels components. Classe que s'encarrega de definir els objectes que analitzaran l'ordinador. També gestiona el pass d'informació entre aquests objectes i la capa de domini
  */
 /**
- * @author Oriol
- *
- */
-/**
- * @author Oriol
+ * @author Oriol Gasset Romo <oriol.gasset@est.fib.upc.edu>
  *
  */
 public class AnalisisController {
 
-	/** The opcions controller. */
+	/** Les opcions de l'anàlisis */
 	private static OpcionsController opcionsController;
 	
-	/** The cpu. */
+	/** Objecte que analitzarà la CPU */
 	private AnalisisCPU cpu;
 	
-	/** The gpu. */
+	/** Objecte que analitzarà la GPU */
 	private AnalisisGPU gpu;
 	
-	/** The hdd. */
+	/** Objecte que analitzarà el disc dur */
 	private AnalisisHDD hdd;
 	
-	/** The net. */
+	/** Objecte que analitzarà la targeta de xarxa */
 	private AnalisisNET net;
 	
-	/** The ram. */
+	/** Objecte que analitzarà la memòria RAM */
 	private AnalisisRAM ram;
 
 	/**
-	 * Instantiates a new analisis controller.
-	 *
-	 * @param oc the oc
+	 * Creadora per defecte del controlador de l'anàlisis.
+	 * Crea un objecte per cada component a analitzar
+	 * @param oc El controlador de les opcions
 	 */
 	public AnalisisController(OpcionsController oc) {
 		cpu = new AnalisisCPU();
@@ -55,7 +51,8 @@ public class AnalisisController {
 	}
 
 	/**
-	 * Analitzar.
+	 * Funció encarregada de actualitzar la informació de l'ús dels components del sistema depenen 
+	 * de si aquests formen part de l'anàlisis o no.
 	 */
 	public void analitzar() {
 		if (opcionsController.isCpu()) {
@@ -72,8 +69,9 @@ public class AnalisisController {
 		}
 	}
 
+	
 	/**
-	 * Gets the cpu info.
+	 * Obté la informació del màxim, mínim i mitjana de l'ús de la CPU. Aquesta funció es crida un cop acabat l'anàlisis.
 	 *
 	 * @return the cpu info
 	 */
@@ -86,10 +84,11 @@ public class AnalisisController {
 	}
 
 	/**
-	 * Gets the evol.
+	 * Obté, per cada component analitzat, el llistat de valors comptabilitzats al llarg del temps
+	 * per crear la gràfica.
 	 *
-	 * @param string the string
-	 * @return the evol
+	 * @param string String que indica de quin component volem obtenir el llistat de valors
+	 * @return El llistat amb els valors i el temps en que s'han obtingut
 	 */
 	public TimeSeries getEvol(String string) {
 		TimeSeries res = new TimeSeries(string);
@@ -124,7 +123,7 @@ public class AnalisisController {
 	}
 
 	/**
-	 * Gets the hdd info.
+	 * Obté la informació del màxim, mínim i mitjana de l'ús del disc dur. Aquesta funció es crida un cop acabat l'anàlisis.
 	 *
 	 * @return the hdd info
 	 */
@@ -137,14 +136,14 @@ public class AnalisisController {
 	}
 
 	/**
-	 * Gets the net info.
+	 * Obté la informació del màxim, mínim i mitjana de l'ús de la targeta de xarxa. Aquesta funció es crida un cop acabat l'anàlisis.
 	 *
 	 * @return the net info
 	 */
 	public Float[] getNetInfo() {
 		Float[] res = new Float[6];
 		res[0] = net.getAvgPercentatge();
-		res[1] = (float) (net.getAvgTotal() / net.getContador());
+		res[1] = (float) (net.getAvgTotal() / net.getComptador());
 		res[2] = net.getMaxPercentatge();
 		res[3] = (float) net.getMaxTotal();
 		res[4] = net.getMinPercentatge();
@@ -153,14 +152,14 @@ public class AnalisisController {
 	}
 
 	/**
-	 * Gets the ram info.
+	 * Obté la informació del màxim, mínim i mitjana de l'ús de la memòria RAM. Aquesta funció es crida un cop acabat l'anàlisis.
 	 *
 	 * @return the ram info
 	 */
 	public Float[] getRamInfo() {
 		Float[] res = new Float[6];
 		res[0] = ram.getAvgPercentatge();
-		res[1] = (float) (ram.getAvgTotal() / ram.getContador());
+		res[1] = (float) (ram.getAvgTotal() / ram.getComptador());
 		res[2] = ram.getMaxPercentatge();
 		res[3] = (float) ram.getMaxTotal();
 		res[4] = ram.getMinPercentatge();
@@ -169,7 +168,7 @@ public class AnalisisController {
 	}
 
 	/**
-	 * Gets the gpu info.
+	 * Obté la informació de la GPU. Aquesta funció es crida un cop acabat l'anàlisis.
 	 *
 	 * @return the gpu info
 	 */
