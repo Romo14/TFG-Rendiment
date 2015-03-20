@@ -121,6 +121,9 @@ public class ResultatAnalisisView extends JPanel {
     /** The hdd min. */
     private JLabel hddMin;
     
+    /** The hdd tool tip. */
+    private JLabel hddToolTip;
+    
     /** The ko icon. */
     private ImageIcon koIcon;
     
@@ -144,6 +147,9 @@ public class ResultatAnalisisView extends JPanel {
     
     /** The ok text. */
     private String okText = "El dispositiu funciona correctament i aguanta perfectament la càrrega de treball que s'hi realitza";
+    
+    /** The opcions. */
+	private Object[] opcions = { "Si", "No" };
     
     /** The panel cpu. */
     private JPanel panelCPU;
@@ -169,8 +175,8 @@ public class ResultatAnalisisView extends JPanel {
     /** The pdf button. */
     private JButton pdfButton;
     
-    /** The ram. */
-    private TimeSeries ram;
+	/** The ram. */
+	private TimeSeries ram;
     
     /** The ram avg. */
     private JLabel ramAvg;
@@ -183,12 +189,8 @@ public class ResultatAnalisisView extends JPanel {
     
     /** The resultat. */
     private JFrame resultat;
-    
     /** The tabbed pane. */
     private JTabbedPane tabbedPane;
-    
-    /** The hdd tool tip. */
-    private JLabel hddToolTip;
 
     /**
      * Instantiates a new resultat analisis view.
@@ -234,9 +236,13 @@ public class ResultatAnalisisView extends JPanel {
 		"/images/home-icon.png")));
 	btnInici.addActionListener(new ActionListener() {
 	    public void actionPerformed(ActionEvent e) {
-		int a = JOptionPane.showConfirmDialog(null,
-			"Vols tornar al menú principal?", "",
-			JOptionPane.YES_NO_OPTION);
+	    	int a = JOptionPane
+					.showOptionDialog(
+							null,
+							"Vol cancel·lar l'anàlisi i tornar al menú principal?",
+							"", JOptionPane.YES_NO_OPTION,
+							JOptionPane.QUESTION_MESSAGE, null, opcions,
+							opcions[0]);
 		if (a == 0) {
 		    MainController.main(null);
 		    resultat.dispose();
