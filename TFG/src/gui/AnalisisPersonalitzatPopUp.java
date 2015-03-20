@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package gui;
 
 import java.awt.Color;
@@ -15,12 +18,28 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class AnalisisPersonalitzatPopUp.
+ */
 public class AnalisisPersonalitzatPopUp extends JPanel {
+	
+	/** The cpu check box. */
 	private static JCheckBox cpuCheckBox;
+	
+	/** The disc dur check box. */
 	private static JCheckBox discDurCheckBox;
+	
+	/** The internet check box. */
 	private static JCheckBox internetCheckBox;
+	
+	/** The ram check box. */
 	private static JCheckBox ramCheckBox;
+	
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -1893117450756795448L;
+	
+	/** The analitza listener. */
 	private ActionListener analitzaListener = new ActionListener() {
 
 		public void actionPerformed(ActionEvent arg0) {
@@ -75,16 +94,27 @@ public class AnalisisPersonalitzatPopUp extends JPanel {
 
 		}
 	};
+	
+	/** The cancela listener. */
 	private ActionListener cancelaListener = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			options.dispose();
 			MainController.view.panel.activaBotons();
 		}
 	};
+	
+	/** The font. */
 	private Font font = new Font(getFont().getName(), getFont().getStyle(), 16);
+	
+	/** The opcions. */
 	private Object[] opcions = { "Si", "No" };
+	
+	/** The options. */
 	private JFrame options;
 
+	/**
+	 * Instantiates a new analisis personalitzat pop up.
+	 */
 	public AnalisisPersonalitzatPopUp() {
 		options = new JFrame("Anàlisi Personalitzat" + "");
 		options.setFont(font);

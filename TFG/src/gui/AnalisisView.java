@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package gui;
 
 import java.awt.Dimension;
@@ -25,10 +28,19 @@ import java.awt.event.WindowEvent;
 import java.awt.Component;
 import java.awt.Color;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class AnalisisView.
+ */
 public class AnalisisView extends JPanel {
 
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 7388902221110453680L;
+	
+	/** The analisis. */
 	private JFrame analisis;
+	
+	/** The atura. */
 	private ActionListener atura = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (btnAtura.getText().equalsIgnoreCase("Atura")) {
@@ -45,20 +57,49 @@ public class AnalisisView extends JPanel {
 
 		}
 	};
+	
+	/** The btn atura. */
 	private JButton btnAtura;
+	
+	/** The btn inici. */
 	private JButton btnInici;
+	
+	/** The btn torna a comenar. */
 	private JButton btnTornaAComenar;
+	
+	/** The btn veure resultats. */
 	private JButton btnVeureResultats;
+	
+	/** The comptador. */
 	private int comptador;
+	
+	/** The font. */
 	private Font font = new Font(getFont().getName(), getFont().getStyle(), 16);
+	
+	/** The lbl temps restant. */
 	private JLabel lblTempsRestant;
+	
+	/** The lbl temps restant descripcio. */
 	private JLabel lblTempsRestantDescripcio;
+	
+	/** The opcions. */
 	private Object[] opcions = { "Si", "No" };
+	
+	/** The progress bar. */
 	private JProgressBar progressBar;
+	
+	/** The restant. */
 	private int restant;
+	
+	/** The t. */
 	private Timer t;
+	
+	/** The temps. */
 	private int temps;
 
+	/**
+	 * Instantiates a new analisis view.
+	 */
 	public AnalisisView() {
 		analisis = new JFrame("Anàlisis del sistema");
 		analisis.getContentPane().setBackground(Color.WHITE);
@@ -306,6 +347,11 @@ public class AnalisisView extends JPanel {
 		});
 	}
 
+	/**
+	 * Gets the temps.
+	 *
+	 * @return the temps
+	 */
 	private String getTemps() {
 		restant = temps - comptador;
 		String t = "";

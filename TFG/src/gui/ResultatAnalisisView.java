@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package gui;
 
 import java.awt.Color;
@@ -43,55 +46,153 @@ import java.awt.Component;
 
 import javax.swing.BoxLayout;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ResultatAnalisisView.
+ */
 public class ResultatAnalisisView extends JPanel {
 
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 9073846157870757887L;
+    
+    /** The btn inici. */
     private JButton btnInici;
+    
+    /** The chckbx cpu. */
     private JCheckBox chckbxCpu;
+    
+    /** The chckbx disc dur. */
     private JCheckBox chckbxDiscDur;
+    
+    /** The chckbx ram. */
     private JCheckBox chckbxRam;
+    
+    /** The chckbx xarxa. */
     private JCheckBox chckbxXarxa;
+    
+    /** The cpu. */
     private TimeSeries cpu;
+    
+    /** The cpu avg. */
     private JLabel cpuAvg;
+    
+    /** The cpu max. */
     private JLabel cpuMax;
+    
+    /** The cpu min. */
     private JLabel cpuMin;
+    
+    /** The dataset. */
     private TimeSeriesCollection dataset;
+    
+    /** The estat cpu. */
     private JPanel estatCPU;
+    
+    /** The estat hdd. */
     private JPanel estatHDD;
+    
+    /** The estat net. */
     private JPanel estatNET;
+    
+    /** The estat ram. */
     private JPanel estatRAM;
+    
+    /** The font. */
     private Font font = new Font(getFont().getName(), getFont().getStyle(), 16);
+    
+    /** The gpu max. */
     private JLabel gpuMax;
+    
+    /** The grafica. */
     private JFreeChart grafica;
+    
+    /** The grafica panel. */
     private ChartPanel graficaPanel;
+    
+    /** The hdd. */
     private TimeSeries hdd;
+    
+    /** The hdd avg. */
     private JLabel hddAvg;
+    
+    /** The hdd max. */
     private JLabel hddMax;
+    
+    /** The hdd min. */
     private JLabel hddMin;
+    
+    /** The ko icon. */
     private ImageIcon koIcon;
+    
+    /** The ko text. */
     private String koText = "El dispositiu té una mitjana d'ús de més del 75%, pel que es pot determinar que és necessari revisar";
+    
+    /** The net. */
     private TimeSeries net;
+    
+    /** The net avg. */
     private JLabel netAvg;
+    
+    /** The net max. */
     private JLabel netMax;
+    
+    /** The net min. */
     private JLabel netMin;
+    
+    /** The ok icon. */
     private ImageIcon okIcon;
+    
+    /** The ok text. */
     private String okText = "El dispositiu funciona correctament i aguanta perfectament la càrrega de treball que s'hi realitza";
+    
+    /** The panel cpu. */
     private JPanel panelCPU;
+    
+    /** The panel dades generals. */
     private JPanel panelDadesGenerals;
+    
+    /** The panel gpu. */
     private JPanel panelGPU;
+    
+    /** The panel grafiques. */
     private JPanel panelGrafiques;
+    
+    /** The panel hdd. */
     private JPanel panelHDD;
+    
+    /** The panel net. */
     private JPanel panelNET;
+    
+    /** The panel ram. */
     private JPanel panelRAM;
+    
+    /** The pdf button. */
     private JButton pdfButton;
+    
+    /** The ram. */
     private TimeSeries ram;
+    
+    /** The ram avg. */
     private JLabel ramAvg;
+    
+    /** The ram max. */
     private JLabel ramMax;
+    
+    /** The ram min. */
     private JLabel ramMin;
+    
+    /** The resultat. */
     private JFrame resultat;
+    
+    /** The tabbed pane. */
     private JTabbedPane tabbedPane;
+    
+    /** The hdd tool tip. */
     private JLabel hddToolTip;
 
+    /**
+     * Instantiates a new resultat analisis view.
+     */
     public ResultatAnalisisView() {
 	resultat = new JFrame("Resultats de l'anàlisi");
 	resultat.setResizable(false);
@@ -432,6 +533,9 @@ public class ResultatAnalisisView extends JPanel {
 	addCheckBoxListeners();
     }
 
+    /**
+     * Actualitza colors.
+     */
     private void actualitzaColors() {
 	XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true, true);
 	renderer.setSeriesPaint(0, Color.BLUE);
@@ -446,6 +550,9 @@ public class ResultatAnalisisView extends JPanel {
 	p.setRenderer(renderer);
     }
 
+    /**
+     * Adds the check box listeners.
+     */
     private void addCheckBoxListeners() {
 	chckbxCpu.addItemListener(new ItemListener() {
 	    public void itemStateChanged(ItemEvent e) {
@@ -489,6 +596,11 @@ public class ResultatAnalisisView extends JPanel {
 	});
     }
 
+    /**
+     * Crear grafica.
+     *
+     * @return the j free chart
+     */
     public JFreeChart crearGrafica() {
 	dataset = new TimeSeriesCollection();
 	if (ViewOpcionsController.isCpu()) {
@@ -522,6 +634,9 @@ public class ResultatAnalisisView extends JPanel {
 	return lineChartObject;
     }
 
+    /**
+     * Mostra resultats.
+     */
     private void mostraResultats() {
 	DecimalFormat df = new DecimalFormat("0.00");
 	if (!ViewOpcionsController.isCpu()) {
@@ -612,6 +727,12 @@ public class ResultatAnalisisView extends JPanel {
 	gpuMax.setText(MainController.analisisController.getGpuInfo());
     }
 
+    /**
+     * Write chart to pdf.
+     *
+     * @param chart the chart
+     * @param fileName the file name
+     */
     public void writeChartToPDF(JFreeChart chart, String fileName) {
 	// Document document = new Document();
 	// PdfWriter writer;

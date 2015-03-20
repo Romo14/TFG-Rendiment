@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package gui;
 
 import java.awt.Dimension;
@@ -15,19 +18,40 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 import java.awt.Color;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class PanelView.
+ */
 public class PanelView extends JPanel {
+	
+	/** The dies. */
 	private static int dies;
+	
+	/** The duracio label edita. */
 	private static JLabel duracioLabelEdita;
+	
+	/** The duracio pop up. */
 	private static DuracioPopUp duracioPopUp;
+	
+	/** The hores. */
 	private static int hores;
 
+	/** The minuts. */
 	private static int minuts;
 
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 2924456615397502338L;
 
+	/** The t. */
 	private static String t = "1 hora/es";
+	
+	/** The analisi complet button. */
 	private JButton analisiCompletButton;
+	
+	/** The analisi complet label. */
 	private JLabel analisiCompletLabel;
+	
+	/** The analisi complet listener. */
 	private ActionListener analisiCompletListener = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			desactivaBotons();
@@ -49,8 +73,14 @@ public class PanelView extends JPanel {
 		}
 
 	};
+	
+	/** The analisi personalitzat button. */
 	private JButton analisiPersonalitzatButton;
+	
+	/** The analisi personalitzat label. */
 	private JLabel analisiPersonalitzatLabel;
+	
+	/** The analisi personalitzat listener. */
 	private ActionListener analisiPersonalitzatListener = new ActionListener() {
 
 		@Override
@@ -59,17 +89,30 @@ public class PanelView extends JPanel {
 			desactivaBotons();
 		}
 	};
+	
+	/** The duracio button. */
 	private JButton duracioButton;
+	
+	/** The duracio label. */
 	private JLabel duracioLabel;
+	
+	/** The editar duracio. */
 	private ActionListener editarDuracio = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			duracioPopUp = new DuracioPopUp();
 			desactivaBotons();
 		}
 	};
+	
+	/** The font. */
 	private Font font = new Font(getFont().getName(), getFont().getStyle(), 16);
+	
+	/** The opcions. */
 	private Object[] opcions = { "Si", "No" };
 
+	/**
+	 * Instantiates a new panel view.
+	 */
 	public PanelView() {
 		setBackground(Color.WHITE);
 		analisiCompletButton = new JButton("An\u00E0lisi Complet");
@@ -247,30 +290,50 @@ public class PanelView extends JPanel {
 		setLayout(groupLayout);
 	}
 
+	/**
+	 * Activa botons.
+	 */
 	public void activaBotons() {
 		analisiCompletButton.setEnabled(true);
 		analisiPersonalitzatButton.setEnabled(true);
 		duracioButton.setEnabled(true);
 	}
 
+	/**
+	 * Desactiva botons.
+	 */
 	public void desactivaBotons() {
 		analisiCompletButton.setEnabled(false);
 		analisiPersonalitzatButton.setEnabled(false);
 		duracioButton.setEnabled(false);
 	}
 
+	/**
+	 * Gets the temps label.
+	 *
+	 * @return the temps label
+	 */
 	public String getTempsLabel() {
 		return t;
 	}
 
+	/**
+	 * Mostra.
+	 */
 	private void mostra() {
 		MainController.view.setVisible(true);
 	}
 
+	/**
+	 * Tanca.
+	 */
 	private void tanca() {
 		MainController.view.dispose();
 	}
 
+	/**
+	 * Update duracio label.
+	 */
 	public void updateDuracioLabel() {
 		mostra();
 		minuts = duracioPopUp.getMinuts();

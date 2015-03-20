@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package gui;
 
 import java.awt.Dimension;
@@ -25,12 +28,16 @@ import javax.swing.event.ChangeEvent;
 
 import java.awt.Color;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DuracioPopUp.
+ */
 public class DuracioPopUp extends JPanel {
 
-    /**
-     * 
-     */
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 2653787619021439964L;
+    
+    /** The accepta. */
     private ActionListener accepta = new ActionListener() {
 
 	@Override
@@ -56,18 +63,43 @@ public class DuracioPopUp extends JPanel {
 	    }
 	}
     };
+    
+    /** The dies. */
     public int dies;
+    
+    /** The dies label. */
     private JLabel diesLabel;
+    
+    /** The dies spinner. */
     private JSpinner diesSpinner;
+    
+    /** The duracio. */
     private JFrame duracio;
+    
+    /** The font. */
     private Font font = new Font(getFont().getName(), getFont().getStyle(), 16);
+    
+    /** The hores. */
     public int hores;
+    
+    /** The hores label. */
     private JLabel horesLabel;
+    
+    /** The hores spinner. */
     private JSpinner horesSpinner;
+    
+    /** The minuts. */
     public int minuts;
+    
+    /** The minuts label. */
     private JLabel minutsLabel;
+    
+    /** The minuts spinner. */
     private JSpinner minutsSpinner;
 
+    /**
+     * Instantiates a new duracio pop up.
+     */
     public DuracioPopUp() {
 	duracio = new JFrame("Duració de l'anàlisi" + "");
 	duracio.getContentPane().setBackground(Color.WHITE);
@@ -236,32 +268,65 @@ public class DuracioPopUp extends JPanel {
 
     }
 
+    /**
+     * Gets the dies.
+     *
+     * @return the dies
+     */
     public int getDies() {
 	return dies;
     }
 
+    /**
+     * Gets the hores.
+     *
+     * @return the hores
+     */
     public int getHores() {
 	return hores;
     }
 
+    /**
+     * Gets the minuts.
+     *
+     * @return the minuts
+     */
     public int getMinuts() {
 	return minuts;
     }
 
+    /**
+     * Limit temps.
+     */
     public void limitTemps() {
 	JOptionPane.showMessageDialog(null,
 		"No es pot fer un anàlisi de durada superior a 7 dies",
 		"Error", JOptionPane.ERROR_MESSAGE);
     }
 
+    /**
+     * Sets the dies.
+     *
+     * @param dies the new dies
+     */
     public void setDies(int dies) {
 	this.dies = dies;
     }
 
+    /**
+     * Sets the hores.
+     *
+     * @param hores the new hores
+     */
     public void setHores(int hores) {
 	this.hores = hores;
     }
 
+    /**
+     * Sets the minuts.
+     *
+     * @param minuts the new minuts
+     */
     public void setMinuts(int minuts) {
 	this.minuts = minuts;
     }
