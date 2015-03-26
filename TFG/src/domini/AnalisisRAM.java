@@ -68,7 +68,7 @@ public class AnalisisRAM {
 
     /**
      * Gets the avg percentatge.
-     *
+     * 
      * @return the avg percentatge
      */
     public float getAvgPercentatge() {
@@ -77,7 +77,7 @@ public class AnalisisRAM {
 
     /**
      * Gets the avg total.
-     *
+     * 
      * @return the ${e.g(1).rsfl()}
      */
     public long getAvgTotal() {
@@ -86,7 +86,7 @@ public class AnalisisRAM {
 
     /**
      * Gets the comptador.
-     *
+     * 
      * @return the comptador
      */
     public long getComptador() {
@@ -95,7 +95,7 @@ public class AnalisisRAM {
 
     /**
      * Gets the graf.
-     *
+     * 
      * @return the graf
      */
     public ArrayList<Float> getGraf() {
@@ -104,7 +104,7 @@ public class AnalisisRAM {
 
     /**
      * Gets the max percentatge.
-     *
+     * 
      * @return the max percentatge
      */
     public float getMaxPercentatge() {
@@ -113,7 +113,7 @@ public class AnalisisRAM {
 
     /**
      * Gets the max total.
-     *
+     * 
      * @return the max total
      */
     public long getMaxTotal() {
@@ -122,7 +122,7 @@ public class AnalisisRAM {
 
     /**
      * Gets the min percentatge.
-     *
+     * 
      * @return the min percentatge
      */
     public float getMinPercentatge() {
@@ -131,7 +131,7 @@ public class AnalisisRAM {
 
     /**
      * Gets the min total.
-     *
+     * 
      * @return the min total
      */
     public long getMinTotal() {
@@ -140,7 +140,7 @@ public class AnalisisRAM {
 
     /**
      * Gets the ram sigar.
-     *
+     * 
      * @return the ram sigar
      */
     public Sigar getRamSigar() {
@@ -149,7 +149,7 @@ public class AnalisisRAM {
 
     /**
      * Gets the temps.
-     *
+     * 
      * @return the temps
      */
     public ArrayList<Second> getTemps() {
@@ -158,8 +158,9 @@ public class AnalisisRAM {
 
     /**
      * Sets the avg percentatge.
-     *
-     * @param avgPercentatge the new avg percentatge
+     * 
+     * @param avgPercentatge
+     *            the new avg percentatge
      */
     public void setAvgPercentatge(float avgPercentatge) {
 	this.avgPercentatge = avgPercentatge;
@@ -167,8 +168,9 @@ public class AnalisisRAM {
 
     /**
      * Sets the avg total.
-     *
-     * @param avgTotal the new avg total
+     * 
+     * @param avgTotal
+     *            the new avg total
      */
     public void setAvgTotal(long avgTotal) {
 	this.avgTotal = avgTotal;
@@ -176,8 +178,9 @@ public class AnalisisRAM {
 
     /**
      * Sets the comptador.
-     *
-     * @param comptador the new comptador
+     * 
+     * @param comptador
+     *            the new comptador
      */
     public void setcomptador(long comptador) {
 	this.comptador = comptador;
@@ -185,8 +188,9 @@ public class AnalisisRAM {
 
     /**
      * Sets the graf.
-     *
-     * @param graf the new graf
+     * 
+     * @param graf
+     *            the new graf
      */
     public void setGraf(ArrayList<Float> graf) {
 	this.graf = graf;
@@ -194,8 +198,9 @@ public class AnalisisRAM {
 
     /**
      * Sets the max percentatge.
-     *
-     * @param maxPercentatge the new max percentatge
+     * 
+     * @param maxPercentatge
+     *            the new max percentatge
      */
     public void setMaxPercentatge(float maxPercentatge) {
 	this.maxPercentatge = maxPercentatge;
@@ -203,8 +208,9 @@ public class AnalisisRAM {
 
     /**
      * Sets the max total.
-     *
-     * @param maxTotal the new max total
+     * 
+     * @param maxTotal
+     *            the new max total
      */
     public void setMaxTotal(long maxTotal) {
 	this.maxTotal = maxTotal;
@@ -212,8 +218,9 @@ public class AnalisisRAM {
 
     /**
      * Sets the min percentatge.
-     *
-     * @param minPercentatge the new min percentatge
+     * 
+     * @param minPercentatge
+     *            the new min percentatge
      */
     public void setMinPercentatge(float minPercentatge) {
 	this.minPercentatge = minPercentatge;
@@ -221,8 +228,9 @@ public class AnalisisRAM {
 
     /**
      * Sets the min total.
-     *
-     * @param minTotal the new min total
+     * 
+     * @param minTotal
+     *            the new min total
      */
     public void setMinTotal(long minTotal) {
 	this.minTotal = minTotal;
@@ -230,8 +238,9 @@ public class AnalisisRAM {
 
     /**
      * Sets the ram sigar.
-     *
-     * @param ramSigar the new ram sigar
+     * 
+     * @param ramSigar
+     *            the new ram sigar
      */
     public void setRamSigar(Sigar ramSigar) {
 	this.ramSigar = ramSigar;
@@ -239,11 +248,28 @@ public class AnalisisRAM {
 
     /**
      * Sets the temps.
-     *
-     * @param temps the new temps
+     * 
+     * @param temps
+     *            the new temps
      */
     public void setTemps(ArrayList<Second> temps) {
 	this.temps = temps;
+    }
+
+    /**
+     * Obté informació sobre la memòria ram
+     * 
+     * @return memòria ram total del dispositiu
+     */
+    public String getRamInfo() {
+	String s = "";
+	try {
+	    s = "Memòria RAM total: "
+		    + String.valueOf(ramSigar.getMem().getRam());
+	} catch (SigarException e) {
+	    e.printStackTrace();
+	}
+	return s;
     }
 
     /**

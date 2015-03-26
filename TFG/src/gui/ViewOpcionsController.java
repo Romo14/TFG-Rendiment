@@ -179,7 +179,7 @@ public class ViewOpcionsController {
 	 *
 	 * @return the temps
 	 */
-	public static int getTemps() {
+	public int getTemps() {
 		return opcions.getDies() * 86400 + opcions.getHores() * 3600
 				+ opcions.getMinuts() * 60;
 	}

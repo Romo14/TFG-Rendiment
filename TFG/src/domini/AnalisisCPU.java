@@ -1,8 +1,8 @@
-
 package domini;
 
 import java.util.ArrayList;
 
+import org.hyperic.sigar.CpuInfo;
 import org.hyperic.sigar.CpuPerc;
 import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarException;
@@ -13,7 +13,7 @@ import org.jfree.data.time.Second;
  */
 /**
  * @author Oriol Gasset Romo <oriol.gasset@est.fib.upc.edu>
- *
+ * 
  */
 public class AnalisisCPU {
 
@@ -69,7 +69,7 @@ public class AnalisisCPU {
 
     /**
      * Obté el avg percentatge.
-     *
+     * 
      * @return el avg percentatge
      */
     public float getAvgPercentatge() {
@@ -78,7 +78,7 @@ public class AnalisisCPU {
 
     /**
      * Obté el avg total.
-     *
+     * 
      * @return el avg total
      */
     public long getAvgTotal() {
@@ -87,16 +87,33 @@ public class AnalisisCPU {
 
     /**
      * Obté el comptador.
-     *
+     * 
      * @return el comptador
      */
-    public long getcomptador() {
+    public long getComptador() {
 	return comptador;
     }
 
     /**
+     * Consulta la informació del processador
+     */
+    public String getCpuInfo() {
+	try {
+	    CpuInfo info = cpuSigar.getCpuInfoList()[0];
+	    return "Fabricant: " + info.getVendor() + " Model: "
+		    + info.getModel() + ", Nuclis: " + info.getTotalCores()
+		    + ", Freqüència màxima: " + info.getMhz() + ", Sockets:"
+		    + info.getTotalSockets() + ", Nuclis per socket: "
+		    + info.getCoresPerSocket();
+	} catch (SigarException e) {
+	    e.printStackTrace();
+	}
+	return "";
+    }
+
+    /**
      * Obté el graf.
-     *
+     * 
      * @return el graf
      */
     public ArrayList<Float> getGraf() {
@@ -105,7 +122,7 @@ public class AnalisisCPU {
 
     /**
      * Obté el max percentatge.
-     *
+     * 
      * @return el max percentatge
      */
     public float getMaxPercentatge() {
@@ -114,7 +131,7 @@ public class AnalisisCPU {
 
     /**
      * Obté el max total.
-     *
+     * 
      * @return el max total
      */
     public long getMaxTotal() {
@@ -123,7 +140,7 @@ public class AnalisisCPU {
 
     /**
      * Obté el min percentatge.
-     *
+     * 
      * @return el min percentatge
      */
     public float getMinPercentatge() {
@@ -132,7 +149,7 @@ public class AnalisisCPU {
 
     /**
      * Obté el min total.
-     *
+     * 
      * @return el min total
      */
     public long getMinTotal() {
@@ -141,7 +158,7 @@ public class AnalisisCPU {
 
     /**
      * Obté el ram sigar.
-     *
+     * 
      * @return el ram sigar
      */
     public Sigar getRamSigar() {
@@ -150,7 +167,7 @@ public class AnalisisCPU {
 
     /**
      * Obté el temps.
-     *
+     * 
      * @return el temps
      */
     public ArrayList<Second> getTemps() {
@@ -159,8 +176,9 @@ public class AnalisisCPU {
 
     /**
      * Defineix el avg percentatge.
-     *
-     * @param avgPercentatge el nou avg percentatge
+     * 
+     * @param avgPercentatge
+     *            el nou avg percentatge
      */
     public void setAvgPercentatge(float avgPercentatge) {
 	this.avgPercentatge = avgPercentatge;
@@ -168,8 +186,9 @@ public class AnalisisCPU {
 
     /**
      * Defineix el avg total.
-     *
-     * @param avgTotal el nou avg total
+     * 
+     * @param avgTotal
+     *            el nou avg total
      */
     public void setAvgTotal(long avgTotal) {
 	this.avgTotal = avgTotal;
@@ -177,8 +196,9 @@ public class AnalisisCPU {
 
     /**
      * Defineix el graf.
-     *
-     * @param graf el nou graf
+     * 
+     * @param graf
+     *            el nou graf
      */
     public void setGraf(ArrayList<Float> graf) {
 	this.graf = graf;
@@ -186,8 +206,9 @@ public class AnalisisCPU {
 
     /**
      * Defineix el max percentatge.
-     *
-     * @param maxPercentatge el nou max percentatge
+     * 
+     * @param maxPercentatge
+     *            el nou max percentatge
      */
     public void setMaxPercentatge(float maxPercentatge) {
 	this.maxPercentatge = maxPercentatge;
@@ -195,8 +216,9 @@ public class AnalisisCPU {
 
     /**
      * Defineix el max total.
-     *
-     * @param maxTotal el nou max total
+     * 
+     * @param maxTotal
+     *            el nou max total
      */
     public void setMaxTotal(long maxTotal) {
 	this.maxTotal = maxTotal;
@@ -204,8 +226,9 @@ public class AnalisisCPU {
 
     /**
      * Defineix el min percentatge.
-     *
-     * @param minPercentatge el nou min percentatge
+     * 
+     * @param minPercentatge
+     *            el nou min percentatge
      */
     public void setMinPercentatge(float minPercentatge) {
 	this.minPercentatge = minPercentatge;
@@ -213,8 +236,9 @@ public class AnalisisCPU {
 
     /**
      * Defineix el min total.
-     *
-     * @param minTotal el nou min total
+     * 
+     * @param minTotal
+     *            el nou min total
      */
     public void setMinTotal(long minTotal) {
 	this.minTotal = minTotal;
@@ -222,8 +246,9 @@ public class AnalisisCPU {
 
     /**
      * Defineix el ram sigar.
-     *
-     * @param cpuSigar el nou ram sigar
+     * 
+     * @param cpuSigar
+     *            el nou ram sigar
      */
     public void setRamSigar(Sigar cpuSigar) {
 	this.cpuSigar = cpuSigar;
@@ -231,8 +256,9 @@ public class AnalisisCPU {
 
     /**
      * Defineix el temps.
-     *
-     * @param temps el nou temps
+     * 
+     * @param temps
+     *            el nou temps
      */
     public void setTemps(ArrayList<Second> temps) {
 	this.temps = temps;

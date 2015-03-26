@@ -13,77 +13,101 @@ import domini.AnalisisController;
  */
 public class ViewAnalisisController {
 
-	/** The analisis controller. */
-	private static AnalisisController analisisController;
+    /** The analisis controller. */
+    private static AnalisisController analisisController;
 
-	/**
-	 * Update system data.
-	 */
-	public static void updateSystemData() {
-		analisisController.analitzar();
-	}
+    /**
+     * Update system data.
+     */
+    public static void updateSystemData() {
+	analisisController.analitzar();
+    }
 
-	/**
-	 * Instantiates a new view analisis controller.
-	 */
-	public ViewAnalisisController() {
-		analisisController = new AnalisisController(
-				MainController.opcionsController.getOpcions());
-	}
+    /**
+     * Instantiates a new view analisis controller.
+     */
+    public ViewAnalisisController() {
+	analisisController = new AnalisisController(
+		MainController.opcionsController.getOpcions());
+    }
 
-	/**
-	 * Gets the cpu info.
-	 *
-	 * @return the cpu info
-	 */
-	public Float[] getCpuInfo() {
-		return analisisController.getCpuInfo();
-	}
+    /**
+     * Gets the cpu info.
+     * 
+     * @return the cpu info
+     */
+    public Float[] getCpuInfo() {
+	return analisisController.getCpuInfo();
+    }
 
-	/**
-	 * Gets the evol.
-	 *
-	 * @param string the string
-	 * @return the evol
-	 */
-	public TimeSeries getEvol(String string) {
-		return analisisController.getEvol(string);
-	}
+    /**
+     * Gets the evol.
+     * 
+     * @param string
+     *            the string
+     * @return the evol
+     */
+    public TimeSeries getEvol(String string) {
+	return analisisController.getEvol(string);
+    }
 
-	/**
-	 * Gets the hdd info.
-	 *
-	 * @return the hdd info
-	 */
-	public float[] getHddInfo() {
-		return analisisController.getHddInfo();
-	}
+    /**
+     * Gets the hdd info.
+     * 
+     * @return the hdd info
+     */
+    public float[] getHddInfo() {
+	return analisisController.getHddInfo();
+    }
 
-	/**
-	 * Gets the ram info.
-	 *
-	 * @return the ram info
-	 */
-	public Float[] getRamInfo() {
-		return analisisController.getRamInfo();
-	}
+    /**
+     * Gets the ram info.
+     * 
+     * @return the ram info
+     */
+    public Float[] getRamInfo() {
+	return analisisController.getRamInfo();
+    }
 
-	/**
-	 * Gets the net info.
-	 *
-	 * @return the net info
-	 */
-	public Float[] getNetInfo() {
-		return analisisController.getNetInfo();
-	}
+    /**
+     * Gets the net info.
+     * 
+     * @return the net info
+     */
+    public Float[] getNetInfo() {
+	return analisisController.getNetInfo();
+    }
 
-	/**
-	 * Gets the gpu info.
-	 *
-	 * @return the gpu info
-	 */
-	public String getGpuInfo() {
-		return analisisController.getGpuInfo();
-	}
+    /**
+     * Gets the gpu info.
+     * 
+     * @return the gpu info
+     */
+    public String getGpuInfo() {
+	return analisisController.getGpuInfo();
+    }
+
+    /**
+     * Obté detalls del component que passem com a paràmetre
+     * 
+     * @param s
+     *            Identificador del component
+     * @return Informació del component
+     */
+    public String getInfoComponent(String s) {
+	return analisisController.getInfoComponents(s);
+    }
+
+    /**
+     * Obté el temps restant de l'anàlisi.
+     * @return
+     */
+    public int getDuracioRestant() {
+	return AnalisisView.getDuracioRestant();
+    }
+    
+    public String getDuracioParcial() {
+   	return AnalisisView.getTempsParcial();
+       }
 
 }

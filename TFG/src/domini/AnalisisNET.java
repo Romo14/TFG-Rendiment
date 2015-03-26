@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.hyperic.sigar.NetFlags;
+import org.hyperic.sigar.NetInfo;
 import org.hyperic.sigar.NetInterfaceConfig;
 import org.hyperic.sigar.NetInterfaceStat;
 import org.hyperic.sigar.Sigar;
@@ -37,11 +38,11 @@ public class AnalisisNET {
     /** La mitjana d'ús de la targeta de xarxa en valors totals. */
     private long avgTotal;
 
-    /** Comptador de les vegades que s'actualitza la informació de la la targeta de xarxa. */
+    /**
+     * Comptador de les vegades que s'actualitza la informació de la la targeta
+     * de xarxa.
+     */
     private long comptador;
-
-    /** Element que ens permet accedir a la informació de la la targeta de xarxa. */
-    private Sigar netSigar;
 
     /** Llista de valors obtinguts en el temps */
     private ArrayList<Float> graf;
@@ -58,13 +59,19 @@ public class AnalisisNET {
     /** Mínim ús de la la targeta de xarxa en total. */
     private long minTotal;
 
+    /**
+     * Element que ens permet accedir a la informació de la la targeta de xarxa.
+     */
+    private Sigar netSigar;
+
     /** Hora del dia en què es realitza l'obtenció de les dades. */
     private Second segon;
 
+    /** The speed. */
+    private long speed;
     /** Llistat de les hores en que s'obté les dades. */
     private ArrayList<Second> temps;
-/** The speed. */
-    private long speed;
+
     /**
      * Instantiates a new analisis net.
      */
@@ -84,7 +91,7 @@ public class AnalisisNET {
 
     /**
      * Gets the avg percentatge.
-     *
+     * 
      * @return the avg percentatge
      */
     public float getAvgPercentatge() {
@@ -93,7 +100,7 @@ public class AnalisisNET {
 
     /**
      * Gets the avg total.
-     *
+     * 
      * @return the avg total
      */
     public long getAvgTotal() {
@@ -102,7 +109,7 @@ public class AnalisisNET {
 
     /**
      * Gets the comptador.
-     *
+     * 
      * @return the comptador
      */
     public long getComptador() {
@@ -111,7 +118,7 @@ public class AnalisisNET {
 
     /**
      * Gets the graf.
-     *
+     * 
      * @return the graf
      */
     public ArrayList<Float> getGraf() {
@@ -120,7 +127,7 @@ public class AnalisisNET {
 
     /**
      * Gets the max percentatge.
-     *
+     * 
      * @return the max percentatge
      */
     public float getMaxPercentatge() {
@@ -129,7 +136,7 @@ public class AnalisisNET {
 
     /**
      * Gets the max total.
-     *
+     * 
      * @return the max total
      */
     public long getMaxTotal() {
@@ -138,7 +145,7 @@ public class AnalisisNET {
 
     /**
      * Gets the metric.
-     *
+     * 
      * @return the metric
      */
     public Long getMetric() {
@@ -181,8 +188,9 @@ public class AnalisisNET {
 
     /**
      * Gets the metric data.
-     *
-     * @param rxChangeMap the rx change map
+     * 
+     * @param rxChangeMap
+     *            the rx change map
      * @return the metric data
      */
     private long getMetricData(Map<String, List<Long>> rxChangeMap) {
@@ -192,14 +200,15 @@ public class AnalisisNET {
 	    for (Long l : entry.getValue()) {
 		average += l;
 	    }
-	    total += average / entry.getValue().size();
+	    if (entry.getValue().size() != 0)
+		total += average / entry.getValue().size();
 	}
 	return total;
     }
 
     /**
      * Gets the min percentatge.
-     *
+     * 
      * @return the min percentatge
      */
     public float getMinPercentatge() {
@@ -208,16 +217,35 @@ public class AnalisisNET {
 
     /**
      * Gets the min total.
-     *
+     * 
      * @return the min total
      */
     public long getMinTotal() {
 	return minTotal;
     }
 
+    public String getNetInfo() {
+	netSigar = new Sigar();
+	String info = "";
+	try {
+	    NetInfo netInfo = netSigar.getNetInfo();
+	    NetInterfaceConfig netInterface = netSigar.getNetInterfaceConfig();
+	    if (!netInfo.getDomainName().equals(""))
+		info += "Domini: " + netInfo.getDomainName();
+	    info += "Nom: " + netInterface.getName() + " Tipus: "
+		    + netInterface.getType() + " Gateway: "
+		    + netInfo.getDefaultGateway() + " Adreça: "
+		    + netInterface.getAddress() + " Descripció: "
+		    + netInterface.getDescription();
+	} catch (SigarException e) {
+	    e.printStackTrace();
+	}
+	return info;
+    }
+
     /**
      * Gets the net sigar.
-     *
+     * 
      * @return the net sigar
      */
     public Sigar getNetSigar() {
@@ -226,7 +254,7 @@ public class AnalisisNET {
 
     /**
      * Gets the segon.
-     *
+     * 
      * @return the segon
      */
     public Second getSegon() {
@@ -235,7 +263,7 @@ public class AnalisisNET {
 
     /**
      * Gets the speed.
-     *
+     * 
      * @return the min total
      */
     public long getSpeed() {
@@ -244,7 +272,7 @@ public class AnalisisNET {
 
     /**
      * Gets the temps.
-     *
+     * 
      * @return the temps
      */
     public ArrayList<Second> getTemps() {
@@ -253,12 +281,17 @@ public class AnalisisNET {
 
     /**
      * Save change.
-     *
-     * @param currentMap the current map
-     * @param changeMap the change map
-     * @param hwaddr the hwaddr
-     * @param current the current
-     * @param ni the ni
+     * 
+     * @param currentMap
+     *            the current map
+     * @param changeMap
+     *            the change map
+     * @param hwaddr
+     *            the hwaddr
+     * @param current
+     *            the current
+     * @param ni
+     *            the ni
      */
     private void saveChange(Map<String, Long> currentMap,
 	    Map<String, List<Long>> changeMap, String hwaddr, long current,
@@ -277,8 +310,9 @@ public class AnalisisNET {
 
     /**
      * Sets the avg percentatge.
-     *
-     * @param avgPercentatge the new avg percentatge
+     * 
+     * @param avgPercentatge
+     *            the new avg percentatge
      */
     public void setAvgPercentatge(float avgPercentatge) {
 	this.avgPercentatge = avgPercentatge;
@@ -286,8 +320,9 @@ public class AnalisisNET {
 
     /**
      * Sets the avg total.
-     *
-     * @param avgTotal the new avg total
+     * 
+     * @param avgTotal
+     *            the new avg total
      */
     public void setAvgTotal(long avgTotal) {
 	this.avgTotal = avgTotal;
@@ -295,8 +330,9 @@ public class AnalisisNET {
 
     /**
      * Sets the comptador.
-     *
-     * @param comptador the new comptador
+     * 
+     * @param comptador
+     *            the new comptador
      */
     public void setcomptador(long comptador) {
 	this.comptador = comptador;
@@ -304,8 +340,9 @@ public class AnalisisNET {
 
     /**
      * Sets the graf.
-     *
-     * @param graf the new graf
+     * 
+     * @param graf
+     *            the new graf
      */
     public void setGraf(ArrayList<Float> graf) {
 	this.graf = graf;
@@ -313,8 +350,9 @@ public class AnalisisNET {
 
     /**
      * Sets the max percentatge.
-     *
-     * @param maxPercentatge the new max percentatge
+     * 
+     * @param maxPercentatge
+     *            the new max percentatge
      */
     public void setMaxPercentatge(float maxPercentatge) {
 	this.maxPercentatge = maxPercentatge;
@@ -322,8 +360,9 @@ public class AnalisisNET {
 
     /**
      * Sets the max total.
-     *
-     * @param maxTotal the new max total
+     * 
+     * @param maxTotal
+     *            the new max total
      */
     public void setMaxTotal(long maxTotal) {
 	this.maxTotal = maxTotal;
@@ -331,8 +370,9 @@ public class AnalisisNET {
 
     /**
      * Sets the min percentatge.
-     *
-     * @param minPercentatge the new min percentatge
+     * 
+     * @param minPercentatge
+     *            the new min percentatge
      */
     public void setMinPercentatge(float minPercentatge) {
 	this.minPercentatge = minPercentatge;
@@ -340,8 +380,9 @@ public class AnalisisNET {
 
     /**
      * Sets the min total.
-     *
-     * @param minTotal the new min total
+     * 
+     * @param minTotal
+     *            the new min total
      */
     public void setMinTotal(long minTotal) {
 	this.minTotal = minTotal;
@@ -349,8 +390,9 @@ public class AnalisisNET {
 
     /**
      * Sets the net sigar.
-     *
-     * @param netSigar the new net sigar
+     * 
+     * @param netSigar
+     *            the new net sigar
      */
     public void setNetSigar(Sigar netSigar) {
 	this.netSigar = netSigar;
@@ -358,8 +400,9 @@ public class AnalisisNET {
 
     /**
      * Sets the segon.
-     *
-     * @param segon the new segon
+     * 
+     * @param segon
+     *            the new segon
      */
     public void setSegon(Second segon) {
 	this.segon = segon;
@@ -367,8 +410,9 @@ public class AnalisisNET {
 
     /**
      * Sets the speed.
-     *
-     * @param speed the new speed
+     * 
+     * @param speed
+     *            the new speed
      */
     public void setSpeed(long speed) {
 	this.speed = speed;
@@ -376,8 +420,9 @@ public class AnalisisNET {
 
     /**
      * Sets the temps.
-     *
-     * @param temps the new temps
+     * 
+     * @param temps
+     *            the new temps
      */
     public void setTemps(ArrayList<Second> temps) {
 	this.temps = temps;
@@ -389,6 +434,14 @@ public class AnalisisNET {
     public void updateNET() {
 	netSigar = new Sigar();
 	float total = getMetric();
+	if (((total * 100) / speed) > 100) {
+	    System.out.println("total " + total + " speed " + speed);
+	    total = 0;
+	}
+	if (((total * 100) / speed) < 0) {
+	    System.out.println("total " + total + " speed " + speed);
+	    total = 0;
+	}
 	graf.add((float) ((total * 100) / speed));
 	temps.add(segon);
 	segon = (Second) segon.next();

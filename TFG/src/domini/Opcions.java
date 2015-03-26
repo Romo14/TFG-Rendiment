@@ -37,8 +37,8 @@ public class Opcions {
      * Instantiates a new opcions.
      */
     public Opcions() {
-	minuts = 1;
-	hores = 0;
+	minuts = 0;
+	hores = 1;
 	dies = 0;
 	cpu = hdd = gpu = net = ram = false;
     }
