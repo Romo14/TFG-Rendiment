@@ -65,6 +65,8 @@ import java.net.MalformedURLException;
 import javax.swing.BoxLayout;
 import javax.swing.border.EmptyBorder;
 
+import java.util.Locale;
+
 /**
  * The Class ResultatAnalisisView.
  */
@@ -101,10 +103,22 @@ public class ResultatAnalisisView extends JPanel {
     private JLabel cpuMin;
 
     /** The cpu ok. */
-    private boolean cpuOk;
+    private int cpuOk;
+
+    /**
+     * Acció que es realitza quan premem el botó de pdf o de tancar. J
+     */
+    private ActionListener crearPdfAction = new ActionListener() {
+	public void actionPerformed(ActionEvent e) {
+	    fileChooser();
+	}
+    };
 
     /** The dataset. */
     private TimeSeriesCollection dataset;
+
+    /** The equal icon. */
+    private ImageIcon equalIcon;
 
     /** The estat cpu. */
     private JPanel estatCPU;
@@ -140,16 +154,13 @@ public class ResultatAnalisisView extends JPanel {
     private JLabel hddMin;
 
     /** The hdd ok. */
-    private boolean hddOk;
+    private int hddOk;
 
     /** The hdd tool tip. */
     private JLabel hddToolTip;
 
     /** The ko icon. */
     private ImageIcon koIcon;
-
-    /** The ko text. */
-    private String koText = "El dispositiu té una mitjana d'ús de més del 75%, pel que es pot determinar que és necessari revisar";
 
     /** The net. */
     private TimeSeries net;
@@ -164,13 +175,10 @@ public class ResultatAnalisisView extends JPanel {
     private JLabel netMin;
 
     /** The net ok. */
-    private boolean netOk;
+    private int netOk;
 
     /** The ok icon. */
     private ImageIcon okIcon;
-
-    /** The ok text. */
-    private String okText = "El dispositiu funciona correctament i aguanta perfectament la càrrega de treball que s'hi realitza";
 
     /** The opcions. */
     private Object[] opcions = { "Si", "No" };
@@ -196,6 +204,9 @@ public class ResultatAnalisisView extends JPanel {
     /** The pdf button. */
     private JButton pdfButton;
 
+    /** The pdf creat. */
+    private boolean pdfCreat = false;
+
     /** The ram. */
     private TimeSeries ram;
 
@@ -209,7 +220,7 @@ public class ResultatAnalisisView extends JPanel {
     private JLabel ramMin;
 
     /** The ram ok. */
-    private boolean ramOk;
+    private int ramOk;
 
     /** The resultat. */
     private JFrame resultat;
@@ -222,13 +233,16 @@ public class ResultatAnalisisView extends JPanel {
      */
     public ResultatAnalisisView() {
 	resultat = new JFrame("Resultats de l'anàlisi");
+	resultat.setMaximumSize(new Dimension(737, 411));
 	resultat.setResizable(false);
 	resultat.getContentPane().setBackground(Color.WHITE);
 	Image img = new ImageIcon(this.getClass().getResource(
 		"/images/app-icon.png")).getImage();
 	resultat.setIconImage(img);
-	resultat.setSize(new Dimension(734, 411));
+	resultat.setSize(new Dimension(737, 411));
 	resultat.setLocationRelativeTo(null);
+	equalIcon = new ImageIcon(this.getClass().getResource(
+		"/images/equal-icon.png"));
 	okIcon = new ImageIcon(this.getClass().getResource(
 		"/images/ok-icon.png"));
 	koIcon = new ImageIcon(this.getClass().getResource(
@@ -262,14 +276,23 @@ public class ResultatAnalisisView extends JPanel {
 	btnInici.addActionListener(new ActionListener() {
 	    public void actionPerformed(ActionEvent e) {
 		int a = JOptionPane
-			.showOptionDialog(null,
-				"Vol tornar al menú principal?", "",
-				JOptionPane.YES_NO_OPTION,
+			.showOptionDialog(
+				null,
+				"Vol tornar al menú principal? És obligatori guardar el resultat, en cas"
+					+ " de no haver-ho fet serà redirigit a la pantalla de guardar resultat",
+				"", JOptionPane.YES_NO_OPTION,
 				JOptionPane.QUESTION_MESSAGE, null, opcions,
 				opcions[0]);
 		if (a == 0) {
-		    MainController.main(null);
-		    resultat.dispose();
+		    if (!pdfCreat)
+			fileChooser();
+		    if (pdfCreat) {
+			MainController.main(null);
+			resultat.dispose();
+		    } else {
+			MainController.main(null);
+			resultat.dispose();
+		    }
 		}
 	    }
 	});
@@ -279,24 +302,7 @@ public class ResultatAnalisisView extends JPanel {
 	pdfButton.setMnemonic('1');
 	pdfButton.setSelectedIcon(new ImageIcon(ResultatAnalisisView.class
 		.getResource("/images/pdf-icon.png")));
-	pdfButton.addActionListener(new ActionListener() {
-	    public void actionPerformed(ActionEvent e) {
-		JFileChooser chooser = new JFileChooser();
-		chooser.setCurrentDirectory(new java.io.File("."));
-		chooser.setMultiSelectionEnabled(false);
-		chooser.setAcceptAllFileFilterUsed(false);
-		chooser.setDialogTitle("Guardar");
-		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		if (chooser.showSaveDialog(pdfButton) == JFileChooser.APPROVE_OPTION) {
-		    try {
-			writeChartToPDF(grafica, chooser.getSelectedFile()
-				.toString());
-		    } catch (Exception ex) {
-			ex.printStackTrace();
-		    }
-		}
-	    }
-	});
+	pdfButton.addActionListener(crearPdfAction);
 	pdfButton.setIcon(new ImageIcon(ResultatAnalisisView.class
 		.getResource("/images/pdf-icon.png")));
 
@@ -462,6 +468,7 @@ public class ResultatAnalisisView extends JPanel {
 	cpuMax.setFont(font);
 
 	estatCPU = new JPanel();
+	estatCPU.setMaximumSize(new Dimension(32, 32));
 	estatCPU.setAlignmentX(Component.LEFT_ALIGNMENT);
 	estatCPU.setOpaque(false);
 	panelCPU.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
@@ -487,6 +494,7 @@ public class ResultatAnalisisView extends JPanel {
 	ramMax.setFont(font);
 
 	estatRAM = new JPanel();
+	estatRAM.setMaximumSize(new Dimension(32, 32));
 	estatRAM.setOpaque(false);
 	panelRAM.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 	panelRAM.add(ramMax);
@@ -497,6 +505,7 @@ public class ResultatAnalisisView extends JPanel {
 	panelRAM.add(estatRAM);
 
 	panelHDD = new JPanel();
+	panelHDD.setLocale(new Locale("ca"));
 	panelHDD.setAlignmentY(Component.TOP_ALIGNMENT);
 	panelHDD.setPreferredSize(new Dimension(615, 40));
 	panelHDD.setBackground(Color.WHITE);
@@ -507,8 +516,10 @@ public class ResultatAnalisisView extends JPanel {
 	hddAvg.setFont(font);
 
 	estatHDD = new JPanel();
+	estatHDD.setMaximumSize(new Dimension(32, 32));
 	estatHDD.setOpaque(false);
-	panelHDD.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+	FlowLayout fl_panelHDD = new FlowLayout(FlowLayout.LEFT, 5, 5);
+	panelHDD.setLayout(fl_panelHDD);
 	hddMax = new JLabel("M\u00E0xim:  ");
 	hddMax.setFont(font);
 	panelHDD.add(hddMax);
@@ -531,6 +542,7 @@ public class ResultatAnalisisView extends JPanel {
 	netMax.setFont(font);
 
 	estatNET = new JPanel();
+	estatNET.setMaximumSize(new Dimension(32, 32));
 	estatNET.setOpaque(false);
 	panelNET.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 	panelNET.add(netMax);
@@ -558,9 +570,25 @@ public class ResultatAnalisisView extends JPanel {
 			.addContainerGap(GroupLayout.DEFAULT_SIZE,
 				Short.MAX_VALUE)));
 	resultat.getContentPane().setLayout(groupLayout);
+	resultat.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 	resultat.addWindowListener(new WindowAdapter() {
 	    public void windowClosing(WindowEvent e) {
-		System.exit(0);
+		int a = JOptionPane
+			.showOptionDialog(
+				null,
+				"Vol sortir de l'aplicació? És obligatori guardar el resultat, en cas"
+					+ " de no haver-ho fet serà redirigit a la pantalla de guardar resultat",
+				"", JOptionPane.YES_NO_OPTION,
+				JOptionPane.QUESTION_MESSAGE, null, opcions,
+				opcions[0]);
+		if (a == 0) {
+		    if (!pdfCreat) {
+			fileChooser();
+			if (pdfCreat)
+			    System.exit(0);
+		    } else
+			System.exit(0);
+		}
 	    }
 	});
 	mostraResultats();
@@ -643,6 +671,50 @@ public class ResultatAnalisisView extends JPanel {
     }
 
     /**
+     * Afegir dades valoracio.
+     * 
+     * @param doc
+     *            the doc
+     * @param idIcon
+     *            the id icon
+     * @param component
+     *            the component
+     * @throws MalformedURLException
+     *             the malformed url exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws DocumentException
+     *             the document exception
+     */
+    private void afegirDadesValoracio(Document doc, int idIcon,
+	    Component component) throws MalformedURLException, IOException,
+	    DocumentException {
+	String icon = "";
+	com.itextpdf.text.Image i;
+	switch (idIcon) {
+	case 0:
+	    icon = "/images/ko-icon.png";
+	    break;
+	case 1:
+	    icon = "/images/equal-icon.png";
+	    break;
+	case 2:
+	    icon = "/images/ok-icon.png";
+	    break;
+	}
+	i = com.itextpdf.text.Image.getInstance(this.getClass().getResource(
+		icon));
+	Paragraph p = new Paragraph();
+	JLabel l = (JLabel) component;
+	String text = l.getToolTipText().replaceAll("<html>", "");
+	text = text.replace("<br>", "");
+	p.add(new Chunk(i, 0, 0));
+	p.add(new Phrase(text));
+	doc.add(new Paragraph("  "));
+	doc.add(p);
+    }
+
+    /**
      * Crear grafica.
      * 
      * @return the j free chart
@@ -680,107 +752,7 @@ public class ResultatAnalisisView extends JPanel {
     }
 
     /**
-     * Mostra resultats.
-     */
-    private void mostraResultats() {
-	DecimalFormat df = new DecimalFormat("0.00");
-	if (!ViewOpcionsController.isCpu()) {
-	    chckbxCpu.setVisible(false);
-	    panelCPU.setVisible(false);
-	} else {
-	    Float[] cpuStats = MainController.analisisController.getCpuInfo();
-	    cpuAvg.setText(cpuAvg.getText() + df.format(cpuStats[0]) + "%");
-	    cpuMax.setText(cpuMax.getText() + df.format(cpuStats[1]) + "%");
-	    cpuMin.setText(cpuMin.getText() + df.format(cpuStats[2]) + "%");
-	    JLabel a = new JLabel();
-	    if (cpuStats[0] > 70) {
-		a.setIcon(koIcon);
-		a.setToolTipText(koText);
-		estatCPU.add(a);
-		cpuOk = false;
-	    } else {
-		a.setIcon(okIcon);
-		a.setToolTipText(okText);
-		estatCPU.add(a);
-		cpuOk = true;
-	    }
-	}
-	if (!ViewOpcionsController.isHdd()) {
-	    chckbxDiscDur.setVisible(false);
-	    panelHDD.setVisible(false);
-	} else {
-	    float[] hddStats = MainController.analisisController.getHddInfo();
-	    hddAvg.setText(hddAvg.getText() + df.format(hddStats[0])
-		    + " MBytes/s");
-	    hddMax.setText(hddMax.getText() + df.format(hddStats[1])
-		    + " MBytes/s");
-	    hddMin.setText(hddMin.getText() + df.format(hddStats[2])
-		    + " MBytes/s");
-	    JLabel a = new JLabel();
-	    if (hddStats[0] > 30) {
-		a.setIcon(koIcon);
-		a.setToolTipText(koText);
-		estatHDD.add(a);
-		hddOk = false;
-	    } else {
-		a.setIcon(okIcon);
-		a.setToolTipText(okText);
-		estatHDD.add(a);
-		hddOk = true;
-	    }
-	}
-	if (!ViewOpcionsController.isNet()) {
-	    chckbxXarxa.setVisible(false);
-	    panelNET.setVisible(false);
-	} else {
-	    Float[] netStats = MainController.analisisController.getNetInfo();
-	    netAvg.setText(netAvg.getText() + df.format(netStats[0]) + "% ("
-		    + df.format(netStats[1] / 1024) + " KBytes)");
-	    netMax.setText(netMax.getText() + df.format(netStats[2]) + "% ("
-		    + df.format(netStats[3] / 1024) + " KBytes)");
-	    netMin.setText(netMin.getText() + df.format(netStats[4]) + "% ("
-		    + df.format(netStats[5] / 1024) + " KBytes)");
-	    JLabel a = new JLabel();
-	    if (netStats[0] > 30) {
-		a.setIcon(koIcon);
-		a.setToolTipText(koText);
-		estatNET.add(a);
-		netOk = false;
-	    } else {
-		a.setIcon(okIcon);
-		a.setToolTipText(okText);
-		estatNET.add(a);
-		netOk = true;
-	    }
-	}
-	if (!ViewOpcionsController.isRam()) {
-	    chckbxRam.setVisible(false);
-	    panelRAM.setVisible(false);
-	} else {
-	    Float[] ramStats = MainController.analisisController.getRamInfo();
-	    ramAvg.setText(ramAvg.getText() + df.format(ramStats[0]) + "% ("
-		    + ramStats[1] + "MB)");
-	    ramMax.setText(ramMax.getText() + df.format(ramStats[2]) + "% ("
-		    + ramStats[3] + "MB)");
-	    ramMin.setText(ramMin.getText() + df.format(ramStats[4]) + "% ("
-		    + ramStats[5] + "MB)");
-	    JLabel a = new JLabel();
-	    if (ramStats[0] > 70) {
-		a.setIcon(koIcon);
-		a.setToolTipText(koText);
-		estatRAM.add(a);
-		ramOk = false;
-	    } else {
-		a.setIcon(okIcon);
-		a.setToolTipText(okText);
-		estatRAM.add(a);
-		ramOk = true;
-	    }
-	}
-    }
-
-    /**
-     * Write chart to pdf.
+     * Crear pdf.
      * 
      * @param chart
      *            the chart
@@ -788,10 +760,12 @@ public class ResultatAnalisisView extends JPanel {
      *            the file name
      * @throws DocumentException
      *             the document exception
-     * @throws IOException
      * @throws MalformedURLException
+     *             the malformed url exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
-    public void writeChartToPDF(JFreeChart chart, String fileName)
+    public void crearPDF(JFreeChart chart, String fileName)
 	    throws DocumentException, MalformedURLException, IOException {
 	Document doc = new Document(PageSize.A4);
 	if (!fileName.endsWith(".pdf"))
@@ -816,15 +790,16 @@ public class ResultatAnalisisView extends JPanel {
 	paragraf.setAlignment(Element.ALIGN_CENTER);
 	doc.add(paragraf);
 	doc.add(new Paragraph("   "));
+	String s = "";
 	if (MainController.analisisController.getDuracioRestant() == 0) {
-	    doc.add(new Paragraph("Duració de l'anàlisis: "
-		    + MainController.view.panel.getTempsLabel()));
+	    s = MainController.view.panel.getTempsLabel();
+	    doc.add(new Paragraph("Duració de l'anàlisis: " + s));
 	} else {
-	    doc.add(new Paragraph("Duració de l'anàlisis: "
-		    + MainController.analisisController.getDuracioParcial()));
+	    s = MainController.analisisController.getDuracioParcial();
+	    doc.add(new Paragraph("Duració de l'anàlisis: " + s));
 	}
 	doc.add(new Paragraph("Identificador de l'Ordinador: "
-		+ java.net.InetAddress.getLocalHost().getHostName()));
+		+ MainController.analisisController.getIdPC()));
 	/** Info CPU */
 	if (ViewOpcionsController.isCpu()) {
 	    Chunk cpuTitle = new Chunk("Ús de la CPU");
@@ -837,19 +812,7 @@ public class ResultatAnalisisView extends JPanel {
 		    .getInfoComponent("CPU")));
 	    doc.add(new Paragraph(cpuAvg.getText() + " " + cpuMax.getText()
 		    + " " + cpuMin.getText()));
-	    if (cpuOk) {
-		com.itextpdf.text.Image i = com.itextpdf.text.Image
-			.getInstance(this.getClass().getResource(
-				"/images/ok-icon.png"));
-		doc.add(i);
-		doc.add(new Phrase(okText));
-	    } else {
-		com.itextpdf.text.Image i = com.itextpdf.text.Image
-			.getInstance(this.getClass().getResource(
-				"/images/ko-icon.png"));
-		doc.add(i);
-		doc.add(new Phrase(koText));
-	    }
+	    afegirDadesValoracio(doc, cpuOk, estatCPU.getComponent(0));
 	    doc.add(new Paragraph("   "));
 	}
 	/** Info RAM */
@@ -864,19 +827,7 @@ public class ResultatAnalisisView extends JPanel {
 		    .getInfoComponent("RAM") + "MB"));
 	    doc.add(new Paragraph(ramAvg.getText() + " " + ramMax.getText()
 		    + " " + ramMin.getText()));
-	    if (ramOk) {
-		com.itextpdf.text.Image i = com.itextpdf.text.Image
-			.getInstance(this.getClass().getResource(
-				"/images/ok-icon.png"));
-		doc.add(i);
-		doc.add(new Phrase(okText));
-	    } else {
-		com.itextpdf.text.Image i = com.itextpdf.text.Image
-			.getInstance(this.getClass().getResource(
-				"/images/ko-icon.png"));
-		doc.add(i);
-		doc.add(new Phrase(koText));
-	    }
+	    afegirDadesValoracio(doc, ramOk, estatRAM.getComponent(0));
 	    doc.add(new Paragraph("   "));
 	}
 	/** Info HDD */
@@ -891,19 +842,7 @@ public class ResultatAnalisisView extends JPanel {
 		    .getInfoComponent("HDD")));
 	    doc.add(new Paragraph(hddAvg.getText() + " " + hddMax.getText()
 		    + " " + hddMin.getText()));
-	    if (hddOk) {
-		com.itextpdf.text.Image i = com.itextpdf.text.Image
-			.getInstance(this.getClass().getResource(
-				"/images/ok-icon.png"));
-		doc.add(i);
-		doc.add(new Phrase(okText));
-	    } else {
-		com.itextpdf.text.Image i = com.itextpdf.text.Image
-			.getInstance(this.getClass().getResource(
-				"/images/ko-icon.png"));
-		doc.add(i);
-		doc.add(new Phrase(koText));
-	    }
+	    afegirDadesValoracio(doc, hddOk, estatHDD.getComponent(0));
 	    doc.add(new Paragraph("   "));
 	}
 	/** Info NET */
@@ -918,19 +857,7 @@ public class ResultatAnalisisView extends JPanel {
 		    .getInfoComponent("NET")));
 	    doc.add(new Paragraph(netAvg.getText() + " " + netMax.getText()
 		    + " " + netMin.getText()));
-	    if (netOk) {
-		com.itextpdf.text.Image i = com.itextpdf.text.Image
-			.getInstance(this.getClass().getResource(
-				"/images/ok-icon.png"));
-		doc.add(i);
-		doc.add(new Phrase(okText));
-	    } else {
-		com.itextpdf.text.Image i = com.itextpdf.text.Image
-			.getInstance(this.getClass().getResource(
-				"/images/ko-icon.png"));
-		doc.add(i);
-		doc.add(new Phrase(koText));
-	    }
+	    afegirDadesValoracio(doc, netOk, estatNET.getComponent(0));
 	    doc.add(new Paragraph("   "));
 	}
 	doc.newPage();
@@ -973,6 +900,225 @@ public class ResultatAnalisisView extends JPanel {
 	} catch (InterruptedException e) {
 	    e.printStackTrace();
 	}
+	MainController.analisisController.guardarAnalisi(fileName, s);
+	pdfCreat = true;
+    }
 
+    protected void fileChooser() {
+	JFileChooser chooser = new JFileChooser();
+	chooser.setCurrentDirectory(new java.io.File(System
+		.getProperty("user.dir")));
+	chooser.setMultiSelectionEnabled(false);
+	chooser.setAcceptAllFileFilterUsed(false);
+	chooser.setDialogTitle("Guardar");
+	chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+	if (chooser.showSaveDialog(pdfButton) == JFileChooser.APPROVE_OPTION) {
+	    try {
+		crearPDF(grafica, chooser.getSelectedFile().toString());
+	    } catch (Exception ex) {
+		ex.printStackTrace();
+	    }
+	}
+
+    }
+
+    public boolean isPdfCreat() {
+	return pdfCreat;
+    }
+
+    /**
+     * Mostra resultats.
+     */
+    private void mostraResultats() {
+	DecimalFormat df = new DecimalFormat("0.00");
+	if (!ViewOpcionsController.isCpu()) {
+	    chckbxCpu.setVisible(false);
+	    panelCPU.setVisible(false);
+	} else {
+	    Float[] cpuStats = MainController.analisisController.getCpuInfo();
+	    cpuAvg.setText(cpuAvg.getText() + df.format(cpuStats[0]) + "%");
+	    cpuMax.setText(cpuMax.getText() + df.format(cpuStats[1]) + "%");
+	    cpuMin.setText(cpuMin.getText() + df.format(cpuStats[2]) + "%");
+	    valoracioResultatCpu(cpuStats);
+	}
+	if (!ViewOpcionsController.isHdd()) {
+	    chckbxDiscDur.setVisible(false);
+	    panelHDD.setVisible(false);
+	} else {
+	    float[] hddStats = MainController.analisisController.getHddInfo();
+	    hddAvg.setText(hddAvg.getText() + df.format(hddStats[0])
+		    + " MBytes/s");
+	    hddMax.setText(hddMax.getText() + df.format(hddStats[1])
+		    + " MBytes/s");
+	    hddMin.setText(hddMin.getText() + df.format(hddStats[2])
+		    + " MBytes/s");
+	    valoracioResultatHdd(hddStats);
+	}
+	if (!ViewOpcionsController.isNet()) {
+	    chckbxXarxa.setVisible(false);
+	    panelNET.setVisible(false);
+	} else {
+	    Float[] netStats = MainController.analisisController.getNetInfo();
+	    netAvg.setText(netAvg.getText() + df.format(netStats[0]) + "% ("
+		    + df.format(netStats[1] / 1024) + " KBytes)");
+	    netMax.setText(netMax.getText() + df.format(netStats[2]) + "% ("
+		    + df.format(netStats[3] / 1024) + " KBytes)");
+	    netMin.setText(netMin.getText() + df.format(netStats[4]) + "% ("
+		    + df.format(netStats[5] / 1024) + " KBytes)");
+	    valoracioResultatNet(netStats);
+
+	}
+	if (!ViewOpcionsController.isRam()) {
+	    chckbxRam.setVisible(false);
+	    panelRAM.setVisible(false);
+	} else {
+	    Float[] ramStats = MainController.analisisController.getRamInfo();
+	    ramAvg.setText(ramAvg.getText() + df.format(ramStats[0]) + "% ("
+		    + ramStats[1] + "MB)");
+	    ramMax.setText(ramMax.getText() + df.format(ramStats[2]) + "% ("
+		    + ramStats[3] + "MB)");
+	    ramMin.setText(ramMin.getText() + df.format(ramStats[4]) + "% ("
+		    + ramStats[5] + "MB)");
+	    valoracioResultatRam(ramStats);
+	}
+    }
+
+    public void setPdfCreat(boolean pdfCreat) {
+	this.pdfCreat = pdfCreat;
+    }
+
+    /**
+     * Valoracio resultat cpu.
+     * 
+     * @param cpuStats
+     *            the cpu stats
+     */
+    private void valoracioResultatCpu(Float[] cpuStats) {
+	JLabel a = new JLabel();
+	String s = "";
+	if (cpuStats[0] > 75) {
+	    a.setIcon(koIcon);
+	    s = "<html> L'ús mitjà de la CPU és molt elevat. Si s'estan executant moltes aplicacions conscientment <br>"
+		    + " al mateix temps es recomana canviar el processador. Altrament caldria comprovar els processos <br>"
+		    + "que s'estan executant al sistema per eliminar aquells que siguin innecessaris <html>";
+	    estatCPU.add(a);
+	    cpuOk = 0;
+	} else if (cpuStats[0] > 40) {
+	    a.setIcon(equalIcon);
+	    s = "<html> L'ús mitjà de la CPU és superior al 50%. El processador funciona correctament, pero si <br>"
+		    + " l'ús que se n'està fent és mínim és possible que hi hagi aplicacions en segon terme consumin recursos <html>";
+	    cpuOk = 1;
+	} else {
+	    a.setIcon(okIcon);
+	    s = "L'ús del processador és correcte";
+	    cpuOk = 2;
+	}
+	a.setToolTipText(s);
+	estatCPU.add(a);
+    }
+
+    /**
+     * Valoracio resultat hdd.
+     * 
+     * @param hddStats
+     *            the hdd stats
+     */
+    private void valoracioResultatHdd(float[] hddStats) {
+	JLabel a = new JLabel();
+	String s = "";
+	if (hddStats[0] > 30) {
+	    a.setIcon(koIcon);
+	    s = "<html> L'ús del disc dur és força elevat. S'estan escribint i llegint moltes dades i de forma constant. Si s'han <br>"
+		    + "estat transferint dades des d'un dispositiu extern o des de la xarxa repetidament durant l'anàlisis <br>"
+		    + "el resultat es pot donar per bo. <html>";
+	    hddOk = 0;
+	} else if (hddStats[0] > 20) {
+	    a.setIcon(equalIcon);
+	    s = "L'ús del disc dur és correcte, encara que s'han realitzar forçes escriptures i lectures.";
+	    hddOk = 1;
+	} else {
+	    a.setIcon(okIcon);
+	    s = "<html> L'ús del disc dur és correcte. <html>";
+	    hddOk = 2;
+	}
+	if (hddStats[1] > 20) {
+	    s += "<html> S'ha produit un pic de dades llegides/escrites força alt. Si la mitjana queda molt<br> "
+		    + "elevada pot ser degut a un pic concret d'ús del disc dur. S'hauria de comprovar la gràfica per assegurar-se. <html>";
+	}
+	a.setToolTipText(s);
+	estatHDD.add(a);
+    }
+
+    /**
+     * Valoracio resultat net.
+     * 
+     * @param netStats
+     *            the net stats
+     */
+    private void valoracioResultatNet(Float[] netStats) {
+	JLabel a = new JLabel();
+	String s = "";
+	if (netStats[0] > 20) {
+	    a.setIcon(koIcon);
+	    s = "<html>L'ús de la targeta de xarxa és molt elevat. Si l'ordinador està constanment enviant i rebent <br>"
+		    + "quantitats molt elevades de dades el resultat es pot considerar bo. Si, per altra banda, l'ús que <br>"
+		    + "se li dóna al PC no és principalment aquest, és possible que la targeta de xarxa no suporti <br>"
+		    + " l'ample de banda que requereix l'ús de l'ordinador o que hi hagi aplicacions en sogon terme enviant <br>"
+		    + "i reben dades constanment.<html>";
+	    netOk = 0;
+	} else if (netStats[0] > 10) {
+	    a.setIcon(equalIcon);
+	    s = "<html>L'ús de la targeta xarxa és força elevat. Si l'ordinador està constanment enviant i rebent <br>"
+		    + "quantitats molt elevades de dades el resultat es pot considerar bo. També pot ser degut a que en <br>"
+		    + " l'execució de l'anàlisi s'hagin consumit molts recursos d'internet, com descàrregues, visualització de <br>"
+		    + "contingut multimèdia online, etc. <html>";
+	    netOk = 1;
+	} else {
+	    a.setIcon(okIcon);
+	    s = "L'ús de la targeta de xarxa és correcte.";
+	    netOk = 2;
+	}
+	a.setToolTipText(s);
+	estatNET.add(a);
+    }
+
+    /**
+     * Valoracio resultat ram.
+     * 
+     * @param ramStats
+     *            the ram stats
+     */
+    private void valoracioResultatRam(Float[] ramStats) {
+	JLabel a = new JLabel();
+	String s = "";
+	if (ramStats[0] > 75) {
+	    a.setIcon(koIcon);
+	    s = "<html> L'ús de la memòria RAM és molt elevat. Si s'han estat executant aplicacions <br>"
+		    + " que requereixen molta memòria durant l'anàlisis el resultat no és destacable. Si, per altra banda, <br>"
+		    + "no s'han executat gaires aplicacions durant l'anàlisi vol dir que hi ha processos consumin <br>"
+		    + "molta memòria o bé que la memòria no té la suficient capacitat per executar les aplicacions del <br>"
+		    + "PC. <html>";
+
+	    ramOk = 0;
+	} else if (ramStats[0] > 40) {
+	    a.setIcon(equalIcon);
+	    s = "<html> L'ús de la memòria RAM és l'esperat en un ús habitual de l'ordinador. La major part del consum es <br>"
+		    + "deu a processos del sistema i, les aplicaions que s'utilitzen no consumeixen excessiva memòria. <br>"
+		    + " En en cas que no s'hagi estat utilitzant l'ordinador durant l'anàlisi, és possible que <br>"
+		    + "hi hagi algunes aplicacions executan-se en segon terme que consumeixen recursos. <html>";
+	    ramOk = 1;
+	} else {
+	    a.setIcon(okIcon);
+	    s = "<html> L'ús de la memòria és força baix. Això es pot deure a que es disposa de molta memòria o que no s'estiguin <br>"
+		    + " executant gaires aplicacions. <html>";
+	    ramOk = 2;
+	}
+	if (ramStats[6] < 4096)
+	    s += "<html> La memòria RAM del sistema és: "
+		    + ramStats[6]
+		    + " MB. Es recomana com a mínim <br>"
+		    + "una memòria de 4096 MB i, en cas d'utilitzar programes que consumeixen molts recursos, una de 8192 MB. <html>";
+	a.setToolTipText(s);
+	estatRAM.add(a);
     }
 }

@@ -11,10 +11,12 @@ import java.awt.event.ActionListener;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.Color;
 
@@ -90,6 +92,11 @@ public class PanelView extends JPanel {
 	}
     };
 
+    /**
+     * 
+     */
+    private JButton btnCarregarAnlisi;
+
     /** The duracio button. */
     private JButton duracioButton;
 
@@ -146,10 +153,36 @@ public class PanelView extends JPanel {
 	duracioLabelEdita.setFont(font);
 	JLabel lblOriolGassetRomo = new JLabel("Oriol Gasset Romo - UPC FIB");
 
+	btnCarregarAnlisi = new JButton("Carregar an\u00E0lisi");
+	btnCarregarAnlisi.setBackground(Color.DARK_GRAY);
+	btnCarregarAnlisi.addActionListener(new ActionListener() {
+	    public void actionPerformed(ActionEvent arg0) {
+		JFileChooser chooser = new JFileChooser();
+		chooser.setCurrentDirectory(new java.io.File("."));
+		chooser.setMultiSelectionEnabled(false);
+		chooser.setAcceptAllFileFilterUsed(false);
+		chooser.setDialogTitle("Carregar");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+			"Anàlisi de rendiment", "ren");
+		chooser.setFileFilter(filter);
+		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		if (chooser.showOpenDialog(btnCarregarAnlisi) == JFileChooser.APPROVE_OPTION) {
+		    try {
+			MainController.analisisController.carregarAnalisi(chooser
+				.getSelectedFile());
+		    } catch (NumberFormatException e) {
+			e.printStackTrace();
+		    } catch (Exception e) {
+			e.printStackTrace();
+		    }
+		}
+	    }
+	});
+
 	GroupLayout groupLayout = new GroupLayout(this);
 	groupLayout
 		.setHorizontalGroup(groupLayout
-			.createParallelGroup(Alignment.LEADING)
+			.createParallelGroup(Alignment.TRAILING)
 			.addGroup(
 				groupLayout
 					.createSequentialGroup()
@@ -202,19 +235,6 @@ public class PanelView extends JPanel {
 			.addGroup(
 				groupLayout
 					.createSequentialGroup()
-					.addGap(102)
-					.addComponent(duracioButton,
-						GroupLayout.DEFAULT_SIZE,
-						GroupLayout.DEFAULT_SIZE,
-						Short.MAX_VALUE)
-					.addGap(29)
-					.addComponent(lblOriolGassetRomo,
-						GroupLayout.PREFERRED_SIZE,
-						156, GroupLayout.PREFERRED_SIZE)
-					.addGap(196))
-			.addGroup(
-				groupLayout
-					.createSequentialGroup()
 					.addGap(94)
 					.addComponent(analisiCompletButton,
 						GroupLayout.PREFERRED_SIZE,
@@ -228,7 +248,35 @@ public class PanelView extends JPanel {
 						analisiPersonalitzatButton,
 						GroupLayout.PREFERRED_SIZE,
 						181, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(286, Short.MAX_VALUE)));
+					.addContainerGap(286, Short.MAX_VALUE))
+			.addGroup(
+				groupLayout
+					.createSequentialGroup()
+					.addGroup(
+						groupLayout
+							.createParallelGroup(
+								Alignment.TRAILING)
+							.addGroup(
+								groupLayout
+									.createSequentialGroup()
+									.addContainerGap()
+									.addComponent(
+										lblOriolGassetRomo,
+										GroupLayout.PREFERRED_SIZE,
+										156,
+										GroupLayout.PREFERRED_SIZE))
+							.addGroup(
+								groupLayout
+									.createSequentialGroup()
+									.addGap(102)
+									.addComponent(
+										duracioButton,
+										GroupLayout.DEFAULT_SIZE,
+										GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)))
+					.addGap(49)
+					.addComponent(btnCarregarAnlisi)
+					.addGap(272)));
 	groupLayout
 		.setVerticalGroup(groupLayout
 			.createParallelGroup(Alignment.LEADING)
@@ -236,7 +284,7 @@ public class PanelView extends JPanel {
 				groupLayout
 					.createSequentialGroup()
 					.addComponent(analisiCompletLabel,
-						GroupLayout.DEFAULT_SIZE, 25,
+						GroupLayout.DEFAULT_SIZE, 58,
 						Short.MAX_VALUE)
 					.addGap(1)
 					.addComponent(analisiCompletButton,
@@ -246,7 +294,7 @@ public class PanelView extends JPanel {
 						ComponentPlacement.RELATED)
 					.addComponent(
 						analisiPersonalitzatLabel,
-						GroupLayout.DEFAULT_SIZE, 25,
+						GroupLayout.DEFAULT_SIZE, 58,
 						Short.MAX_VALUE)
 					.addPreferredGap(
 						ComponentPlacement.RELATED)
@@ -266,27 +314,26 @@ public class PanelView extends JPanel {
 								GroupLayout.DEFAULT_SIZE,
 								GroupLayout.DEFAULT_SIZE,
 								Short.MAX_VALUE))
+					.addPreferredGap(
+						ComponentPlacement.RELATED)
 					.addGroup(
 						groupLayout
 							.createParallelGroup(
-								Alignment.LEADING)
+								Alignment.TRAILING)
 							.addGroup(
 								groupLayout
 									.createSequentialGroup()
-									.addPreferredGap(
-										ComponentPlacement.RELATED)
 									.addComponent(
-										duracioButton,
-										GroupLayout.PREFERRED_SIZE,
-										37,
-										GroupLayout.PREFERRED_SIZE))
+										duracioButton)
+									.addGap(18)
+									.addComponent(
+										lblOriolGassetRomo))
 							.addGroup(
 								groupLayout
 									.createSequentialGroup()
-									.addGap(42)
 									.addComponent(
-										lblOriolGassetRomo)))
-					.addContainerGap()));
+										btnCarregarAnlisi)
+									.addContainerGap()))));
 	setLayout(groupLayout);
     }
 

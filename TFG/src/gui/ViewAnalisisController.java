@@ -3,11 +3,12 @@
  */
 package gui;
 
+import java.io.File;
+
 import org.jfree.data.time.TimeSeries;
 
 import domini.AnalisisController;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ViewAnalisisController.
  */
@@ -79,15 +80,6 @@ public class ViewAnalisisController {
     }
 
     /**
-     * Gets the gpu info.
-     * 
-     * @return the gpu info
-     */
-    public String getGpuInfo() {
-	return analisisController.getGpuInfo();
-    }
-
-    /**
      * Obté detalls del component que passem com a paràmetre
      * 
      * @param s
@@ -100,14 +92,32 @@ public class ViewAnalisisController {
 
     /**
      * Obté el temps restant de l'anàlisi.
+     * 
      * @return
      */
     public int getDuracioRestant() {
 	return AnalisisView.getDuracioRestant();
     }
-    
+
     public String getDuracioParcial() {
-   	return AnalisisView.getTempsParcial();
-       }
+	return AnalisisView.getTempsParcial();
+    }
+
+    public void guardarAnalisi(String fileName, String duracio) {
+	analisisController.guardarAnalisi(fileName, duracio);
+
+    }
+
+    public void carregarAnalisi(File selectedFile) {
+	analisisController = new AnalisisController(MainController.opcionsController.getOpcions());
+	analisisController.carregarAnalisi(selectedFile);
+	ResultatAnalisisView res = new ResultatAnalisisView();
+	res.setPdfCreat(true);
+	MainController.view.dispose();
+    }
+
+    public String getIdPC() {
+	return analisisController.getIdPC();
+    }
 
 }

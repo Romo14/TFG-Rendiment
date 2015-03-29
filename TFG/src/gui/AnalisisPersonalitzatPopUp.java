@@ -124,10 +124,9 @@ public class AnalisisPersonalitzatPopUp extends JPanel {
 		Point aqui = new Point(
 				MainController.view.getLocationOnScreen().x + 50,
 				MainController.view.getLocationOnScreen().y + 50);
-		Dimension min = new Dimension(340, 280);
 		Box popUpLayout = Box.createVerticalBox();
 		options.setLocation(aqui);
-		options.setSize(min);
+		options.setSize(new Dimension(340, 249));
 		options.setResizable(false);
 		options.setVisible(true);
 		JPanel WindowPanel = new JPanel();
@@ -185,103 +184,58 @@ public class AnalisisPersonalitzatPopUp extends JPanel {
 		analisiPersonalitzatLabel.setFont(font);
 		analisiPersonalitzatLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		GroupLayout gl_popUpPanel = new GroupLayout(popUpPanel);
-		gl_popUpPanel
-				.setHorizontalGroup(gl_popUpPanel
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								gl_popUpPanel
-										.createSequentialGroup()
-										.addGap(49)
-										.addGroup(
-												gl_popUpPanel
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																gl_popUpPanel
-																		.createParallelGroup(
-																				Alignment.LEADING)
-																		.addGroup(
-																				gl_popUpPanel
-																						.createSequentialGroup()
-																						.addComponent(
-																								discDurCheckBox,
-																								GroupLayout.DEFAULT_SIZE,
-																								87,
-																								Short.MAX_VALUE)
-																						.addGap(18))
-																		.addComponent(
-																				cpuCheckBox))
-														.addGroup(
-																gl_popUpPanel
-																		.createSequentialGroup()
-																		.addComponent(
-																				cancelaButton)
-																		.addPreferredGap(
-																				ComponentPlacement.RELATED)))
-										.addGroup(
-												gl_popUpPanel
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																gl_popUpPanel
-																		.createSequentialGroup()
-																		.addGap(30)
-																		.addComponent(
-																				analitzaButton))
-														.addComponent(
-																ramCheckBox)
-														.addComponent(
-																internetCheckBox))
-										.addGap(182))
-						.addGroup(
-								gl_popUpPanel
-										.createSequentialGroup()
-										.addGap(31)
-										.addComponent(
-												analisiPersonalitzatLabel,
-												GroupLayout.PREFERRED_SIZE,
-												274, GroupLayout.PREFERRED_SIZE)
-										.addContainerGap(176, Short.MAX_VALUE)));
-		gl_popUpPanel
-				.setVerticalGroup(gl_popUpPanel
-						.createParallelGroup(Alignment.TRAILING)
-						.addGroup(
-								gl_popUpPanel
-										.createSequentialGroup()
-										.addGap(21)
-										.addComponent(analisiPersonalitzatLabel)
-										.addPreferredGap(
-												ComponentPlacement.UNRELATED)
-										.addGroup(
-												gl_popUpPanel
-														.createParallelGroup(
-																Alignment.BASELINE)
-														.addComponent(
-																cpuCheckBox)
-														.addComponent(
-																ramCheckBox))
-										.addGap(6)
-										.addGroup(
-												gl_popUpPanel
-														.createParallelGroup(
-																Alignment.BASELINE)
-														.addComponent(
-																discDurCheckBox,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																Short.MAX_VALUE)
-														.addComponent(
-																internetCheckBox))
-										.addGap(50)
-										.addGroup(
-												gl_popUpPanel
-														.createParallelGroup(
-																Alignment.BASELINE)
-														.addComponent(
-																cancelaButton)
-														.addComponent(
-																analitzaButton))
-										.addGap(57)));
+		gl_popUpPanel.setHorizontalGroup(
+			gl_popUpPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_popUpPanel.createSequentialGroup()
+					.addGroup(gl_popUpPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_popUpPanel.createSequentialGroup()
+							.addGroup(gl_popUpPanel.createParallelGroup(Alignment.TRAILING)
+								.addGroup(Alignment.LEADING, gl_popUpPanel.createSequentialGroup()
+									.addGap(49)
+									.addComponent(analitzaButton)
+									.addPreferredGap(ComponentPlacement.RELATED))
+								.addGroup(gl_popUpPanel.createSequentialGroup()
+									.addContainerGap(50, Short.MAX_VALUE)
+									.addGroup(gl_popUpPanel.createParallelGroup(Alignment.LEADING)
+										.addGroup(gl_popUpPanel.createSequentialGroup()
+											.addComponent(discDurCheckBox, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+											.addPreferredGap(ComponentPlacement.RELATED))
+										.addGroup(Alignment.TRAILING, gl_popUpPanel.createSequentialGroup()
+											.addComponent(cpuCheckBox)
+											.addGap(48)))))
+							.addGroup(gl_popUpPanel.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_popUpPanel.createSequentialGroup()
+									.addGroup(gl_popUpPanel.createParallelGroup(Alignment.LEADING)
+										.addComponent(cancelaButton)
+										.addComponent(internetCheckBox))
+									.addPreferredGap(ComponentPlacement.RELATED, 7, Short.MAX_VALUE))
+								.addGroup(gl_popUpPanel.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(ramCheckBox, GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE))))
+						.addGroup(gl_popUpPanel.createSequentialGroup()
+							.addGap(31)
+							.addComponent(analisiPersonalitzatLabel, GroupLayout.PREFERRED_SIZE, 274, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap())
+		);
+		gl_popUpPanel.setVerticalGroup(
+			gl_popUpPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_popUpPanel.createSequentialGroup()
+					.addGap(21)
+					.addComponent(analisiPersonalitzatLabel)
+					.addGap(18)
+					.addGroup(gl_popUpPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(cpuCheckBox)
+						.addComponent(ramCheckBox, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_popUpPanel.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(discDurCheckBox, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(internetCheckBox, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addGap(27)
+					.addGroup(gl_popUpPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(cancelaButton)
+						.addComponent(analitzaButton))
+					.addGap(57))
+		);
 		popUpPanel.setLayout(gl_popUpPanel);
 		analitzaButton.addActionListener(analitzaListener);
 		cancelaButton.addActionListener(cancelaListener);

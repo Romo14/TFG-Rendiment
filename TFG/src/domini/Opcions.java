@@ -15,9 +15,6 @@ public class Opcions {
     /** The dies. */
     private int dies;
     
-    /** The gpu. */
-    private boolean gpu;
-    
     /** The hdd. */
     private boolean hdd;
     
@@ -40,7 +37,7 @@ public class Opcions {
 	minuts = 0;
 	hores = 1;
 	dies = 0;
-	cpu = hdd = gpu = net = ram = false;
+	cpu = hdd = net = ram = false;
     }
 
     /**
@@ -77,15 +74,6 @@ public class Opcions {
      */
     public boolean isCpu() {
 	return cpu;
-    }
-
-    /**
-     * Checks if is gpu.
-     *
-     * @return true, if is gpu
-     */
-    public boolean isGpu() {
-	return gpu;
     }
 
     /**
@@ -131,15 +119,6 @@ public class Opcions {
      */
     public void setDies(int dies) {
 	this.dies = dies;
-    }
-
-    /**
-     * Sets the gpu.
-     *
-     * @param gpu the new gpu
-     */
-    public void setGpu(boolean gpu) {
-	this.gpu = gpu;
     }
 
     /**

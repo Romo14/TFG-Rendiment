@@ -3,6 +3,8 @@
  */
 package domini;
 
+import java.io.File;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -10,7 +12,8 @@ import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
 
 /**
- * Controlador de l'anàlisis dels components. Classe que s'encarrega de definir els objectes que analitzaran l'ordinador. També gestiona el pass d'informació entre aquests objectes i la capa de domini
+ * Controlador de la classe anàlisi. És l'encarregat de crear l'anàlisi i actualitzar les dades
+ * d'aquest. A través d'aquest controlador també guardem i carreguem els anàlisis realitzats.
  */
 /**
  * @author Oriol Gasset Romo <oriol.gasset@est.fib.upc.edu>
@@ -18,34 +21,36 @@ import org.jfree.data.time.TimeSeries;
  */
 public class AnalisisController {
 
-    /** Les opcions de l'anàlisis */
-    private static OpcionsController opcionsController;
-
-    /** Objecte que analitzarà la CPU */
+    /** Objecte encarregar d'analitzar la cpu. */
     private AnalisisCPU cpu;
 
-    /** Objecte que analitzarà la GPU */
-    private AnalisisGPU gpu;
+    /** Duració de l'anàlisi. */
+    private String duracio;
 
-    /** Objecte que analitzarà el disc dur */
+    /** Objecte encarregar d'analitzar el disc dur. */
     private AnalisisHDD hdd;
 
-    /** Objecte que analitzarà la targeta de xarxa */
+    /** Identificador de l'ordinador. */
+    private String idPC;
+
+    /** Objecte encarregar d'analitzar la targeta de xarxa. */
     private AnalisisNET net;
 
-    /** Objecte que analitzarà la memòria RAM */
+    /** El controlador d'opcions. */
+    private OpcionsController opcionsController;
+
+    /** Objecte encarregar d'analitzar la memòria RAM. */
     private AnalisisRAM ram;
 
     /**
-     * Creadora per defecte del controlador de l'anàlisis. Crea un objecte per
-     * cada component a analitzar
+     * Creadora per defecte de l'anàlisi controller. Inicia un nou objecte
+     * d'anàlisi per a cada component i les opcions de l'anàlisi.
      * 
      * @param oc
-     *            El controlador de les opcions
+     *            Controlador d'opcions del procés
      */
     public AnalisisController(OpcionsController oc) {
 	cpu = new AnalisisCPU();
-	gpu = new AnalisisGPU();
 	hdd = new AnalisisHDD();
 	net = new AnalisisNET();
 	ram = new AnalisisRAM();
@@ -53,8 +58,8 @@ public class AnalisisController {
     }
 
     /**
-     * Funció encarregada de actualitzar la informació de l'ús dels components
-     * del sistema depenen de si aquests formen part de l'anàlisis o no.
+     * Acció que es realitza cada segon i s'encarrega de, per cada component que
+     * formi part del procés, actualitzar les seves dades.
      */
     public void analitzar() {
 	if (opcionsController.isCpu()) {
@@ -72,10 +77,33 @@ public class AnalisisController {
     }
 
     /**
-     * Obté la informació del màxim, mínim i mitjana de l'ús de la CPU. Aquesta
-     * funció es crida un cop acabat l'anàlisis.
+     * Carregar analisi.
      * 
-     * @return the cpu info
+     * @param selectedFile
+     *            URL del fitxer a carregar.
+     */
+    public void carregarAnalisi(File selectedFile) {
+	ArrayList<Object> dades = GestioDades.carregar(selectedFile);
+	this.opcionsController.setCpu((boolean) dades.get(6));
+	this.opcionsController.setRam((boolean) dades.get(7));
+	this.opcionsController.setHdd((boolean) dades.get(8));
+	this.opcionsController.setNet((boolean) dades.get(9));
+	if (opcionsController.isCpu())
+	    cpu.setTot((Object[]) dades.get(0));
+	if (opcionsController.isRam())
+	    ram.setTot((Object[]) dades.get(1));
+	if (opcionsController.isHdd())
+	    hdd.setTot((Object[]) dades.get(2));
+	if (opcionsController.isNet())
+	    net.setTot((Object[]) dades.get(3));
+	this.idPC = (String) dades.get(4);
+	this.duracio = (String) dades.get(5);
+    }
+
+    /**
+     * Obté la informació del resultat de l'anàlisi del processador.
+     * 
+     * @return Informació de la CPU.
      */
     public Float[] getCpuInfo() {
 	Float[] res = new Float[3];
@@ -86,13 +114,13 @@ public class AnalisisController {
     }
 
     /**
-     * Obté, per cada component analitzat, el llistat de valors comptabilitzats
-     * al llarg del temps per crear la gràfica.
+     * Obté la informació de la variació de l'ús del component passat per
+     * paràmetre al llarg de l'anàlisi. A la capa de presentació es converteix
+     * en les dades de la gràfica.
      * 
      * @param string
-     *            String que indica de quin component volem obtenir el llistat
-     *            de valors
-     * @return El llistat amb els valors i el temps en que s'han obtingut
+     *            Identificador del component
+     * @return Evolució de l'ús del component en el temps
      */
     public TimeSeries getEvol(String string) {
 	TimeSeries res = new TimeSeries(string);
@@ -127,70 +155,36 @@ public class AnalisisController {
     }
 
     /**
-     * Obté la informació del màxim, mínim i mitjana de l'ús del disc dur.
-     * Aquesta funció es crida un cop acabat l'anàlisis.
+     * Obté la informació del resultat de l'anàlisi del disc dur.
      * 
-     * @return the hdd info
+     * @return Informació del disc dur
      */
     public float[] getHddInfo() {
-	float[] res = new float[3];
+	float[] res = new float[5];
 	res[0] = (float) (((hdd.getAvgTotal() - hdd.getInicial()) / 1024 / 1024) / hdd
 		.getTemps().size());
 	res[1] = hdd.getMaxTotal();
 	res[2] = hdd.getMinTotal();
+	res[3] = hdd.getNumEscriptures() - hdd.getNumEscripturesInicial();
+	res[4] = hdd.getNumLectures() - hdd.getNumLecturesInicial();
 	return res;
     }
 
     /**
-     * Obté la informació del màxim, mínim i mitjana de l'ús de la targeta de
-     * xarxa. Aquesta funció es crida un cop acabat l'anàlisis.
+     * Obté l'identificador del PC on s'ha executat l'anàlisi.
      * 
-     * @return the net info
+     * @return Identificador del PC
      */
-    public Float[] getNetInfo() {
-	Float[] res = new Float[6];
-	res[0] = net.getAvgPercentatge();
-	res[1] = (float) (net.getAvgTotal() / net.getComptador());
-	res[2] = net.getMaxPercentatge();
-	res[3] = (float) net.getMaxTotal();
-	res[4] = net.getMinPercentatge();
-	res[5] = (float) net.getMinTotal();
-	return res;
+    public String getIdPC() {
+	return idPC;
     }
 
     /**
-     * Obté la informació del màxim, mínim i mitjana de l'ús de la memòria RAM.
-     * Aquesta funció es crida un cop acabat l'anàlisis.
-     * 
-     * @return the ram info
-     */
-    public Float[] getRamInfo() {
-	Float[] res = new Float[6];
-	res[0] = ram.getAvgPercentatge();
-	res[1] = (float) (ram.getAvgTotal() / ram.getComptador());
-	res[2] = ram.getMaxPercentatge();
-	res[3] = (float) ram.getMaxTotal();
-	res[4] = ram.getMinPercentatge();
-	res[5] = (float) ram.getMinTotal();
-	return res;
-    }
-
-    /**
-     * Obté la informació de la GPU. Aquesta funció es crida un cop acabat
-     * l'anàlisis.
-     * 
-     * @return the gpu info
-     */
-    public String getGpuInfo() {
-	return gpu.getInfo();
-    }
-
-    /**
-     * Obté detalls del component que passem com a paràmetre
+     * Obté la informació del component que se li passa per paràmetre.
      * 
      * @param string
-     *            Identificador del component
-     * @return detalls del component seleccionat
+     *            Identificador del component.
+     * @return Informació del component.
      */
     public String getInfoComponents(String string) {
 	String res = "";
@@ -210,4 +204,65 @@ public class AnalisisController {
 	}
 	return res;
     }
+
+    /**
+     * Obté la informació del resultat de l'anàlisi de la targeta de xarxa.
+     * 
+     * @return Informació de la targeta de xarxa
+     */
+    public Float[] getNetInfo() {
+	Float[] res = new Float[6];
+	res[0] = net.getAvgPercentatge();
+	res[1] = (float) (net.getAvgTotal() / net.getComptador());
+	res[2] = net.getMaxPercentatge();
+	res[3] = (float) net.getMaxTotal();
+	res[4] = net.getMinPercentatge();
+	res[5] = (float) net.getMinTotal();
+	return res;
+    }
+
+    /**
+     * Obté la informació del resultat de l'anàlisi de la memòria RAM.
+     * 
+     * @return Informació de la memòria RAM
+     */
+    public Float[] getRamInfo() {
+	Float[] res = new Float[7];
+	res[0] = ram.getAvgPercentatge();
+	res[1] = (float) (ram.getAvgTotal() / ram.getComptador());
+	res[2] = ram.getMaxPercentatge();
+	res[3] = (float) ram.getMaxTotal();
+	res[4] = ram.getMinPercentatge();
+	res[5] = (float) ram.getMinTotal();
+	res[6] = (float) ram.getMaxRam();
+	return res;
+    }
+
+    /**
+     * Guarda tota la informació relacionada amb l'anàlisi.
+     * 
+     * @param fileName
+     *            nom del fitxer on es guardarà la informació
+     * @param duracio
+     *            Duració de l'anàlisi realitzat
+     */
+    public void guardarAnalisi(String fileName, String duracio) {
+	ArrayList<Object> resultat = new ArrayList<Object>();
+	resultat.add(cpu.getTot());
+	resultat.add(ram.getTot());
+	resultat.add(hdd.getTot());
+	resultat.add(net.getTot());
+	try {
+	    resultat.add(java.net.InetAddress.getLocalHost().getHostName());
+	} catch (UnknownHostException e) {
+	    e.printStackTrace();
+	}
+	resultat.add(duracio);
+	resultat.add(opcionsController.isCpu());
+	resultat.add(opcionsController.isRam());
+	resultat.add(opcionsController.isHdd());
+	resultat.add(opcionsController.isNet());
+	GestioDades.guardar(resultat, fileName);
+    }
+
 }

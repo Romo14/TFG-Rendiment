@@ -5,7 +5,7 @@ package domini;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class OpcionsController.
+ * La classe controlador de les opcions de l'anàlisi..
  */
 public class OpcionsController {
 
@@ -21,7 +21,7 @@ public class OpcionsController {
 
     /**
      * Gets the dies.
-     *
+     * 
      * @return the dies
      */
     public int getDies() {
@@ -30,7 +30,7 @@ public class OpcionsController {
 
     /**
      * Gets the hores.
-     *
+     * 
      * @return the hores
      */
     public int getHores() {
@@ -39,7 +39,7 @@ public class OpcionsController {
 
     /**
      * Gets the minuts.
-     *
+     * 
      * @return the minuts
      */
     public int getMinuts() {
@@ -48,7 +48,7 @@ public class OpcionsController {
 
     /**
      * Checks if is cpu.
-     *
+     * 
      * @return true, if is cpu
      */
     public boolean isCpu() {
@@ -56,17 +56,8 @@ public class OpcionsController {
     }
 
     /**
-     * Checks if is gpu.
-     *
-     * @return true, if is gpu
-     */
-    public boolean isGpu() {
-	return opcions.isGpu();
-    }
-
-    /**
      * Checks if is hdd.
-     *
+     * 
      * @return true, if is hdd
      */
     public boolean isHdd() {
@@ -75,7 +66,7 @@ public class OpcionsController {
 
     /**
      * Checks if is net.
-     *
+     * 
      * @return true, if is net
      */
     public boolean isNet() {
@@ -84,7 +75,7 @@ public class OpcionsController {
 
     /**
      * Checks if is ram.
-     *
+     * 
      * @return true, if is ram
      */
     public boolean isRam() {
@@ -93,8 +84,9 @@ public class OpcionsController {
 
     /**
      * Sets the cpu.
-     *
-     * @param cpu the new cpu
+     * 
+     * @param cpu
+     *            the new cpu
      */
     public void setCpu(boolean cpu) {
 	opcions.setCpu(cpu);
@@ -102,26 +94,19 @@ public class OpcionsController {
 
     /**
      * Sets the dies.
-     *
-     * @param dies the new dies
+     * 
+     * @param dies
+     *            the new dies
      */
     public void setDies(int dies) {
 	opcions.setDies(dies);
     }
 
     /**
-     * Sets the gpu.
-     *
-     * @param gpu the new gpu
-     */
-    public void setGpu(boolean gpu) {
-	opcions.setGpu(gpu);
-    }
-
-    /**
      * Sets the hdd.
-     *
-     * @param hdd the new hdd
+     * 
+     * @param hdd
+     *            the new hdd
      */
     public void setHdd(boolean hdd) {
 	opcions.setHdd(hdd);
@@ -129,8 +114,9 @@ public class OpcionsController {
 
     /**
      * Sets the hores.
-     *
-     * @param hores the new hores
+     * 
+     * @param hores
+     *            the new hores
      */
     public void setHores(int hores) {
 	opcions.setHores(hores);
@@ -138,8 +124,9 @@ public class OpcionsController {
 
     /**
      * Sets the minuts.
-     *
-     * @param minuts the new minuts
+     * 
+     * @param minuts
+     *            the new minuts
      */
     public void setMinuts(int minuts) {
 	opcions.setMinuts(minuts);
@@ -147,8 +134,9 @@ public class OpcionsController {
 
     /**
      * Sets the net.
-     *
-     * @param net the new net
+     * 
+     * @param net
+     *            the new net
      */
     public void setNet(boolean net) {
 	opcions.setNet(net);
@@ -156,8 +144,9 @@ public class OpcionsController {
 
     /**
      * Sets the ram.
-     *
-     * @param ram the new ram
+     * 
+     * @param ram
+     *            the new ram
      */
     public void setRam(boolean ram) {
 	opcions.setRam(ram);
@@ -168,9 +157,9 @@ public class OpcionsController {
      */
     public void setAllTrue() {
 	opcions.setCpu(true);
-	opcions.setGpu(true);
 	opcions.setHdd(true);
 	opcions.setNet(true);
 	opcions.setRam(true);
     }
+
 }

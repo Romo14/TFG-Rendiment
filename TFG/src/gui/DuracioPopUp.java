@@ -173,96 +173,49 @@ public class DuracioPopUp extends JPanel {
 	});
 	btnCancellar.setFont(font);
 	GroupLayout groupLayout = new GroupLayout(duracio.getContentPane());
-	groupLayout.setHorizontalGroup(groupLayout
-		.createParallelGroup(Alignment.LEADING)
-		.addGroup(
-			groupLayout
-				.createSequentialGroup()
+	groupLayout.setHorizontalGroup(
+		groupLayout.createParallelGroup(Alignment.LEADING)
+			.addGroup(groupLayout.createSequentialGroup()
 				.addGap(43)
-				.addGroup(
-					groupLayout
-						.createParallelGroup(
-							Alignment.LEADING)
-						.addComponent(minutsLabel)
-						.addComponent(diesLabel)
-						.addComponent(horesLabel))
-				.addPreferredGap(ComponentPlacement.RELATED,
-					44, Short.MAX_VALUE)
-				.addGroup(
-					groupLayout
-						.createParallelGroup(
-							Alignment.LEADING,
-							false)
-						.addComponent(minutsSpinner,
-							Alignment.TRAILING)
-						.addComponent(horesSpinner,
-							Alignment.TRAILING)
-						.addComponent(diesSpinner,
-							Alignment.TRAILING))
+				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addComponent(minutsLabel)
+					.addComponent(diesLabel)
+					.addComponent(horesLabel))
+				.addPreferredGap(ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+					.addComponent(minutsSpinner, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addComponent(horesSpinner, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addComponent(diesSpinner, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(66))
-		.addGroup(
-			groupLayout.createSequentialGroup().addGap(41)
-				.addComponent(btnCancellar).addGap(18)
+			.addGroup(groupLayout.createSequentialGroup()
+				.addGap(41)
 				.addComponent(acceptaButton)
-				.addContainerGap(38, Short.MAX_VALUE)));
-	groupLayout
-		.setVerticalGroup(groupLayout
-			.createParallelGroup(Alignment.LEADING)
-			.addGroup(
-				groupLayout
-					.createSequentialGroup()
-					.addGap(28)
-					.addGroup(
-						groupLayout
-							.createParallelGroup(
-								Alignment.LEADING)
-							.addGroup(
-								groupLayout
-									.createSequentialGroup()
-									.addComponent(
-										minutsSpinner,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(
-										ComponentPlacement.RELATED)
-									.addGroup(
-										groupLayout
-											.createParallelGroup(
-												Alignment.BASELINE)
-											.addComponent(
-												horesSpinner,
-												GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-											.addComponent(
-												horesLabel)))
-							.addComponent(
-								minutsLabel))
-					.addGap(10)
-					.addGroup(
-						groupLayout
-							.createParallelGroup(
-								Alignment.BASELINE)
-							.addComponent(
-								diesSpinner,
-								GroupLayout.PREFERRED_SIZE,
-								GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-							.addComponent(diesLabel))
-					.addGap(18)
-					.addGroup(
-						groupLayout
-							.createParallelGroup(
-								Alignment.BASELINE)
-							.addComponent(
-								acceptaButton,
-								GroupLayout.DEFAULT_SIZE,
-								GroupLayout.DEFAULT_SIZE,
-								Short.MAX_VALUE)
-							.addComponent(
-								btnCancellar))
-					.addGap(31)));
+				.addPreferredGap(ComponentPlacement.RELATED)
+				.addComponent(btnCancellar)
+				.addContainerGap(150, Short.MAX_VALUE))
+	);
+	groupLayout.setVerticalGroup(
+		groupLayout.createParallelGroup(Alignment.LEADING)
+			.addGroup(groupLayout.createSequentialGroup()
+				.addGap(28)
+				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addGroup(groupLayout.createSequentialGroup()
+						.addComponent(minutsSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(horesSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(horesLabel)))
+					.addComponent(minutsLabel))
+				.addGap(10)
+				.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+					.addComponent(diesSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addComponent(diesLabel))
+				.addGap(18)
+				.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+					.addComponent(btnCancellar)
+					.addComponent(acceptaButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+				.addGap(31))
+	);
 	duracio.getContentPane().setLayout(groupLayout);
 	duracio.setVisible(true);
 
