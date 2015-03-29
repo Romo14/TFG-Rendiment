@@ -168,6 +168,7 @@ public class PanelView extends JPanel {
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		if (chooser.showOpenDialog(btnCarregarAnlisi) == JFileChooser.APPROVE_OPTION) {
 		    try {
+		    MainController.analisisController = new ViewAnalisisController();
 			MainController.analisisController.carregarAnalisi(chooser
 				.getSelectedFile());
 		    } catch (NumberFormatException e) {
