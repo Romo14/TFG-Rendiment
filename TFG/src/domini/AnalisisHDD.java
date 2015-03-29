@@ -94,7 +94,7 @@ public class AnalisisHDD {
 	s = "Tamany del disc: " + diskSize + "GB Espai disponible: " + diskFree
 		+ "GB \r\n Número de lectures: "
 		+ (numLectures - numLecturesInicial)
-		+ " Número d'escriptures: "
+		+ "Número d'escriptures: "
 		+ (numEscriptures - numEscripturesInicial);
 
 	return s;

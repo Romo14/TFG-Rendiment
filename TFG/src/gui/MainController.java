@@ -66,7 +66,6 @@ public class MainController {
 		}
 		view = new View();
 		opcionsController = new ViewOpcionsController();
-		analisisController = new ViewAnalisisController();
 
 	}
 
