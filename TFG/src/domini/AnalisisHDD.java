@@ -9,7 +9,9 @@ import org.hyperic.sigar.SigarException;
 import org.jfree.data.time.Second;
 
 /**
- * The Class AnalisisHDD.
+ * Classe encarregada de realitzar l'anàlisi del disc dur.
+ * 
+ * @author Oriol Gasset Romo <oriol.gasset@est.fib.upc.edu>
  */
 public class AnalisisHDD {
 
@@ -93,8 +95,7 @@ public class AnalisisHDD {
 	long diskFree = (new File("/").getFreeSpace()) / 1024 / 1024 / 1024;
 	s = "Tamany del disc: " + diskSize + "GB Espai disponible: " + diskFree
 		+ "GB \r\n Número de lectures: "
-		+ (numLectures - numLecturesInicial)
-		+ "Número d'escriptures: "
+		+ (numLectures - numLecturesInicial) + "Número d'escriptures: "
 		+ (numEscriptures - numEscripturesInicial);
 
 	return s;
@@ -222,7 +223,11 @@ public class AnalisisHDD {
 	try {
 	    hdd = hddSigar.getFileSystemUsage("C:");
 	} catch (SigarException se) {
-	    se.printStackTrace();
+	    try {
+		hdd = hddSigar.getFileSystemUsage("/");
+	    } catch (SigarException e) {
+		e.printStackTrace();
+	    }
 	}
 	float used = 0;
 	long aux = hdd.getDiskReadBytes() + hdd.getDiskWriteBytes();

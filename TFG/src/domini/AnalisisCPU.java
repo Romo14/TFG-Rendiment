@@ -10,8 +10,7 @@ import org.jfree.data.time.Second;
 
 /**
  * Classe encarregada de realitzar l'anàlisi del processador
- */
-/**
+ * 
  * @author Oriol Gasset Romo <oriol.gasset@est.fib.upc.edu>
  * 
  */
@@ -163,7 +162,7 @@ public class AnalisisCPU {
     }
 
     /**
-     * Actualitza les dades de l'ús de la cpu. Obté els valors actuals i 
+     * Actualitza les dades de l'ús de la cpu. Obté els valors actuals i
      * comprova actualitza els paràmetres adients.
      */
     public void updateCPU() {

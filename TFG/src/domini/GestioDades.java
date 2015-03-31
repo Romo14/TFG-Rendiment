@@ -11,15 +11,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The Class GestioDadesController.
+ * Classe encarregada de guardar i carregar els anàlisis realitzats de disc.
+ * 
+ * @author Oriol Gasset Romo <oriol.gasset@est.fib.upc.edu>
  */
 public class GestioDades {
 
     /**
-     * Guardar.
-     *
-     * @param resultat the resultat
-     * @param name the name
+     * Guardar les dades a disc.
+     * 
+     * @param resultat
+     *            resultat de l'anàlisi
+     * @param name
+     *            nom del fitxer on es guardarà l'anàlisi
      */
     public static void guardar(List<Object> resultat, String name) {
 	try {
@@ -38,9 +42,10 @@ public class GestioDades {
     }
 
     /**
-     * Carregar.
-     *
-     * @param file the file
+     * Carrega les dades de disc.
+     * 
+     * @param file
+     *            Fitxer d'anàlisi
      * @return llistat amb les dades de l'anàlisi
      */
     @SuppressWarnings("unchecked")
@@ -53,7 +58,11 @@ public class GestioDades {
 	    l = (ArrayList<Object>) load.readObject();
 	    load.close();
 	    return l;
-	} catch (IOException | ClassNotFoundException e) {
+	} catch (ClassNotFoundException e) {
+	    e.printStackTrace();
+	} catch (FileNotFoundException e) {
+	    e.printStackTrace();
+	} catch (IOException e) {
 	    e.printStackTrace();
 	}
 	return null;

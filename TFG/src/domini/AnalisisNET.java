@@ -1,6 +1,11 @@
 package domini;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,69 +13,72 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.hyperic.sigar.NetFlags;
-import org.hyperic.sigar.NetInfo;
 import org.hyperic.sigar.NetInterfaceConfig;
 import org.hyperic.sigar.NetInterfaceStat;
 import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarException;
 import org.jfree.data.time.Second;
 
+import domini.netInfo.ParseRoute;
+
 /**
  * Classe encarregada de realitzar l'anàlisi de la targeta de xarxa.
+ * 
  * @author Oriol Gasset Romo <oriol.gasset@est.fib.upc.edu>
  */
 public class AnalisisNET {
 
-    /**  rx change map. */
+    /** rx change map. */
     private static Map<String, List<Long>> rxChangeMap = new HashMap<String, List<Long>>();
 
-    /**  rx current map. */
+    /** rx current map. */
     private static Map<String, Long> rxCurrentMap = new HashMap<String, Long>();
 
-    /**  tx change map. */
+    /** tx change map. */
     private static Map<String, List<Long>> txChangeMap = new HashMap<String, List<Long>>();
 
-    /**  tx current map. */
+    /** tx current map. */
     private static Map<String, Long> txCurrentMap = new HashMap<String, Long>();
 
-    /**  Mitjana d'ús de la targeta de xarxa en percentatge. */
+    /** Mitjana d'ús de la targeta de xarxa en percentatge. */
     private float avgPercentatge;
 
-    /**   Mitjana d'ús de la targeta de xarxa total. */
+    /** Mitjana d'ús de la targeta de xarxa total. */
     private long avgTotal;
 
-    /**  Comptador. */
+    /** Comptador. */
     private long comptador;
 
-    /**  Llistat d'ús de la targeta de xarxa. */
+    /** Llistat d'ús de la targeta de xarxa. */
     private ArrayList<Float> graf;
 
-    /**  Màxim ús de la targeta de xarxa en percentatge. */
+    /** Màxim ús de la targeta de xarxa en percentatge. */
     private float maxPercentatge;
 
-    /**  Màxim ús de la targeta de xarxa total. */
+    /** Màxim ús de la targeta de xarxa total. */
     private long maxTotal;
 
-    /**  Mínim ús de la targeta de xarxa en percentatge. */
+    /** Mínim ús de la targeta de xarxa en percentatge. */
     private float minPercentatge;
 
-    /**  Mínim ús de la targeta de xarxa total. */
+    /** Mínim ús de la targeta de xarxa total. */
     private long minTotal;
 
-    /**  Element que accedeix a la informació de la targeta de xarxa */
+    /** Element que accedeix a la informació de la targeta de xarxa */
     private Sigar netSigar;
 
-    /**  Segon. */
+    /** Segon. */
     private Second segon;
 
-    /**  speed. */
+    /** speed. */
     private long speed;
-    
-    /**  temps. */
+
+    /** temps. */
     private ArrayList<Second> temps;
 
     /**
-     * Instantiates a new analisis net.
+     * Creadora per defecte de la classe. Inicialitza els atributs amb valors
+     * predeterminats
      */
     public AnalisisNET() {
 	this.avgPercentatge = 0;
@@ -87,70 +95,69 @@ public class AnalisisNET {
     }
 
     /**
-     * Gets the avg percentatge.
-     *
-     * @return the avg percentatge
+     * Obté el avg percentatge.
+     * 
+     * @return avg percentatge
      */
     public float getAvgPercentatge() {
 	return avgPercentatge;
     }
 
     /**
-     * Gets the avg total.
-     *
-     * @return the avg total
+     * Obté el avg total.
+     * 
+     * @return avg total
      */
     public long getAvgTotal() {
 	return avgTotal;
     }
 
     /**
-     * Gets the comptador.
-     *
-     * @return the comptador
+     * Obté el comptador.
+     * 
+     * @return comptador
      */
     public long getComptador() {
 	return comptador;
     }
 
     /**
-     * Gets the graf.
+     * Obté el graf.
      * 
-     * @return the graf
+     * @return graf
      */
     public ArrayList<Float> getGraf() {
 	return graf;
     }
 
     /**
-     * Gets the max percentatge.
-     *
-     * @return the max percentatge
+     * Obté el max percentatge.
+     * 
+     * @return max percentatge
      */
     public float getMaxPercentatge() {
 	return maxPercentatge;
     }
 
     /**
-     * Gets the max total.
-     *
-     * @return the max total
+     * Obté el max total.
+     * 
+     * @return max total
      */
     public long getMaxTotal() {
 	return maxTotal;
     }
 
     /**
-     * Gets the metric.
-     *
-     * @return the metric
+     * Obté l'ús de la xarxa.
+     * 
+     * @return metric
      */
     public Long getMetric() {
 	try {
 	    for (String ni : netSigar.getNetInterfaceList()) {
-		NetInterfaceStat netStat = getNetSigar()
-			.getNetInterfaceStat(ni);
-		NetInterfaceConfig ifConfig = getNetSigar()
+		NetInterfaceStat netStat = netSigar.getNetInterfaceStat(ni);
+		NetInterfaceConfig ifConfig = netSigar
 			.getNetInterfaceConfig(ni);
 		String hwaddr = null;
 		if (!NetFlags.NULL_HWADDR.equals(ifConfig.getHwaddr())) {
@@ -184,12 +191,13 @@ public class AnalisisNET {
     }
 
     /**
-     * Gets the metric data.
-     *
-     * @param rxChangeMap the rx change map
-     * @return the metric data
+     * Obté dades de la xarxa.
+     * 
+     * @param rxChangeMap
+     *            rx change map
+     * @return metric data
      */
-    private long getMetricData(Map<String, List<Long>> rxChangeMap) {
+    long getMetricData(Map<String, List<Long>> rxChangeMap) {
 	long total = 0;
 	for (Entry<String, List<Long>> entry : rxChangeMap.entrySet()) {
 	    int average = 0;
@@ -203,70 +211,60 @@ public class AnalisisNET {
     }
 
     /**
-     * Gets the min percentatge.
-     *
-     * @return the min percentatge
+     * Obté el min percentatge.
+     * 
+     * @return min percentatge
      */
     public float getMinPercentatge() {
 	return minPercentatge;
     }
 
     /**
-     * Gets the min total.
+     * Obté el min total.
      * 
-     * @return the min total
+     * @return min total
      */
     public long getMinTotal() {
 	return minTotal;
     }
 
     /**
-     * Gets the net info.
-     *
-     * @return the net info
+     * Obté informació de la xarxa.
+     * 
+     * @return net info
      */
     public String getNetInfo() {
-	netSigar = new Sigar();
 	String info = "";
 	try {
-	    NetInfo netInfo = netSigar.getNetInfo();
-	    NetInterfaceConfig netInterface = netSigar.getNetInterfaceConfig();
-	    if (!netInfo.getDomainName().equals(""))
-		info += "Domini: " + netInfo.getDomainName();
-	    info += "Nom: " + netInterface.getName() + " Tipus: "
-		    + netInterface.getType() + " Gateway: "
-		    + netInfo.getDefaultGateway() + " Adreça: "
-		    + netInterface.getAddress() + " Descripció: "
-		    + netInterface.getDescription();
-	} catch (SigarException e) {
+	    ParseRoute pr = ParseRoute.getInstance();
+	    InetAddress ip = InetAddress.getByName(pr.getLocalIPAddress());
+	    NetworkInterface network = NetworkInterface.getByInetAddress(ip);
+	    info += "Nom: " + network.getName() + " Descripció: "
+		    + network.getDisplayName() + " MTU: " + network.getMTU();
+	    Enumeration<InetAddress> en = network.getInetAddresses();
+	    info += " Adreça IPv4: " + en.nextElement().getHostAddress()
+		    + " Adreça IPv6: " + en.nextElement().getHostAddress();
+	} catch (UnknownHostException e) {
+	    e.printStackTrace();
+	} catch (SocketException e) {
 	    e.printStackTrace();
 	}
 	return info;
     }
 
     /**
-     * Gets the net sigar.
-     *
-     * @return the net sigar
-     */
-    public Sigar getNetSigar() {
-	return netSigar;
-    }
-
-
-    /**
-     * Gets the temps.
-     *
-     * @return the temps
+     * Obté el temps.
+     * 
+     * @return temps
      */
     public ArrayList<Second> getTemps() {
 	return temps;
     }
 
     /**
-     * Gets the tot.
-     *
-     * @return the tot
+     * Obté totes les dades de la classe.
+     * 
+     * @return tot
      */
     public Object getTot() {
 	Object[] tot = new Object[9];
@@ -283,15 +281,21 @@ public class AnalisisNET {
     }
 
     /**
-     * Save change.
-     *
-     * @param currentMap the current map
-     * @param changeMap the change map
-     * @param hwaddr the hwaddr
-     * @param current the current
-     * @param ni the ni
+     * Funció interna que forma part del procés d'obtenció de dades de la
+     * targeta de xarxa.
+     * 
+     * @param currentMap
+     *            current map
+     * @param changeMap
+     *            change map
+     * @param hwaddr
+     *            hwaddr
+     * @param current
+     *            current
+     * @param ni
+     *            ni
      */
-    private void saveChange(Map<String, Long> currentMap,
+    void saveChange(Map<String, Long> currentMap,
 	    Map<String, List<Long>> changeMap, String hwaddr, long current,
 	    String ni) {
 	Long oldCurrent = currentMap.get(ni);
@@ -307,10 +311,11 @@ public class AnalisisNET {
     }
 
     /**
-     * Defineix l'estat final de l'anàlisi. Aquesta funció s'utilitza quan es carrega
-     * un anàlisi ja realitzat
-     *
-     * @param dadesNet Dades de l'anàlisi carregat
+     * Defineix l'estat final de l'anàlisi. Aquesta funció s'utilitza quan es
+     * carrega un anàlisi ja realitzat
+     * 
+     * @param dadesNet
+     *            Dades de l'anàlisi carregat
      */
     @SuppressWarnings("unchecked")
     public void setTot(Object[] dadesNet) {
@@ -324,7 +329,7 @@ public class AnalisisNET {
 	graf = (ArrayList<Float>) dadesNet[7];
 	temps = (ArrayList<Second>) dadesNet[8];
     }
-    
+
     /**
      * Actualitza la informació de l'anàlisi de la targeta de xarxa.
      */

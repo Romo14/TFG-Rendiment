@@ -3,163 +3,162 @@
  */
 package domini;
 
-// TODO: Auto-generated Javadoc
 /**
- * La classe controlador de les opcions de l'anàlisi..
+ * Controlador de les opcions de l'anàlisi.
  */
 public class OpcionsController {
 
-	/** The opcions. */
-	private Opcions opcions;
+    /** Les opcions. */
+    private Opcions opcions;
 
-	/**
-	 * Instantiates a new opcions controller.
-	 */
-	public OpcionsController() {
-		opcions = new Opcions();
-	}
+    /**
+     * Creadora per defecte de la classe. Inicialitza un objecte opcions.
+     */
+    public OpcionsController() {
+	opcions = new Opcions();
+    }
 
-	/**
-	 * Gets the dies.
-	 * 
-	 * @return the dies
-	 */
-	public int getDies() {
-		return opcions.getDies();
-	}
+    /**
+     * Obté el dies.
+     * 
+     * @return els dies
+     */
+    public int getDies() {
+	return opcions.getDies();
+    }
 
-	/**
-	 * Gets the hores.
-	 * 
-	 * @return the hores
-	 */
-	public int getHores() {
-		return opcions.getHores();
-	}
+    /**
+     * Obté el hores.
+     * 
+     * @return les hores
+     */
+    public int getHores() {
+	return opcions.getHores();
+    }
 
-	/**
-	 * Gets the minuts.
-	 * 
-	 * @return the minuts
-	 */
-	public int getMinuts() {
-		return opcions.getMinuts();
-	}
+    /**
+     * Obté el minuts.
+     * 
+     * @return els minuts
+     */
+    public int getMinuts() {
+	return opcions.getMinuts();
+    }
 
-	/**
-	 * Checks if is cpu.
-	 * 
-	 * @return true, if is cpu
-	 */
-	public boolean isCpu() {
-		return opcions.isCpu();
-	}
+    /**
+     * Comprova si s'analitza el CPU.
+     * 
+     * @return cert, si s'ha d'analitzar la CPU
+     */
+    public boolean isCpu() {
+	return opcions.isCpu();
+    }
 
-	/**
-	 * Checks if is hdd.
-	 * 
-	 * @return true, if is hdd
-	 */
-	public boolean isHdd() {
-		return opcions.isHdd();
-	}
+    /**
+     * Comprova si s'analitza el disc dur.
+     * 
+     * @return cert, si s'ha d'analitzar el disc dur
+     */
+    public boolean isHdd() {
+	return opcions.isHdd();
+    }
 
-	/**
-	 * Checks if is net.
-	 * 
-	 * @return true, if is net
-	 */
-	public boolean isNet() {
-		return opcions.isNet();
-	}
+    /**
+     * Comprova si s'analitza la xarxa.
+     * 
+     * @return cert, si s'ha d'analitzar la xarxa
+     */
+    public boolean isNet() {
+	return opcions.isNet();
+    }
 
-	/**
-	 * Checks if is ram.
-	 * 
-	 * @return true, if is ram
-	 */
-	public boolean isRam() {
-		return opcions.isRam();
-	}
+    /**
+     * Comprova si s'analitza la RAM.
+     * 
+     * @return cert, si s'ha d'analitzar la RAM
+     */
+    public boolean isRam() {
+	return opcions.isRam();
+    }
 
-	/**
-	 * Sets the cpu.
-	 * 
-	 * @param cpu
-	 *            the new cpu
-	 */
-	public void setCpu(boolean cpu) {
-		opcions.setCpu(cpu);
-	}
+    /**
+     * Defineix si s'ha d'analitzar la CPU.
+     * 
+     * @param cpu
+     *            els new cpu
+     */
+    public void setCpu(boolean cpu) {
+	opcions.setCpu(cpu);
+    }
 
-	/**
-	 * Sets the dies.
-	 * 
-	 * @param dies
-	 *            the new dies
-	 */
-	public void setDies(int dies) {
-		opcions.setDies(dies);
-	}
+    /**
+     * Defineix la duració en dies.
+     * 
+     * @param dies
+     *            duració en dies
+     */
+    public void setDies(int dies) {
+	opcions.setDies(dies);
+    }
 
-	/**
-	 * Sets the hdd.
-	 * 
-	 * @param hdd
-	 *            the new hdd
-	 */
-	public void setHdd(boolean hdd) {
-		opcions.setHdd(hdd);
-	}
+    /**
+     * Defineix si s'ha d'analitzar el disc dur.
+     * 
+     * @param hdd
+     *            cert, si s'ha d'analitzar
+     */
+    public void setHdd(boolean hdd) {
+	opcions.setHdd(hdd);
+    }
 
-	/**
-	 * Sets the hores.
-	 * 
-	 * @param hores
-	 *            the new hores
-	 */
-	public void setHores(int hores) {
-		opcions.setHores(hores);
-	}
+    /**
+     * Defineix la duració en hores.
+     * 
+     * @param hores
+     *            duració en hores
+     */
+    public void setHores(int hores) {
+	opcions.setHores(hores);
+    }
 
-	/**
-	 * Sets the minuts.
-	 * 
-	 * @param minuts
-	 *            the new minuts
-	 */
-	public void setMinuts(int minuts) {
-		opcions.setMinuts(minuts);
-	}
+    /**
+     * Defineix la duració en minuts.
+     * 
+     * @param minuts
+     *            duració en minuts
+     */
+    public void setMinuts(int minuts) {
+	opcions.setMinuts(minuts);
+    }
 
-	/**
-	 * Sets the net.
-	 * 
-	 * @param net
-	 *            the new net
-	 */
-	public void setNet(boolean net) {
-		opcions.setNet(net);
-	}
+    /**
+     * Defineix si s'ha d'analitzar el net.
+     * 
+     * @param net
+     *            cert, si s'ha d'analitzar
+     */
+    public void setNet(boolean net) {
+	opcions.setNet(net);
+    }
 
-	/**
-	 * Sets the ram.
-	 * 
-	 * @param ram
-	 *            the new ram
-	 */
-	public void setRam(boolean ram) {
-		opcions.setRam(ram);
-	}
+    /**
+     * Defineix si s'ha d'analitzar el ram.
+     * 
+     * @param ram
+     *            cert, si s'ha d'analitzar
+     */
+    public void setRam(boolean ram) {
+	opcions.setRam(ram);
+    }
 
-	/**
-	 * Define el valor de all true.
-	 */
-	public void setAllTrue() {
-		opcions.setCpu(true);
-		opcions.setHdd(true);
-		opcions.setNet(true);
-		opcions.setRam(true);
-	}
+    /**
+     * Defineix tots els booleans a true.
+     */
+    public void setAllTrue() {
+	opcions.setCpu(true);
+	opcions.setHdd(true);
+	opcions.setNet(true);
+	opcions.setRam(true);
+    }
 
 }

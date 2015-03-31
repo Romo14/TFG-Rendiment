@@ -12,53 +12,59 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Dialog.ModalExclusionType;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class View.
+ * Classe encarregada de definir les caracterísitques i carregar la pantalla principal.
+ * 
+ * @author Oriol Gasset Romo <oriol.gasset@est.fib.upc.edu>
  */
 public class View extends JFrame {
 
-	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = 1L;
+    /** El Constant serialVersionUID. */
+    private static final long serialVersionUID = 1L;
 
-	/** The panel. */
-	PanelView panel;
+    /** Objecte de la pantalla principal. */
+    PanelView panel;
 
-	/**
-	 * Instantiates a new view.
-	 *
-	 * @throws ClassNotFoundException the class not found exception
-	 * @throws InstantiationException the instantiation exception
-	 * @throws IllegalAccessException the illegal access exception
-	 * @throws UnsupportedLookAndFeelException the unsupported look and feel exception
-	 */
-	public View() throws ClassNotFoundException, InstantiationException,
-			IllegalAccessException, UnsupportedLookAndFeelException {
-		super("Análisi de rendiment");
-		setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
-		Image img = new ImageIcon(this.getClass().getResource(
-				"/images/app-icon.png")).getImage();
-		setIconImage(img);
-		setResizable(false);
-		setPreferredSize(new Dimension(400, 300));
-		panel = new PanelView();
-	}
+    /**
+     * Creadora per defecte. Defineix l'aspecte i el tamany de la pantalla i
+     * carrega el seu contingut.
+     * 
+     * @throws ClassNotFoundException
+     *             the class not found exception
+     * @throws InstantiationException
+     *             the instantiation exception
+     * @throws IllegalAccessException
+     *             the illegal access exception
+     * @throws UnsupportedLookAndFeelException
+     *             the unsupported look and feel exception
+     */
+    public View() throws ClassNotFoundException, InstantiationException,
+	    IllegalAccessException, UnsupportedLookAndFeelException {
+	super("Análisi de rendiment");
+	setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
+	Image img = new ImageIcon(this.getClass().getResource(
+		"/images/app-icon.png")).getImage();
+	setIconImage(img);
+	setResizable(false);
+	setPreferredSize(new Dimension(400, 300));
+	panel = new PanelView();
+    }
 
-	/**
-	 * Inits the components.
-	 */
-	public void initComponents() {
-		getContentPane().add(panel);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
+    /**
+     * Inicia els components.
+     */
+    public void initComponents() {
+	getContentPane().add(panel);
+	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
 
-	/**
-	 * Run.
-	 */
-	public void Run() {
-		pack();
-		setLocationRelativeTo(null);
-		this.setVisible(true);
-	}
+    /**
+     * Mostra la pantalla
+     */
+    public void Run() {
+	pack();
+	setLocationRelativeTo(null);
+	this.setVisible(true);
+    }
 
 }

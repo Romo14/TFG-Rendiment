@@ -10,47 +10,49 @@ import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarException;
 import org.jfree.data.time.Second;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class AnalisisRAM.
+ * Classe encarregada de realitzar l'anàlisi de la memòria RAM.
+ * 
+ * @author Oriol Gasset Romo <oriol.gasset@est.fib.upc.edu>
  */
 public class AnalisisRAM {
 
-    /** The avg percentatge. */
+    /** Mitjana d'ús en percentatge de la RAM. */
     private float avgPercentatge;
 
-    /** The avg total. */
+    /** Mitjana total d'ús de la RAM. */
     private long avgTotal;
 
-    /** The comptador. */
+    /** Comptador. */
     private long comptador;
 
-    /** The graf. */
+    /** Llistat d'ús de la RAM. */
     private ArrayList<Float> graf;
 
-    /** The max percentatge. */
+    /** Màxim ús en percentatge de la RAM. */
     private float maxPercentatge;
 
-    /** The max total. */
+    /** Màxim total d'ús de la RAM. */
     private long maxTotal;
 
-    /** The min percentatge. */
+    /** Mínim ús en percentatge de la RAM. */
     private float minPercentatge;
 
-    /** The min total. */
+    /** Mínim total d'ús de la RAM. */
     private long minTotal;
 
-    /** The ram sigar. */
+    /** Element que accedeix a la informació de la memòria RAM */
     private Sigar ramSigar;
 
-    /** The segon. */
+    /** segon. */
     private Second segon;
 
-    /** The temps. */
+    /** temps. */
     private ArrayList<Second> temps;
 
     /**
-     * Instantiates a new analisis ram.
+     * Creadora per defecte de la classe. Inicialitza els atributs amb valors
+     * predeterminats
      */
     public AnalisisRAM() {
 	this.avgPercentatge = 0;
@@ -67,81 +69,81 @@ public class AnalisisRAM {
     }
 
     /**
-     * Gets the avg percentatge.
-     *
-     * @return the avg percentatge
+     * Obté el avgpercentatge.
+     * 
+     * @return avgpercentatge
      */
     public float getAvgPercentatge() {
 	return avgPercentatge;
     }
 
     /**
-     * Gets the avg total.
-     *
-     * @return the avg total
+     * Obté el avgtotal.
+     * 
+     * @return avgtotal
      */
     public long getAvgTotal() {
 	return avgTotal;
     }
 
     /**
-     * Gets the comptador.
-     *
-     * @return the comptador
+     * Obté el comptador.
+     * 
+     * @return comptador
      */
     public long getComptador() {
 	return comptador;
     }
 
     /**
-     * Gets the graf.
-     *
-     * @return the graf
+     * Obté el graf.
+     * 
+     * @return graf
      */
     public ArrayList<Float> getGraf() {
 	return graf;
     }
 
     /**
-     * Gets the max percentatge.
-     *
-     * @return the max percentatge
+     * Obté el maxpercentatge.
+     * 
+     * @return maxpercentatge
      */
     public float getMaxPercentatge() {
 	return maxPercentatge;
     }
 
     /**
-     * Gets the max total.
-     *
-     * @return the max total
+     * Obté el maxtotal.
+     * 
+     * @return maxtotal
      */
     public long getMaxTotal() {
 	return maxTotal;
     }
 
     /**
-     * Gets the min percentatge.
-     *
-     * @return the min percentatge
+     * Obté el minpercentatge.
+     * 
+     * @return minpercentatge
      */
     public float getMinPercentatge() {
 	return minPercentatge;
     }
 
     /**
-     * Gets the min total.
-     *
-     * @return the min total
+     * Obté el mintotal.
+     * 
+     * @return elmin total
      */
     public long getMinTotal() {
 	return minTotal;
     }
 
     /**
-     * Gets the ram info.
-     *
-     * @return the ram info
+     * Obté informació de la memòria RAM.
+     * 
+     * @return informació de la RAM
      */
     public String getRamInfo() {
 	String s = "";
@@ -153,16 +155,16 @@ public class AnalisisRAM {
 	}
 	return s;
     }
-    
+
     /**
-     * Gets the max ram.
-     *
-     * @return the max ram
+     * Obté el maxram.
+     * 
+     * @return maxram
      */
     public long getMaxRam() {
 	long res = 0;
 	try {
-	    res =  ramSigar.getMem().getRam();
+	    res = ramSigar.getMem().getRam();
 	} catch (SigarException e) {
 	    e.printStackTrace();
 	}
@@ -170,115 +172,16 @@ public class AnalisisRAM {
     }
 
     /**
-     * Gets the ram sigar.
-     *
-     * @return the ram sigar
-     */
-    public Sigar getRamSigar() {
-	return ramSigar;
-    }
-
-    /**
-     * Gets the temps.
-     *
-     * @return the temps
+     * Obté el temps.
+     * 
+     * @return temps
      */
     public ArrayList<Second> getTemps() {
 	return temps;
     }
 
     /**
-     * Sets the avg percentatge.
-     *
-     * @param avgPercentatge the new avg percentatge
-     */
-    public void setAvgPercentatge(float avgPercentatge) {
-	this.avgPercentatge = avgPercentatge;
-    }
-
-    /**
-     * Sets the avg total.
-     *
-     * @param avgTotal the new avg total
-     */
-    public void setAvgTotal(long avgTotal) {
-	this.avgTotal = avgTotal;
-    }
-
-    /**
-     * Sets the comptador.
-     *
-     * @param comptador the new comptador
-     */
-    public void setComptador(long comptador) {
-	this.comptador = comptador;
-    }
-
-    /**
-     * Sets the graf.
-     *
-     * @param graf the new graf
-     */
-    public void setGraf(ArrayList<Float> graf) {
-	this.graf = graf;
-    }
-
-    /**
-     * Sets the max percentatge.
-     *
-     * @param maxPercentatge the new max percentatge
-     */
-    public void setMaxPercentatge(float maxPercentatge) {
-	this.maxPercentatge = maxPercentatge;
-    }
-
-    /**
-     * Sets the max total.
-     *
-     * @param maxTotal the new max total
-     */
-    public void setMaxTotal(long maxTotal) {
-	this.maxTotal = maxTotal;
-    }
-
-    /**
-     * Sets the min percentatge.
-     *
-     * @param minPercentatge the new min percentatge
-     */
-    public void setMinPercentatge(float minPercentatge) {
-	this.minPercentatge = minPercentatge;
-    }
-
-    /**
-     * Sets the min total.
-     *
-     * @param minTotal the new min total
-     */
-    public void setMinTotal(long minTotal) {
-	this.minTotal = minTotal;
-    }
-
-    /**
-     * Sets the ram sigar.
-     *
-     * @param ramSigar the new ram sigar
-     */
-    public void setRamSigar(Sigar ramSigar) {
-	this.ramSigar = ramSigar;
-    }
-
-    /**
-     * Sets the temps.
-     *
-     * @param temps the new temps
-     */
-    public void setTemps(ArrayList<Second> temps) {
-	this.temps = temps;
-    }
-
-    /**
-     * Update ram.
+     * Actualitza la informació de l'anàlisi de la RAM.
      */
     public void updateRAM() {
 	Mem mem = null;
@@ -308,9 +211,9 @@ public class AnalisisRAM {
     }
 
     /**
-     * Gets the tot.
-     *
-     * @return the tot
+     * Obté totes les dades de la memòria RAM.
+     * 
+     * @return totes les dades de la memòria RAM
      */
     public Object[] getTot() {
 	Object[] tot = new Object[10];
@@ -326,11 +229,12 @@ public class AnalisisRAM {
 	tot[9] = temps;
 	return tot;
     }
-    
+
     /**
-     * Sets the tot.
-     *
-     * @param dadesRam the new tot
+     * Defineix el valor de tots els atributs de la memòria RAM.
+     * 
+     * @param dadesRam
+     *            Noves dades
      */
     @SuppressWarnings("unchecked")
     public void setTot(Object[] dadesRam) {
