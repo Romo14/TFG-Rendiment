@@ -972,8 +972,8 @@ public class ResultatAnalisisView extends JPanel {
 		JOptionPane
 			.showMessageDialog(
 				this,
-				"No es pot obrir el fitxer autom√†ticament, per veure el"
-					+ " pdf accedeix a trav√©s de l'explorador de fitxers",
+				"No es pot obrir el fitxer autom‡ticament, per veure el"
+					+ " pdf accedeix a travÈs de l'explorador de fitxers",
 				"Error al obri el fitxer",
 				JOptionPane.WARNING_MESSAGE);
 	    }
