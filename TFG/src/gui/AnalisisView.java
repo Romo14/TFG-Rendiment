@@ -122,7 +122,7 @@ public class AnalisisView extends JPanel {
 		MainController.view.getLocationOnScreen().y + 50);
 	Dimension min = new Dimension(450, 230);
 	analisis.setLocation(aqui);
-	analisis.setSize(min);
+	analisis.setSize(new Dimension(474, 230));
 	analisis.setResizable(false);
 	lblTempsRestantDescripcio = new JLabel("Temps restant: ");
 	lblTempsRestantDescripcio.setAlignmentX(Component.CENTER_ALIGNMENT);
