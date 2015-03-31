@@ -213,141 +213,55 @@ public class AnalisisView extends JPanel {
 	btnInici.setIcon(new ImageIcon(this.getClass().getResource(
 		"/images/home-icon.png")));
 	GroupLayout groupLayout = new GroupLayout(analisis.getContentPane());
-	groupLayout
-		.setHorizontalGroup(groupLayout
-			.createParallelGroup(Alignment.LEADING)
-			.addGroup(
-				groupLayout
-					.createSequentialGroup()
-					.addGap(23)
-					.addGroup(
-						groupLayout
-							.createParallelGroup(
-								Alignment.LEADING)
-							.addGroup(
-								groupLayout
-									.createSequentialGroup()
-									.addComponent(
-										progressBar,
-										GroupLayout.PREFERRED_SIZE,
-										378,
-										GroupLayout.PREFERRED_SIZE)
-									.addContainerGap())
-							.addGroup(
-								groupLayout
-									.createSequentialGroup()
-									.addGroup(
-										groupLayout
-											.createParallelGroup(
-												Alignment.LEADING)
-											.addGroup(
-												groupLayout
-													.createSequentialGroup()
-													.addPreferredGap(
-														ComponentPlacement.RELATED)
-													.addComponent(
-														btnAtura,
-														GroupLayout.PREFERRED_SIZE,
-														87,
-														GroupLayout.PREFERRED_SIZE)
-													.addPreferredGap(
-														ComponentPlacement.RELATED)
-													.addComponent(
-														btnVeureResultats,
-														GroupLayout.DEFAULT_SIZE,
-														GroupLayout.DEFAULT_SIZE,
-														Short.MAX_VALUE)
-													.addPreferredGap(
-														ComponentPlacement.RELATED)
-													.addComponent(
-														btnTornaAComenar)
-													.addPreferredGap(
-														ComponentPlacement.RELATED))
-											.addGroup(
-												groupLayout
-													.createSequentialGroup()
-													.addComponent(
-														lblTempsRestantDescripcio,
-														GroupLayout.DEFAULT_SIZE,
-														131,
-														Short.MAX_VALUE)
-													.addPreferredGap(
-														ComponentPlacement.RELATED)
-													.addComponent(
-														lblTempsRestant,
-														GroupLayout.PREFERRED_SIZE,
-														260,
-														GroupLayout.PREFERRED_SIZE)))
-									.addGap(49))))
-			.addGroup(
-				groupLayout
-					.createSequentialGroup()
-					.addContainerGap(392, Short.MAX_VALUE)
-					.addComponent(btnInici,
-						GroupLayout.PREFERRED_SIZE, 36,
-						GroupLayout.PREFERRED_SIZE)
-					.addGap(41)));
-	groupLayout
-		.setVerticalGroup(groupLayout
-			.createParallelGroup(Alignment.LEADING)
-			.addGroup(
-				groupLayout
-					.createSequentialGroup()
-					.addGap(35)
-					.addComponent(progressBar,
-						GroupLayout.DEFAULT_SIZE,
-						GroupLayout.DEFAULT_SIZE,
-						Short.MAX_VALUE)
-					.addPreferredGap(
-						ComponentPlacement.UNRELATED)
-					.addGroup(
-						groupLayout
-							.createParallelGroup(
-								Alignment.BASELINE)
-							.addComponent(
-								lblTempsRestantDescripcio)
-							.addComponent(
-								lblTempsRestant,
-								GroupLayout.PREFERRED_SIZE,
-								27,
-								GroupLayout.PREFERRED_SIZE))
-					.addGroup(
-						groupLayout
-							.createParallelGroup(
-								Alignment.LEADING)
-							.addGroup(
-								groupLayout
-									.createSequentialGroup()
-									.addGap(61)
-									.addComponent(
-										btnInici,
-										GroupLayout.PREFERRED_SIZE,
-										37,
-										GroupLayout.PREFERRED_SIZE))
-							.addGroup(
-								groupLayout
-									.createSequentialGroup()
-									.addGap(18)
-									.addGroup(
-										groupLayout
-											.createParallelGroup(
-												Alignment.BASELINE)
-											.addComponent(
-												btnAtura,
-												GroupLayout.PREFERRED_SIZE,
-												33,
-												GroupLayout.PREFERRED_SIZE)
-											.addComponent(
-												btnVeureResultats,
-												GroupLayout.PREFERRED_SIZE,
-												35,
-												GroupLayout.PREFERRED_SIZE)
-											.addComponent(
-												btnTornaAComenar,
-												GroupLayout.PREFERRED_SIZE,
-												34,
-												GroupLayout.PREFERRED_SIZE))))
-					.addContainerGap()));
+	groupLayout.setHorizontalGroup(
+		groupLayout.createParallelGroup(Alignment.LEADING)
+			.addGroup(groupLayout.createSequentialGroup()
+				.addGap(23)
+				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addGroup(groupLayout.createSequentialGroup()
+						.addComponent(progressBar, GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
+						.addGap(52))
+					.addGroup(groupLayout.createSequentialGroup()
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+							.addGroup(groupLayout.createSequentialGroup()
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(btnAtura, GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(btnVeureResultats, GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(btnTornaAComenar, GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
+								.addPreferredGap(ComponentPlacement.RELATED))
+							.addGroup(groupLayout.createSequentialGroup()
+								.addComponent(lblTempsRestantDescripcio, GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(lblTempsRestant, GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)))
+						.addGap(49))))
+			.addGroup(groupLayout.createSequentialGroup()
+				.addGap(392)
+				.addComponent(btnInici, GroupLayout.PREFERRED_SIZE, 36, Short.MAX_VALUE)
+				.addGap(41))
+	);
+	groupLayout.setVerticalGroup(
+		groupLayout.createParallelGroup(Alignment.LEADING)
+			.addGroup(groupLayout.createSequentialGroup()
+				.addGap(35)
+				.addComponent(progressBar, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addPreferredGap(ComponentPlacement.UNRELATED)
+				.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+					.addComponent(lblTempsRestantDescripcio)
+					.addComponent(lblTempsRestant, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
+				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addGroup(groupLayout.createSequentialGroup()
+						.addGap(61)
+						.addComponent(btnInici, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE))
+					.addGroup(groupLayout.createSequentialGroup()
+						.addGap(18)
+						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(btnAtura, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+							.addComponent(btnVeureResultats, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+							.addComponent(btnTornaAComenar, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE))))
+				.addContainerGap())
+	);
 	analisis.getContentPane().setLayout(groupLayout);
 	analisis.setVisible(true);
 	t.start();
