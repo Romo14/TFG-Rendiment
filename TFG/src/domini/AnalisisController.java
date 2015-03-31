@@ -78,7 +78,7 @@ public class AnalisisController {
 	    }
 	    idPC = "Hostname: "
 		    + java.net.InetAddress.getLocalHost().getHostName()
-		    + "  // MAC: " + mac + "  // " + "Data: "
+		    + "  // MAC: " + sb + "  // " + "Data: "
 		    + dateFormat.format(cal.getTime());
 	} catch (UnknownHostException e) {
 	    e.printStackTrace();

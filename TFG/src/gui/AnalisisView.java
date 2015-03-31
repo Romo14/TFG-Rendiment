@@ -120,7 +120,6 @@ public class AnalisisView extends JPanel {
 	Point aqui = new Point(
 		MainController.view.getLocationOnScreen().x + 50,
 		MainController.view.getLocationOnScreen().y + 50);
-	Dimension min = new Dimension(450, 230);
 	analisis.setLocation(aqui);
 	analisis.setSize(new Dimension(474, 230));
 	analisis.setResizable(false);
@@ -218,14 +217,18 @@ public class AnalisisView extends JPanel {
 			.addGroup(groupLayout.createSequentialGroup()
 				.addGap(23)
 				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-					.addGroup(groupLayout.createSequentialGroup()
-						.addComponent(progressBar, GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
-						.addGap(52))
+					.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+							.addComponent(progressBar, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 405, Short.MAX_VALUE)
+							.addGroup(groupLayout.createSequentialGroup()
+								.addGap(369)
+								.addComponent(btnInici, GroupLayout.PREFERRED_SIZE, 36, Short.MAX_VALUE)))
+						.addGap(41))
 					.addGroup(groupLayout.createSequentialGroup()
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 							.addGroup(groupLayout.createSequentialGroup()
 								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(btnAtura, GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
+								.addComponent(btnAtura, GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
 								.addPreferredGap(ComponentPlacement.RELATED)
 								.addComponent(btnVeureResultats, GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
 								.addPreferredGap(ComponentPlacement.RELATED)
@@ -235,15 +238,11 @@ public class AnalisisView extends JPanel {
 								.addComponent(lblTempsRestantDescripcio, GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
 								.addPreferredGap(ComponentPlacement.RELATED)
 								.addComponent(lblTempsRestant, GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)))
-						.addGap(49))))
-			.addGroup(groupLayout.createSequentialGroup()
-				.addGap(392)
-				.addComponent(btnInici, GroupLayout.PREFERRED_SIZE, 36, Short.MAX_VALUE)
-				.addGap(41))
+						.addGap(35))))
 	);
 	groupLayout.setVerticalGroup(
 		groupLayout.createParallelGroup(Alignment.LEADING)
-			.addGroup(groupLayout.createSequentialGroup()
+			.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
 				.addGap(35)
 				.addComponent(progressBar, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 				.addPreferredGap(ComponentPlacement.UNRELATED)
@@ -258,8 +257,8 @@ public class AnalisisView extends JPanel {
 						.addGap(18)
 						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 							.addComponent(btnAtura, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
-							.addComponent(btnVeureResultats, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-							.addComponent(btnTornaAComenar, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE))))
+							.addComponent(btnTornaAComenar, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
+							.addComponent(btnVeureResultats, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))))
 				.addContainerGap())
 	);
 	analisis.getContentPane().setLayout(groupLayout);

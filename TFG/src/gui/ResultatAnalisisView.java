@@ -5,6 +5,7 @@ package gui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -58,6 +59,7 @@ import javax.swing.JTabbedPane;
 
 import java.awt.FlowLayout;
 import java.awt.Component;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -283,12 +285,16 @@ public class ResultatAnalisisView extends JPanel {
 	tabbedPane.setEnabledAt(0, true);
 	tabbedPane.setBackgroundAt(0, Color.WHITE);
 	chckbxRam = new JCheckBox("RAM");
+	chckbxRam.setFont(new Font("Tahoma", Font.PLAIN, 16));
 	chckbxRam.setSelected(true);
 	chckbxDiscDur = new JCheckBox("Disc Dur");
+	chckbxDiscDur.setFont(new Font("Tahoma", Font.PLAIN, 16));
 	chckbxDiscDur.setSelected(true);
 	chckbxXarxa = new JCheckBox("Xarxa");
+	chckbxXarxa.setFont(new Font("Tahoma", Font.PLAIN, 16));
 	chckbxXarxa.setSelected(true);
 	chckbxCpu = new JCheckBox("CPU");
+	chckbxCpu.setFont(new Font("Tahoma", Font.PLAIN, 16));
 	chckbxCpu.setSelected(true);
 	btnInici = new JButton();
 	btnInici.setBorder(BorderFactory.createEmptyBorder());
@@ -334,146 +340,56 @@ public class ResultatAnalisisView extends JPanel {
 
 	hddToolTip = new JLabel("*Dades del disc dur en MB/s");
 	GroupLayout gl_panelGrafiques = new GroupLayout(panelGrafiques);
-	gl_panelGrafiques
-		.setHorizontalGroup(gl_panelGrafiques
-			.createParallelGroup(Alignment.LEADING)
-			.addGroup(
-				gl_panelGrafiques
-					.createSequentialGroup()
-					.addGap(7)
-					.addGroup(
-						gl_panelGrafiques
-							.createParallelGroup(
-								Alignment.LEADING,
-								false)
-							.addGroup(
-								gl_panelGrafiques
-									.createSequentialGroup()
+	gl_panelGrafiques.setHorizontalGroup(
+		gl_panelGrafiques.createParallelGroup(Alignment.LEADING)
+			.addGroup(gl_panelGrafiques.createSequentialGroup()
+				.addGap(7)
+				.addGroup(gl_panelGrafiques.createParallelGroup(Alignment.LEADING, false)
+					.addGroup(gl_panelGrafiques.createSequentialGroup()
+						.addGap(10)
+						.addComponent(hddToolTip))
+					.addGroup(gl_panelGrafiques.createSequentialGroup()
+						.addComponent(graficaPanel, GroupLayout.PREFERRED_SIZE, 529, GroupLayout.PREFERRED_SIZE)
+						.addGap(18)
+						.addGroup(gl_panelGrafiques.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_panelGrafiques.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_panelGrafiques.createSequentialGroup()
+									.addGroup(gl_panelGrafiques.createParallelGroup(Alignment.TRAILING, false)
+										.addComponent(chckbxRam, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(chckbxCpu, Alignment.LEADING))
+									.addGap(33))
+								.addComponent(chckbxDiscDur, Alignment.LEADING))
+							.addGroup(gl_panelGrafiques.createParallelGroup(Alignment.LEADING)
+								.addComponent(chckbxXarxa)
+								.addGroup(gl_panelGrafiques.createSequentialGroup()
 									.addGap(10)
-									.addComponent(
-										hddToolTip))
-							.addGroup(
-								gl_panelGrafiques
-									.createSequentialGroup()
-									.addComponent(
-										graficaPanel,
-										GroupLayout.PREFERRED_SIZE,
-										529,
-										GroupLayout.PREFERRED_SIZE)
+									.addComponent(pdfButton)
 									.addGap(18)
-									.addGroup(
-										gl_panelGrafiques
-											.createParallelGroup(
-												Alignment.LEADING)
-											.addGroup(
-												gl_panelGrafiques
-													.createParallelGroup(
-														Alignment.TRAILING)
-													.addGroup(
-														gl_panelGrafiques
-															.createSequentialGroup()
-															.addGroup(
-																gl_panelGrafiques
-																	.createParallelGroup(
-																		Alignment.TRAILING,
-																		false)
-																	.addComponent(
-																		chckbxRam,
-																		Alignment.LEADING,
-																		GroupLayout.DEFAULT_SIZE,
-																		GroupLayout.DEFAULT_SIZE,
-																		Short.MAX_VALUE)
-																	.addComponent(
-																		chckbxCpu,
-																		Alignment.LEADING))
-															.addGap(33))
-													.addComponent(
-														chckbxDiscDur,
-														Alignment.LEADING))
-											.addGroup(
-												gl_panelGrafiques
-													.createSequentialGroup()
-													.addGroup(
-														gl_panelGrafiques
-															.createParallelGroup(
-																Alignment.TRAILING,
-																false)
-															.addGroup(
-																Alignment.LEADING,
-																gl_panelGrafiques
-																	.createSequentialGroup()
-																	.addGap(10)
-																	.addComponent(
-																		pdfButton,
-																		GroupLayout.DEFAULT_SIZE,
-																		GroupLayout.DEFAULT_SIZE,
-																		Short.MAX_VALUE))
-															.addComponent(
-																chckbxXarxa,
-																Alignment.LEADING))
-													.addGap(18)
-													.addComponent(
-														btnInici,
-														GroupLayout.PREFERRED_SIZE,
-														39,
-														GroupLayout.PREFERRED_SIZE)))))
-					.addContainerGap()));
-	gl_panelGrafiques
-		.setVerticalGroup(gl_panelGrafiques
-			.createParallelGroup(Alignment.LEADING)
-			.addGroup(
-				gl_panelGrafiques
-					.createSequentialGroup()
-					.addGroup(
-						gl_panelGrafiques
-							.createParallelGroup(
-								Alignment.LEADING)
-							.addComponent(
-								graficaPanel,
-								GroupLayout.PREFERRED_SIZE,
-								356,
-								GroupLayout.PREFERRED_SIZE)
-							.addGroup(
-								Alignment.TRAILING,
-								gl_panelGrafiques
-									.createSequentialGroup()
-									.addGap(61)
-									.addComponent(
-										chckbxCpu)
-									.addPreferredGap(
-										ComponentPlacement.UNRELATED)
-									.addComponent(
-										chckbxRam)
-									.addPreferredGap(
-										ComponentPlacement.UNRELATED)
-									.addComponent(
-										chckbxDiscDur)
-									.addPreferredGap(
-										ComponentPlacement.UNRELATED)
-									.addComponent(
-										chckbxXarxa)
-									.addPreferredGap(
-										ComponentPlacement.RELATED,
-										122,
-										Short.MAX_VALUE)
-									.addGroup(
-										gl_panelGrafiques
-											.createParallelGroup(
-												Alignment.LEADING)
-											.addComponent(
-												btnInici,
-												GroupLayout.PREFERRED_SIZE,
-												41,
-												GroupLayout.PREFERRED_SIZE)
-											.addComponent(
-												pdfButton,
-												GroupLayout.PREFERRED_SIZE,
-												41,
-												GroupLayout.PREFERRED_SIZE))
-									.addGap(76)))
-					.addPreferredGap(
-						ComponentPlacement.RELATED)
-					.addComponent(hddToolTip)));
+									.addComponent(btnInici, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE))))))
+				.addGap(72))
+	);
+	gl_panelGrafiques.setVerticalGroup(
+		gl_panelGrafiques.createParallelGroup(Alignment.LEADING)
+			.addGroup(gl_panelGrafiques.createSequentialGroup()
+				.addGroup(gl_panelGrafiques.createParallelGroup(Alignment.TRAILING)
+					.addComponent(graficaPanel, GroupLayout.PREFERRED_SIZE, 356, GroupLayout.PREFERRED_SIZE)
+					.addGroup(gl_panelGrafiques.createSequentialGroup()
+						.addGap(61)
+						.addComponent(chckbxCpu)
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addComponent(chckbxRam)
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addComponent(chckbxDiscDur)
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addComponent(chckbxXarxa)
+						.addPreferredGap(ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+						.addGroup(gl_panelGrafiques.createParallelGroup(Alignment.LEADING)
+							.addComponent(pdfButton, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)
+							.addComponent(btnInici, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE))
+						.addGap(76)))
+				.addPreferredGap(ComponentPlacement.RELATED)
+				.addComponent(hddToolTip))
+	);
 	panelGrafiques.setLayout(gl_panelGrafiques);
 	panelDadesGenerals = new JPanel();
 	panelDadesGenerals.setBackground(Color.WHITE);
@@ -963,7 +879,18 @@ public class ResultatAnalisisView extends JPanel {
 		    "rundll32 url.dll,FileProtocolHandler " + fileName);
 	    p.waitFor();
 	} catch (IOException e) {
-	    e.printStackTrace();
+	    if (Desktop.isDesktopSupported()) {
+		File myFile = new File(fileName);
+		Desktop.getDesktop().open(myFile);
+	    } else {
+		JOptionPane
+			.showMessageDialog(
+				this,
+				"No es pot obrir el fitxer automàticament, per veure el"
+					+ " pdf accedeix a través de l'explorador de fitxers",
+				"Error al obri el fitxer",
+				JOptionPane.WARNING_MESSAGE);
+	    }
 	} catch (InterruptedException e) {
 	    e.printStackTrace();
 	}
@@ -985,8 +912,12 @@ public class ResultatAnalisisView extends JPanel {
 	if (chooser.showSaveDialog(pdfButton) == JFileChooser.APPROVE_OPTION) {
 	    try {
 		crearPDF(grafica, chooser.getSelectedFile().toString());
-	    } catch (Exception ex) {
-		ex.printStackTrace();
+	    } catch (MalformedURLException e) {
+		e.printStackTrace();
+	    } catch (DocumentException e) {
+		e.printStackTrace();
+	    } catch (IOException e) {
+		e.printStackTrace();
 	    }
 	}
 
