@@ -5,6 +5,7 @@ package gui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -58,6 +59,7 @@ import javax.swing.JTabbedPane;
 
 import java.awt.FlowLayout;
 import java.awt.Component;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -963,7 +965,18 @@ public class ResultatAnalisisView extends JPanel {
 		    "rundll32 url.dll,FileProtocolHandler " + fileName);
 	    p.waitFor();
 	} catch (IOException e) {
-	    e.printStackTrace();
+	    if (Desktop.isDesktopSupported()) {
+		File myFile = new File(fileName);
+		Desktop.getDesktop().open(myFile);
+	    } else {
+		JOptionPane
+			.showMessageDialog(
+				this,
+				"No es pot obrir el fitxer automàticament, per veure el"
+					+ " pdf accedeix a través de l'explorador de fitxers",
+				"Error al obri el fitxer",
+				JOptionPane.WARNING_MESSAGE);
+	    }
 	} catch (InterruptedException e) {
 	    e.printStackTrace();
 	}
@@ -985,11 +998,14 @@ public class ResultatAnalisisView extends JPanel {
 	if (chooser.showSaveDialog(pdfButton) == JFileChooser.APPROVE_OPTION) {
 	    try {
 		crearPDF(grafica, chooser.getSelectedFile().toString());
-	    } catch (Exception ex) {
-		ex.printStackTrace();
+	    } catch (MalformedURLException e) {
+		e.printStackTrace();
+	    } catch (DocumentException e) {
+		e.printStackTrace();
+	    } catch (IOException e) {
+		e.printStackTrace();
 	    }
 	}
-
     }
 
     /**
