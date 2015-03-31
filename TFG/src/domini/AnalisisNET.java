@@ -19,8 +19,6 @@ import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarException;
 import org.jfree.data.time.Second;
 
-import domini.netInfo.ParseRoute;
-
 /**
  * Classe encarregada de realitzar l'anàlisi de la targeta de xarxa.
  * 
@@ -51,6 +49,9 @@ public class AnalisisNET {
 
     /** Llistat d'ús de la targeta de xarxa. */
     private ArrayList<Float> graf;
+
+    /** ip de l'ordinador */
+    private String ip;
 
     /** Màxim ús de la targeta de xarxa en percentatge. */
     private float maxPercentatge;
@@ -236,9 +237,13 @@ public class AnalisisNET {
     public String getNetInfo() {
 	String info = "";
 	try {
-	    ParseRoute pr = ParseRoute.getInstance();
-	    InetAddress ip = InetAddress.getByName(pr.getLocalIPAddress());
-	    NetworkInterface network = NetworkInterface.getByInetAddress(ip);
+	    InetAddress ipAdress = InetAddress.getByName(ip);
+	    NetworkInterface network = NetworkInterface
+		    .getByInetAddress(ipAdress);
+	    if (network == null) {
+		ipAdress = InetAddress.getLocalHost();
+		network = NetworkInterface.getByInetAddress(ipAdress);
+	    }
 	    info += "Nom: " + network.getName() + " Descripció: "
 		    + network.getDisplayName() + " MTU: " + network.getMTU();
 	    Enumeration<InetAddress> en = network.getInetAddresses();
@@ -308,6 +313,14 @@ public class AnalisisNET {
 	    list.add((current - oldCurrent));
 	}
 	currentMap.put(ni, current);
+    }
+
+    /**
+     * @param ip
+     *            the ip to set
+     */
+    public void setIp(String ip) {
+	this.ip = ip;
     }
 
     /**

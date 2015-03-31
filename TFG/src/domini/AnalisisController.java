@@ -76,6 +76,7 @@ public class AnalisisController {
 		sb.append(String.format("%02X%s", mac[i],
 			(i < mac.length - 1) ? "-" : ""));
 	    }
+	    net.setIp(pr.getLocalIPAddress());
 	    idPC = "Hostname: "
 		    + java.net.InetAddress.getLocalHost().getHostName()
 		    + "  // MAC: " + sb + "  // " + "Data: "

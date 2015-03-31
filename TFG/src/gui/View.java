@@ -1,6 +1,4 @@
-/*
- * 
- */
+
 package gui;
 
 import javax.swing.ImageIcon;
@@ -46,7 +44,7 @@ public class View extends JFrame {
 		"/images/app-icon.png")).getImage();
 	setIconImage(img);
 	setResizable(false);
-	setPreferredSize(new Dimension(420, 300));
+	setPreferredSize(new Dimension(435, 300));
 	panel = new PanelView();
     }
 
