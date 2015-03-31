@@ -1103,7 +1103,7 @@ public class ResultatAnalisisView extends JPanel {
     private void valoracioResultatRam(Float[] ramStats) {
 	JLabel a = new JLabel();
 	String s = "";
-	if (ramStats[0] > 75) {
+	if (ramStats[0] > 65) {
 	    a.setIcon(koIcon);
 	    s = "<html> L'ús de la memòria RAM és molt elevat. Si s'han estat executant aplicacions <br>"
 		    + " que requereixen molta memòria durant l'anàlisis el resultat no és destacable. Si, per altra banda, <br>"
