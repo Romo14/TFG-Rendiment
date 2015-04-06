@@ -66,7 +66,9 @@ public class MainController {
 	    InstantiationException, IllegalAccessException,
 	    UnsupportedLookAndFeelException {
 	try {
-	    System.setProperty("org.hyperic.sigar.path", "./lib/");
+	    if (System.getProperty("os.name").contains("Linux")) {
+		System.setProperty("org.hyperic.sigar.path", "./lib/");
+	    }
 	    UIManager.setLookAndFeel(new SyntheticaAluOxideLookAndFeel());
 	    UIManager.put("Synthetica.tabbedPane.keepOpacity", true);
 
