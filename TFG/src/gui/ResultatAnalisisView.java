@@ -17,7 +17,9 @@ import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.geom.Rectangle2D;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -66,7 +68,9 @@ import java.net.MalformedURLException;
 
 import javax.swing.BoxLayout;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -263,7 +267,7 @@ public class ResultatAnalisisView extends JPanel {
 	Image img = new ImageIcon(this.getClass().getResource(
 		"/images/app-icon.png")).getImage();
 	resultat.setIconImage(img);
-	resultat.setSize(new Dimension(737, 411));
+	resultat.setSize(new Dimension(737, 448));
 	resultat.setLocationRelativeTo(null);
 	equalIcon = new ImageIcon(this.getClass().getResource(
 		"/images/equal-icon.png"));
@@ -340,56 +344,136 @@ public class ResultatAnalisisView extends JPanel {
 
 	hddToolTip = new JLabel("*Dades del disc dur en MB/s");
 	GroupLayout gl_panelGrafiques = new GroupLayout(panelGrafiques);
-	gl_panelGrafiques.setHorizontalGroup(
-		gl_panelGrafiques.createParallelGroup(Alignment.LEADING)
-			.addGroup(gl_panelGrafiques.createSequentialGroup()
-				.addGap(7)
-				.addGroup(gl_panelGrafiques.createParallelGroup(Alignment.LEADING, false)
-					.addGroup(gl_panelGrafiques.createSequentialGroup()
-						.addGap(10)
-						.addComponent(hddToolTip))
-					.addGroup(gl_panelGrafiques.createSequentialGroup()
-						.addComponent(graficaPanel, GroupLayout.PREFERRED_SIZE, 529, GroupLayout.PREFERRED_SIZE)
-						.addGap(18)
-						.addGroup(gl_panelGrafiques.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_panelGrafiques.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_panelGrafiques.createSequentialGroup()
-									.addGroup(gl_panelGrafiques.createParallelGroup(Alignment.TRAILING, false)
-										.addComponent(chckbxRam, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(chckbxCpu, Alignment.LEADING))
-									.addGap(33))
-								.addComponent(chckbxDiscDur, Alignment.LEADING))
-							.addGroup(gl_panelGrafiques.createParallelGroup(Alignment.LEADING)
-								.addComponent(chckbxXarxa)
-								.addGroup(gl_panelGrafiques.createSequentialGroup()
+	gl_panelGrafiques
+		.setHorizontalGroup(gl_panelGrafiques
+			.createParallelGroup(Alignment.LEADING)
+			.addGroup(
+				gl_panelGrafiques
+					.createSequentialGroup()
+					.addGap(7)
+					.addGroup(
+						gl_panelGrafiques
+							.createParallelGroup(
+								Alignment.LEADING,
+								false)
+							.addGroup(
+								gl_panelGrafiques
+									.createSequentialGroup()
 									.addGap(10)
-									.addComponent(pdfButton)
+									.addComponent(
+										hddToolTip))
+							.addGroup(
+								gl_panelGrafiques
+									.createSequentialGroup()
+									.addComponent(
+										graficaPanel,
+										GroupLayout.PREFERRED_SIZE,
+										529,
+										GroupLayout.PREFERRED_SIZE)
 									.addGap(18)
-									.addComponent(btnInici, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE))))))
-				.addGap(72))
-	);
-	gl_panelGrafiques.setVerticalGroup(
-		gl_panelGrafiques.createParallelGroup(Alignment.LEADING)
-			.addGroup(gl_panelGrafiques.createSequentialGroup()
-				.addGroup(gl_panelGrafiques.createParallelGroup(Alignment.TRAILING)
-					.addComponent(graficaPanel, GroupLayout.PREFERRED_SIZE, 356, GroupLayout.PREFERRED_SIZE)
-					.addGroup(gl_panelGrafiques.createSequentialGroup()
-						.addGap(61)
-						.addComponent(chckbxCpu)
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(chckbxRam)
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(chckbxDiscDur)
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(chckbxXarxa)
-						.addPreferredGap(ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
-						.addGroup(gl_panelGrafiques.createParallelGroup(Alignment.LEADING)
-							.addComponent(pdfButton, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)
-							.addComponent(btnInici, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE))
-						.addGap(76)))
-				.addPreferredGap(ComponentPlacement.RELATED)
-				.addComponent(hddToolTip))
-	);
+									.addGroup(
+										gl_panelGrafiques
+											.createParallelGroup(
+												Alignment.LEADING)
+											.addGroup(
+												gl_panelGrafiques
+													.createParallelGroup(
+														Alignment.TRAILING)
+													.addGroup(
+														gl_panelGrafiques
+															.createSequentialGroup()
+															.addGroup(
+																gl_panelGrafiques
+																	.createParallelGroup(
+																		Alignment.TRAILING,
+																		false)
+																	.addComponent(
+																		chckbxRam,
+																		Alignment.LEADING,
+																		GroupLayout.DEFAULT_SIZE,
+																		GroupLayout.DEFAULT_SIZE,
+																		Short.MAX_VALUE)
+																	.addComponent(
+																		chckbxCpu,
+																		Alignment.LEADING))
+															.addGap(33))
+													.addComponent(
+														chckbxDiscDur,
+														Alignment.LEADING))
+											.addGroup(
+												gl_panelGrafiques
+													.createParallelGroup(
+														Alignment.LEADING)
+													.addComponent(
+														chckbxXarxa)
+													.addGroup(
+														gl_panelGrafiques
+															.createSequentialGroup()
+															.addGap(10)
+															.addComponent(
+																pdfButton)
+															.addGap(18)
+															.addComponent(
+																btnInici,
+																GroupLayout.PREFERRED_SIZE,
+																39,
+																GroupLayout.PREFERRED_SIZE))))))
+					.addGap(72)));
+	gl_panelGrafiques
+		.setVerticalGroup(gl_panelGrafiques
+			.createParallelGroup(Alignment.LEADING)
+			.addGroup(
+				gl_panelGrafiques
+					.createSequentialGroup()
+					.addGroup(
+						gl_panelGrafiques
+							.createParallelGroup(
+								Alignment.TRAILING)
+							.addComponent(
+								graficaPanel,
+								GroupLayout.PREFERRED_SIZE,
+								356,
+								GroupLayout.PREFERRED_SIZE)
+							.addGroup(
+								gl_panelGrafiques
+									.createSequentialGroup()
+									.addGap(61)
+									.addComponent(
+										chckbxCpu)
+									.addPreferredGap(
+										ComponentPlacement.UNRELATED)
+									.addComponent(
+										chckbxRam)
+									.addPreferredGap(
+										ComponentPlacement.UNRELATED)
+									.addComponent(
+										chckbxDiscDur)
+									.addPreferredGap(
+										ComponentPlacement.UNRELATED)
+									.addComponent(
+										chckbxXarxa)
+									.addPreferredGap(
+										ComponentPlacement.RELATED,
+										77,
+										Short.MAX_VALUE)
+									.addGroup(
+										gl_panelGrafiques
+											.createParallelGroup(
+												Alignment.LEADING)
+											.addComponent(
+												pdfButton,
+												GroupLayout.PREFERRED_SIZE,
+												41,
+												GroupLayout.PREFERRED_SIZE)
+											.addComponent(
+												btnInici,
+												GroupLayout.PREFERRED_SIZE,
+												41,
+												GroupLayout.PREFERRED_SIZE))
+									.addGap(76)))
+					.addPreferredGap(
+						ComponentPlacement.RELATED)
+					.addComponent(hddToolTip)));
 	panelGrafiques.setLayout(gl_panelGrafiques);
 	panelDadesGenerals = new JPanel();
 	panelDadesGenerals.setBackground(Color.WHITE);
@@ -498,16 +582,10 @@ public class ResultatAnalisisView extends JPanel {
 	panelDadesGenerals.add(panelNET);
 	GroupLayout groupLayout = new GroupLayout(resultat.getContentPane());
 	groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(
-		Alignment.LEADING).addComponent(tabbedPane,
-		GroupLayout.DEFAULT_SIZE, 716, Short.MAX_VALUE));
+		Alignment.LEADING).addComponent(tabbedPane));
 	groupLayout.setVerticalGroup(groupLayout.createParallelGroup(
-		Alignment.LEADING).addGroup(
-		groupLayout
-			.createSequentialGroup()
-			.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE,
-				384, GroupLayout.PREFERRED_SIZE)
-			.addContainerGap(GroupLayout.DEFAULT_SIZE,
-				Short.MAX_VALUE)));
+		Alignment.LEADING).addComponent(tabbedPane,
+		GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE));
 	resultat.getContentPane().setLayout(groupLayout);
 	resultat.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 	resultat.addWindowListener(new WindowAdapter() {
@@ -754,148 +832,127 @@ public class ResultatAnalisisView extends JPanel {
      */
     public void crearPDF(JFreeChart chart, String fileName)
 	    throws DocumentException, MalformedURLException, IOException {
-	Document doc = new Document(PageSize.A4);
-	if (!fileName.endsWith(".pdf"))
-	    fileName += ".pdf";
-	PdfWriter docWriter = PdfWriter.getInstance(doc, new FileOutputStream(
-		fileName));
-	doc.addTitle("Resultat de l'anàlisi de l'ordinador");
-	doc.addAuthor("Oriol Gasset Romo");
-	doc.addSubject("Resultat de l'anàlisi de l'ordinador");
-	doc.addKeywords("Anàlisi, PDF, rendiment");
-	doc.addCreator("Anàlisi del rendiment de PCs");
-
-	doc.setPageSize(PageSize.A4);
-	doc.open();
-
-	/** Títol del pdf */
-	Chunk title = new Chunk("Resultat de l'anàlisi");
-	title.setFont(FontFactory.getFont(FontFactory.HELVETICA, 34,
-		Font.CENTER_BASELINE));
-	title.setUnderline(0.1f, -2f);
-	Paragraph paragraf = new Paragraph(title);
-	paragraf.setAlignment(Element.ALIGN_CENTER);
-	doc.add(paragraf);
-	doc.add(new Paragraph("   "));
-	String s = "";
-	if (!MainController.analisisController.getDuracio().equals("-1")) {
-	    s = MainController.analisisController.getDuracio();
-	} else {
-	    if (MainController.analisisController.getDuracioRestant() == 0) {
-		s = MainController.view.panel.getTempsLabel();
-	    } else {
-		s = MainController.analisisController.getDuracioParcial();
-	    }
-	}
-	doc.add(new Paragraph("Duració de l'anàlisis: " + s));
-	MainController.analisisController.setDuracio(s);
-	doc.add(new Paragraph("Informació de l'anàlisi:"));
-	doc.add(new Paragraph(MainController.analisisController.getIdPC()));
-	doc.add(new Paragraph("   "));
-
-	/** Info CPU */
-	if (ViewOpcionsController.isCpu()) {
-	    Chunk cpuTitle = new Chunk("Ús de la CPU");
-	    cpuTitle.setFont(FontFactory.getFont(FontFactory.HELVETICA, 18,
-		    Font.BOLD));
-	    cpuTitle.setUnderline(0.1f, -2f);
-	    Paragraph cpuParagraf = new Paragraph(cpuTitle);
-	    doc.add(cpuParagraf);
-	    doc.add(new Paragraph(MainController.analisisController
-		    .getInfoComponent("CPU")));
-	    doc.add(new Paragraph(cpuAvg.getText() + " " + cpuMax.getText()
-		    + " " + cpuMin.getText()));
-	    afegirDadesValoracio(doc, cpuOk, estatCPU.getComponent(0));
-	    doc.add(new Paragraph("   "));
-	    afegirGrafica(docWriter, doc, cpu, fileName,
-		    Color.decode("#4D87F9"));
-	    doc.add(new Paragraph("   "));
-	    doc.newPage();
-	}
-
-	/** Info RAM */
-	if (ViewOpcionsController.isRam()) {
-	    Chunk ramTitle = new Chunk("Ús de la memòria RAM");
-	    ramTitle.setFont(FontFactory.getFont(FontFactory.HELVETICA, 18,
-		    Font.BOLD));
-	    ramTitle.setUnderline(0.1f, -2f);
-	    Paragraph ramParagraf = new Paragraph(ramTitle);
-	    doc.add(ramParagraf);
-	    doc.add(new Paragraph(MainController.analisisController
-		    .getInfoComponent("RAM") + "MB"));
-	    doc.add(new Paragraph(ramAvg.getText() + " " + ramMax.getText()
-		    + " " + ramMin.getText()));
-	    afegirDadesValoracio(doc, ramOk, estatRAM.getComponent(0));
-	    doc.add(new Paragraph("   "));
-	    afegirGrafica(docWriter, doc, ram, fileName,
-		    Color.decode("#B01227"));
-	    doc.add(new Paragraph("   "));
-	    doc.newPage();
-	}
-
-	/** Info HDD */
-	if (ViewOpcionsController.isHdd()) {
-	    Chunk hddTitle = new Chunk("Ús del disc dur");
-	    hddTitle.setFont(FontFactory.getFont(FontFactory.HELVETICA, 18,
-		    Font.BOLD));
-	    hddTitle.setUnderline(0.1f, -2f);
-	    Paragraph hddParagraf = new Paragraph(hddTitle);
-	    doc.add(hddParagraf);
-	    doc.add(new Paragraph(MainController.analisisController
-		    .getInfoComponent("HDD")));
-	    doc.add(new Paragraph(hddAvg.getText() + " " + hddMax.getText()
-		    + " " + hddMin.getText()));
-	    afegirDadesValoracio(doc, hddOk, estatHDD.getComponent(0));
-	    doc.add(new Paragraph("   "));
-	    afegirGrafica(docWriter, doc, hdd, fileName,
-		    Color.decode("#00BD39"));
-	    doc.add(new Paragraph("   "));
-	    doc.newPage();
-	}
-
-	/** Info NET */
-	if (ViewOpcionsController.isNet()) {
-	    Chunk netTitle = new Chunk("Ús de la xarxa");
-	    netTitle.setFont(FontFactory.getFont(FontFactory.HELVETICA, 18,
-		    Font.BOLD));
-	    netTitle.setUnderline(0.1f, -2f);
-	    Paragraph netParagraf = new Paragraph(netTitle);
-	    doc.add(netParagraf);
-	    doc.add(new Paragraph(MainController.analisisController
-		    .getInfoComponent("NET")));
-	    doc.add(new Paragraph(netAvg.getText() + " " + netMax.getText()
-		    + " " + netMin.getText()));
-	    afegirDadesValoracio(doc, netOk, estatNET.getComponent(0));
-	    doc.add(new Paragraph("   "));
-	    afegirGrafica(docWriter, doc, net, fileName,
-		    Color.decode("#E2D62E"));
-	    doc.add(new Paragraph("   "));
-	}
-	doc.close();
-
-	Process p;
-	try {
-	    p = Runtime.getRuntime().exec(
-		    "rundll32 url.dll,FileProtocolHandler " + fileName);
-	    p.waitFor();
-	} catch (IOException e) {
-	    if (Desktop.isDesktopSupported()) {
-		File myFile = new File(fileName);
-		Desktop.getDesktop().open(myFile);
-	    } else {
-		JOptionPane
-			.showMessageDialog(
-				this,
-				"No es pot obrir el fitxer automàticament, per veure el"
-					+ " pdf accedeix a través de l'explorador de fitxers",
-				"Error al obri el fitxer",
-				JOptionPane.WARNING_MESSAGE);
-	    }
-	} catch (InterruptedException e) {
-	    e.printStackTrace();
-	}
-	MainController.analisisController.guardarAnalisi(fileName, s);
-	pdfCreat = true;
+    	// Generated by UModel. This code will be overwritten when you re-run code generation.
+    	Document doc = new Document(PageSize.A4);
+    	
+    	if (!fileName.endsWith(".pdf")) {
+    		fileName += ".pdf";
+    	}
+    	PdfWriter docWriter = PdfWriter.getInstance(doc, new FileOutputStream( fileName));
+    	doc.addTitle("Resultat de l'anàlisi de l'ordinador");
+    	doc.addAuthor("Oriol Gasset Romo");
+    	doc.addSubject("Resultat de l'anàlisi de l'ordinador");
+    	doc.addKeywords("Anàlisi, PDF, rendiment");
+    	doc.addCreator("Anàlisi del rendiment de PCs");
+    	doc.setPageSize(PageSize.A4);
+    	doc.open();
+    	Chunk title = new Chunk("Resultat de l'anàlisi");
+    	title.setFont(FontFactory.getFont(FontFactory.HELVETICA, 34, Font.CENTER_BASELINE));
+    	title.setUnderline(0.1f, -2f);
+    	Paragraph paragraf = new Paragraph(title);
+    	paragraf.setAlignment(Element.ALIGN_CENTER);
+    	doc.add(paragraf);
+    	doc.add(new Paragraph("   "));
+    	String s = "";
+    	
+    	if (!MainController.analisisController.getDuracio().equals("-1")) {
+    		s = MainController.analisisController.getDuracio();
+    	}
+    	else {
+    		
+    		if (MainController.analisisController.getDuracioRestant() == 0) {
+    			s = MainController.view.panel.getTempsLabel();
+    		}
+    		else {
+    			s = MainController.analisisController.getDuracioParcial();
+    		}
+    	}
+    	doc.add(new Paragraph("Duració de l'anàlisis: " + s));
+    	MainController.analisisController.setDuracio(s);
+    	doc.add(new Paragraph("Informació de l'anàlisi:"));
+    	doc.add(new Paragraph(MainController.analisisController.getIdPC()));
+    	doc.add(new Paragraph("   "));
+    	
+    	if (ViewOpcionsController.isCpu()) {
+    		Chunk cpuTitle = new Chunk("Ús de la CPU");
+    		cpuTitle.setFont(FontFactory.getFont(FontFactory.HELVETICA, 18, Font.BOLD));
+    		cpuTitle.setUnderline(0.1f, -2f);
+    		Paragraph cpuParagraf = new Paragraph(cpuTitle);
+    		doc.add(cpuParagraf);
+    		doc.add(new Paragraph(MainController.analisisController .getInfoComponent("CPU")));
+    		doc.add(new Paragraph(cpuAvg.getText() + " " + cpuMax.getText() + " " + cpuMin.getText()));
+    		afegirDadesValoracio(doc, cpuOk, estatCPU.getComponent(0));
+    		doc.add(new Paragraph("   "));
+    		afegirGrafica(docWriter, doc, cpu, fileName, Color.decode("#4D87F9"));
+    		doc.add(new Paragraph("   "));
+    		doc.newPage();
+    	}
+    	
+    	if (ViewOpcionsController.isRam()) {
+    		Chunk ramTitle = new Chunk("Ús de la memòria RAM");
+    		ramTitle.setFont(FontFactory.getFont(FontFactory.HELVETICA, 18, Font.BOLD));
+    		ramTitle.setUnderline(0.1f, -2f);
+    		Paragraph ramParagraf = new Paragraph(ramTitle);
+    		doc.add(ramParagraf);
+    		doc.add(new Paragraph(MainController.analisisController .getInfoComponent("RAM") + "MB"));
+    		doc.add(new Paragraph(ramAvg.getText() + " " + ramMax.getText() + " " + ramMin.getText()));
+    		afegirDadesValoracio(doc, ramOk, estatRAM.getComponent(0));
+    		doc.add(new Paragraph("   "));
+    		afegirGrafica(docWriter, doc, ram, fileName, Color.decode("#B01227"));
+    		doc.add(new Paragraph("   "));
+    		doc.newPage();
+    	}
+    	
+    	if (ViewOpcionsController.isHdd()) {
+    		Chunk hddTitle = new Chunk("Ús del disc dur");
+    		hddTitle.setFont(FontFactory.getFont(FontFactory.HELVETICA, 18, Font.BOLD));
+    		hddTitle.setUnderline(0.1f, -2f);
+    		Paragraph hddParagraf = new Paragraph(hddTitle);
+    		doc.add(hddParagraf);
+    		doc.add(new Paragraph(MainController.analisisController .getInfoComponent("HDD")));
+    		doc.add(new Paragraph(hddAvg.getText() + " " + hddMax.getText() + " " + hddMin.getText()));
+    		afegirDadesValoracio(doc, hddOk, estatHDD.getComponent(0));
+    		doc.add(new Paragraph("   "));
+    		afegirGrafica(docWriter, doc, hdd, fileName, Color.decode("#00BD39"));
+    		doc.add(new Paragraph("   "));
+    		doc.newPage();
+    	}
+    	
+    	if (ViewOpcionsController.isNet()) {
+    		Chunk netTitle = new Chunk("Ús de la xarxa");
+    		netTitle.setFont(FontFactory.getFont(FontFactory.HELVETICA, 18, Font.BOLD));
+    		netTitle.setUnderline(0.1f, -2f);
+    		Paragraph netParagraf = new Paragraph(netTitle);
+    		doc.add(netParagraf);
+    		doc.add(new Paragraph(MainController.analisisController .getInfoComponent("NET")));
+    		doc.add(new Paragraph(netAvg.getText() + " " + netMax.getText() + " " + netMin.getText()));
+    		afegirDadesValoracio(doc, netOk, estatNET.getComponent(0));
+    		doc.add(new Paragraph("   "));
+    		afegirGrafica(docWriter, doc, net, fileName, Color.decode("#E2D62E"));
+    		doc.add(new Paragraph("   "));
+    	}
+    	doc.close();
+    	Process p;
+    	
+    	try {
+    		p = Runtime.getRuntime().exec( "rundll32 url.dll,FileProtocolHandler " + fileName);
+    		p.waitFor();
+    	}
+    	catch( IOException e ) {
+    		
+    		if (Desktop.isDesktopSupported()) {
+    			File myFile = new File(fileName);
+    			Desktop.getDesktop().open(myFile);
+    		}
+    		else {
+    			JOptionPane .showMessageDialog( this, "No es pot obrir el fitxer automàticament, per veure el" + " pdf accedeix a través de l'explorador de fitxers", "Error al obri el fitxer", JOptionPane.WARNING_MESSAGE);
+    		}
+    	}
+    	catch( InterruptedException e ) {
+    		e.printStackTrace();
+    }
+    	MainController.analisisController.guardarAnalisi(fileName, s);
+    	pdfCreat = true;
     }
 
     /**
@@ -908,7 +965,13 @@ public class ResultatAnalisisView extends JPanel {
 	chooser.setMultiSelectionEnabled(false);
 	chooser.setAcceptAllFileFilterUsed(false);
 	chooser.setDialogTitle("Guardar");
-	chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+	FileNameExtensionFilter filter = new FileNameExtensionFilter(
+		"Fitxers PDF", "pdf");
+	chooser.setFileFilter(filter);
+	DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+	Date date = new Date();
+	chooser.setSelectedFile(new File(dateFormat.format(date)
+		+ "analisi.pdf"));
 	if (chooser.showSaveDialog(pdfButton) == JFileChooser.APPROVE_OPTION) {
 	    try {
 		crearPDF(grafica, chooser.getSelectedFile().toString());

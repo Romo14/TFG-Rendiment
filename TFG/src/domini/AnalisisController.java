@@ -3,6 +3,8 @@
  */
 package domini;
 
+import gestioDades.GestioDades;
+
 import java.io.File;
 import java.net.InetAddress;
 import java.net.NetworkInterface;

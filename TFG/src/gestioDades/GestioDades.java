@@ -1,4 +1,4 @@
-package domini;
+package gestioDades;
 
 import java.io.File;
 import java.io.FileInputStream;
