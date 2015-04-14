@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.hyperic.sigar.Sigar;
 import org.jfree.data.time.Second;
 
-public class Analisi {
+public abstract class Analisi {
     /** Mitjana d'ús en percentatge. */
     protected float avgPercentatge;
 
@@ -38,6 +38,12 @@ public class Analisi {
 
     /** Llistat de segons durant el que es realitza l'anàlisi. */
     protected ArrayList<Second> temps;
+    
+    protected String info;
+
+    public String getInfo() {
+        return info;
+    }
 
     public Analisi() {
 	this.avgPercentatge = 0;
@@ -51,6 +57,7 @@ public class Analisi {
 	this.comptador = 0;
 	this.temps = new ArrayList<Second>();
 	this.segon = new Second();
+	this.info = getInfoComponent();
     }
 
     /**
@@ -133,4 +140,12 @@ public class Analisi {
     public ArrayList<Second> getTemps() {
 	return temps;
     }
+
+    public abstract void update();
+
+    public abstract String getInfoComponent();
+    
+    public abstract Object[] getTot();
+    
+    public abstract void setTot(Object[] tot);
 }

@@ -96,16 +96,16 @@ public class AnalisisController {
      */
     public void analitzar() {
 	if (opcions.isCpu()) {
-	    cpu.updateCPU();
+	    cpu.update();
 	}
 	if (opcions.isHdd()) {
-	    hdd.updateHDD();
+	    hdd.update();
 	}
 	if (opcions.isNet()) {
-	    net.updateNET();
+	    net.update();
 	}
 	if (opcions.isRam()) {
-	    ram.updateRAM();
+	    ram.update();
 	}
     }
 
@@ -228,16 +228,16 @@ public class AnalisisController {
 	String res = "";
 	switch (string) {
 	case "CPU":
-	    res = cpu.getCpuInfo();
+	    res = cpu.getInfo();
 	    break;
 	case "HDD":
-	    res = hdd.getHddInfo();
+	    res = hdd.getInfo();
 	    break;
 	case "RAM":
-	    res = ram.getRamInfo();
+	    res = ram.getInfo();
 	    break;
 	case "NET":
-	    res = net.getNetInfo();
+	    res = net.getInfo();
 	    break;
 	}
 	return res;

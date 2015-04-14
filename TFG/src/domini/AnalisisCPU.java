@@ -27,7 +27,7 @@ public class AnalisisCPU extends Analisi {
      * 
      * @return cpu info
      */
-    public String getCpuInfo() {
+    public String getInfoComponent() {
 	try {
 	    CpuInfo info = sigar.getCpuInfoList()[0];
 	    return "Fabricant: " + info.getVendor() + " Model: "
@@ -47,12 +47,13 @@ public class AnalisisCPU extends Analisi {
      * @return tot
      */
     public Object[] getTot() {
-	Object[] tot = new Object[5];
+	Object[] tot = new Object[6];
 	tot[0] = avgPercentatge;
 	tot[1] = maxPercentatge;
 	tot[2] = minPercentatge;
 	tot[3] = graf;
 	tot[4] = temps;
+	tot[5] = info;
 	return tot;
     }
 
@@ -70,13 +71,14 @@ public class AnalisisCPU extends Analisi {
 	minPercentatge = (float) dadesCpu[2];
 	graf = (ArrayList<Float>) dadesCpu[3];
 	temps = (ArrayList<Second>) dadesCpu[4];
+	info = (String) dadesCpu[5];
     }
 
     /**
      * Actualitza les dades de l'ús de la cpu. Obté els valors actuals i
      * comprova actualitza els paràmetres adients.
      */
-    public void updateCPU() {
+    public void update() {
 	CpuPerc cpuPerc = null;
 	try {
 	    cpuPerc = sigar.getCpuPerc();

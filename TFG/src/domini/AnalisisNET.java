@@ -21,6 +21,8 @@ import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarException;
 import org.jfree.data.time.Second;
 
+import domini.netInfo.ParseRoute;
+
 /**
  * Classe encarregada de realitzar l'anàlisi de la targeta de xarxa.
  * 
@@ -52,6 +54,8 @@ public class AnalisisNET extends Analisi {
      */
     public AnalisisNET() {
 	super();
+	ParseRoute pr = ParseRoute.getInstance();
+	this.setIp(pr.getLocalIPAddress());
     }
 
     /**
@@ -120,7 +124,7 @@ public class AnalisisNET extends Analisi {
      * 
      * @return net info
      */
-    public String getNetInfo() {
+    public String getInfoComponent() {
 	String info = "";
 	try {
 	    InetAddress ipAdress = InetAddress.getByName(ip);
@@ -153,8 +157,8 @@ public class AnalisisNET extends Analisi {
      * 
      * @return tot
      */
-    public Object getTot() {
-	Object[] tot = new Object[9];
+    public Object[] getTot() {
+	Object[] tot = new Object[10];
 	tot[0] = avgPercentatge;
 	tot[1] = avgTotal;
 	tot[2] = comptador;
@@ -164,6 +168,7 @@ public class AnalisisNET extends Analisi {
 	tot[6] = minTotal;
 	tot[7] = graf;
 	tot[8] = temps;
+	tot[9] = this.getInfo();
 	return tot;
     }
 
@@ -223,12 +228,13 @@ public class AnalisisNET extends Analisi {
 	minTotal = (long) dadesNet[6];
 	graf = (ArrayList<Float>) dadesNet[7];
 	temps = (ArrayList<Second>) dadesNet[8];
+	info = (String) dadesNet[9];
     }
 
     /**
      * Actualitza la informació de l'anàlisi de la targeta de xarxa.
      */
-    public void updateNET() {
+    public void update() {
 	sigar = new Sigar();
 	float total = getMetric();
 	if (((total * 100) / speed) > 100) {

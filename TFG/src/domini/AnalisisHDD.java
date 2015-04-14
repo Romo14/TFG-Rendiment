@@ -53,7 +53,7 @@ public class AnalisisHDD extends Analisi {
      * 
      * @return Informació del disc dur
      */
-    public String getHddInfo() {
+    public String getInfoComponent() {
 	String s = "";
 
 	long diskSize = (new File("/").getTotalSpace()) / 1024 / 1024 / 1024;
@@ -74,8 +74,6 @@ public class AnalisisHDD extends Analisi {
     public float getInicial() {
 	return inicial;
     }
-
-    
 
     /**
      * Obté el número d'escriptures.
@@ -114,21 +112,12 @@ public class AnalisisHDD extends Analisi {
     }
 
     /**
-     * Obté la llista amb els instants en què s'ha realitzat l'anàlisi.
-     * 
-     * @return Llistat de temps
-     */
-    public ArrayList<Second> getTemps() {
-	return temps;
-    }
-
-    /**
      * Obté totes les dades de l'anàlisi.
      * 
      * @return Dades de l'anàlisi
      */
     public Object[] getTot() {
-	Object[] tot = new Object[10];
+	Object[] tot = new Object[11];
 	tot[0] = avgTotal;
 	tot[1] = inicial;
 	tot[2] = maxTotal;
@@ -139,6 +128,7 @@ public class AnalisisHDD extends Analisi {
 	tot[7] = numLecturesInicial;
 	tot[8] = graf;
 	tot[9] = temps;
+	tot[10] = info;
 	return tot;
     }
 
@@ -154,20 +144,21 @@ public class AnalisisHDD extends Analisi {
 	avgTotal = (long) dadesHdd[0];
 	inicial = (float) dadesHdd[1];
 	maxTotal = (long) dadesHdd[2];
-	minTotal = (long) dadesHdd[3];
+	minTotal =  (long) dadesHdd[3];
 	numEscriptures = (long) dadesHdd[4];
 	numEscripturesInicial = (long) dadesHdd[5];
 	numLectures = (long) dadesHdd[6];
 	numLecturesInicial = (long) dadesHdd[7];
 	graf = (ArrayList<Float>) dadesHdd[8];
 	temps = (ArrayList<Second>) dadesHdd[9];
+	info = (String) dadesHdd[10];
     }
 
     /**
      * Actualitza les dades de l'ús del disc dur. Obté els valors actuals i
      * comprova actualitza els paràmetres adients.
      */
-    public void updateHDD() {
+    public void update() {
 	FileSystemUsage hdd = null;
 	try {
 	    hdd = sigar.getFileSystemUsage("C:");

@@ -44,7 +44,7 @@ public class AnalisisRAM extends Analisi {
      * 
      * @return informació de la RAM
      */
-    public String getRamInfo() {
+    public String getInfoComponent() {
 	String s = "";
 	try {
 	    s = "Memòria RAM total: "
@@ -98,7 +98,7 @@ public class AnalisisRAM extends Analisi {
     /**
      * Actualitza la informació de l'anàlisi de la RAM.
      */
-    public void updateRAM() {
+    public void update() {
 	Mem mem = null;
 	try {
 	    mem = sigar.getMem();
