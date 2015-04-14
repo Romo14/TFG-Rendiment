@@ -15,9 +15,6 @@ public class Analisi {
     /** Comptador d'execucions de l'anàlisi. */
     protected long comptador;
 
-    /** Element encarregat d'accedir a les dades. */
-    protected Sigar sigar;
-
     /** Llista amb els valors d'ús per segon. */
     protected ArrayList<Float> graf;
 
@@ -35,6 +32,9 @@ public class Analisi {
 
     /** Segon en què es realitza el seguiment. */
     protected Second segon;
+
+    /** Element encarregat d'accedir a les dades. */
+    protected Sigar sigar;
 
     /** Llistat de segons durant el que es realitza l'anàlisi. */
     protected ArrayList<Second> temps;
@@ -63,6 +63,24 @@ public class Analisi {
     }
 
     /**
+     * Obté la mitjana d'ús.
+     * 
+     * @return Mitjana d'ús
+     */
+    public long getAvgTotal() {
+	return avgTotal;
+    }
+
+    /**
+     * Obté el comptador.
+     * 
+     * @return comptador
+     */
+    public long getComptador() {
+	return comptador;
+    }
+
+    /**
      * Obté el graf.
      * 
      * @return graf
@@ -81,6 +99,15 @@ public class Analisi {
     }
 
     /**
+     * Obté el máxim ús durant l'anàlisi.
+     * 
+     * @return Màxim ús
+     */
+    public float getMaxTotal() {
+	return maxTotal;
+    }
+
+    /**
      * Obté el min percentatge.
      * 
      * @return min percentatge
@@ -90,30 +117,12 @@ public class Analisi {
     }
 
     /**
-     * Obté el máxim ús del disc dur durant l'anàlisi.
-     * 
-     * @return Màxim ús
-     */
-    public float getMaxTotal() {
-	return maxTotal;
-    }
-
-    /**
-     * Obté el mínim ús del disc dur durant l'anàlisi.
+     * Obté el mínim ús durant l'anàlisi.
      * 
      * @return Mínim ús
      */
     public float getMinTotal() {
 	return minTotal;
-    }
-
-    /**
-     * Obté la mitjana d'ús del disc dur.
-     * 
-     * @return Mitjana d'ús del disc dur
-     */
-    public long getAvgTotal() {
-	return avgTotal;
     }
 
     /**
@@ -123,13 +132,5 @@ public class Analisi {
      */
     public ArrayList<Second> getTemps() {
 	return temps;
-    }
-
-    /**
-     * Obté el comptador.
-     * @return comptador
-     */
-    public long getComptador() {
-	return comptador;
     }
 }
