@@ -1,5 +1,7 @@
 package domini;
 
+import java.net.Inet4Address;
+import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -247,12 +249,17 @@ public class AnalisisNET {
 	    info += "Nom: " + network.getName() + " Descripció: "
 		    + network.getDisplayName() + " MTU: " + network.getMTU();
 	    Enumeration<InetAddress> en = network.getInetAddresses();
-	    info += " Adreça IPv4: " + en.nextElement().getHostAddress()
-		    + " Adreça IPv6: " + en.nextElement().getHostAddress();
+	    while (en.hasMoreElements()) {
+		InetAddress aux = en.nextElement();
+		if (aux instanceof Inet4Address) {
+		    info += " Adreça IPv4: " + aux.getHostAddress();
+		} else if (aux instanceof Inet6Address) {
+		    info += " Adreça IPv6: " + aux.getHostAddress();
+		}
+	    }
+
 	} catch (UnknownHostException e) {
-	    e.printStackTrace();
 	} catch (SocketException e) {
-	    e.printStackTrace();
 	}
 	return info;
     }
