@@ -26,7 +26,7 @@ import org.jfree.data.time.Second;
  * 
  * @author Oriol Gasset Romo <oriol.gasset@est.fib.upc.edu>
  */
-public class AnalisisNET {
+public class AnalisisNET extends Analisi {
 
     /** rx change map. */
     private static Map<String, List<Long>> rxChangeMap = new HashMap<String, List<Long>>();
@@ -40,115 +40,18 @@ public class AnalisisNET {
     /** tx current map. */
     private static Map<String, Long> txCurrentMap = new HashMap<String, Long>();
 
-    /** Mitjana d'ús de la targeta de xarxa en percentatge. */
-    private float avgPercentatge;
-
-    /** Mitjana d'ús de la targeta de xarxa total. */
-    private long avgTotal;
-
-    /** Comptador. */
-    private long comptador;
-
-    /** Llistat d'ús de la targeta de xarxa. */
-    private ArrayList<Float> graf;
-
     /** ip de l'ordinador */
     private String ip;
 
-    /** Màxim ús de la targeta de xarxa en percentatge. */
-    private float maxPercentatge;
-
-    /** Màxim ús de la targeta de xarxa total. */
-    private long maxTotal;
-
-    /** Mínim ús de la targeta de xarxa en percentatge. */
-    private float minPercentatge;
-
-    /** Mínim ús de la targeta de xarxa total. */
-    private long minTotal;
-
-    /** Element que accedeix a la informació de la targeta de xarxa */
-    private Sigar netSigar;
-
-    /** Segon. */
-    private Second segon;
-
     /** speed. */
     private long speed;
-
-    /** temps. */
-    private ArrayList<Second> temps;
 
     /**
      * Creadora per defecte de la classe. Inicialitza els atributs amb valors
      * predeterminats
      */
     public AnalisisNET() {
-	this.avgPercentatge = 0;
-	this.avgTotal = 0;
-	this.graf = new ArrayList<Float>();
-	this.maxPercentatge = 0;
-	this.maxTotal = 0;
-	this.minPercentatge = 100;
-	this.minTotal = Long.MAX_VALUE;
-	this.netSigar = new Sigar();
-	this.comptador = 0;
-	this.temps = new ArrayList<Second>();
-	this.segon = new Second();
-    }
-
-    /**
-     * Obté el avg percentatge.
-     * 
-     * @return avg percentatge
-     */
-    public float getAvgPercentatge() {
-	return avgPercentatge;
-    }
-
-    /**
-     * Obté el avg total.
-     * 
-     * @return avg total
-     */
-    public long getAvgTotal() {
-	return avgTotal;
-    }
-
-    /**
-     * Obté el comptador.
-     * 
-     * @return comptador
-     */
-    public long getComptador() {
-	return comptador;
-    }
-
-    /**
-     * Obté el graf.
-     * 
-     * @return graf
-     */
-    public ArrayList<Float> getGraf() {
-	return graf;
-    }
-
-    /**
-     * Obté el max percentatge.
-     * 
-     * @return max percentatge
-     */
-    public float getMaxPercentatge() {
-	return maxPercentatge;
-    }
-
-    /**
-     * Obté el max total.
-     * 
-     * @return max total
-     */
-    public long getMaxTotal() {
-	return maxTotal;
+	super();
     }
 
     /**
@@ -158,10 +61,9 @@ public class AnalisisNET {
      */
     public Long getMetric() {
 	try {
-	    for (String ni : netSigar.getNetInterfaceList()) {
-		NetInterfaceStat netStat = netSigar.getNetInterfaceStat(ni);
-		NetInterfaceConfig ifConfig = netSigar
-			.getNetInterfaceConfig(ni);
+	    for (String ni : sigar.getNetInterfaceList()) {
+		NetInterfaceStat netStat = sigar.getNetInterfaceStat(ni);
+		NetInterfaceConfig ifConfig = sigar.getNetInterfaceConfig(ni);
 		String hwaddr = null;
 		if (!NetFlags.NULL_HWADDR.equals(ifConfig.getHwaddr())) {
 		    hwaddr = ifConfig.getHwaddr();
@@ -214,24 +116,6 @@ public class AnalisisNET {
     }
 
     /**
-     * Obté el min percentatge.
-     * 
-     * @return min percentatge
-     */
-    public float getMinPercentatge() {
-	return minPercentatge;
-    }
-
-    /**
-     * Obté el min total.
-     * 
-     * @return min total
-     */
-    public long getMinTotal() {
-	return minTotal;
-    }
-
-    /**
      * Obté informació de la xarxa.
      * 
      * @return net info
@@ -262,15 +146,6 @@ public class AnalisisNET {
 	} catch (SocketException e) {
 	}
 	return info;
-    }
-
-    /**
-     * Obté el temps.
-     * 
-     * @return temps
-     */
-    public ArrayList<Second> getTemps() {
-	return temps;
     }
 
     /**
@@ -354,7 +229,7 @@ public class AnalisisNET {
      * Actualitza la informació de l'anàlisi de la targeta de xarxa.
      */
     public void updateNET() {
-	netSigar = new Sigar();
+	sigar = new Sigar();
 	float total = getMetric();
 	if (((total * 100) / speed) > 100) {
 	    total = 0;

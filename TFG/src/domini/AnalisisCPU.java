@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.hyperic.sigar.CpuInfo;
 import org.hyperic.sigar.CpuPerc;
-import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarException;
 import org.jfree.data.time.Second;
 
@@ -14,67 +13,15 @@ import org.jfree.data.time.Second;
  * @author Oriol Gasset Romo <oriol.gasset@est.fib.upc.edu>
  * 
  */
-public class AnalisisCPU {
+public class AnalisisCPU extends Analisi {
 
-    /** Mitjana d'ús en percentatge. */
-    private float avgPercentatge;
-
-    /** Mitjana d'ús en valor total. */
-    private long avgTotal;
-
-    /** Comptador d'execucions de l'anàlisi. */
-    private long comptador;
-
-    /** Element encarregat d'accedir a les dades de la cpu. */
-    private Sigar cpuSigar;
-
-    /** Llista amb els valors d'ús de cpu per segon. */
-    private ArrayList<Float> graf;
-
-    /** Màxim ús de la cpu en percentatge. */
-    private float maxPercentatge;
-
-    /** Màxim ús de la cpu en total. */
-    private long maxTotal;
-
-    /** Mínim ús de la cpu en percentatge. */
-    private float minPercentatge;
-
-    /** Mínim ús de la cpu en total. */
-    private long minTotal;
-
-    /** Segon en què es realitza el seguiment. */
-    private Second segon;
-
-    /** Llistat de segons durant el que es realitza l'anàlisi. */
-    private ArrayList<Second> temps;
 
     /**
      * Creadora per defecte de l'objecte AnalisisCPU
      */
     public AnalisisCPU() {
-	this.avgPercentatge = 0;
-	this.avgTotal = 0;
-	this.graf = new ArrayList<Float>();
-	this.maxPercentatge = 0;
-	this.maxTotal = 0;
-	this.minPercentatge = 100;
-	this.minTotal = Long.MAX_VALUE;
-	this.cpuSigar = new Sigar();
-	this.comptador = 0;
-	this.temps = new ArrayList<Second>();
-	this.segon = new Second();
+	super();
     }
-
-    /**
-     * Obté el avg percentatge.
-     * 
-     * @return avg percentatge
-     */
-    public float getAvgPercentatge() {
-	return avgPercentatge;
-    }
-
     /**
      * Obté el cpu info.
      * 
@@ -82,7 +29,7 @@ public class AnalisisCPU {
      */
     public String getCpuInfo() {
 	try {
-	    CpuInfo info = cpuSigar.getCpuInfoList()[0];
+	    CpuInfo info = sigar.getCpuInfoList()[0];
 	    return "Fabricant: " + info.getVendor() + " Model: "
 		    + info.getModel() + ", Nuclis: " + info.getTotalCores()
 		    + ", Freqüència màxima: " + info.getMhz()
@@ -92,42 +39,6 @@ public class AnalisisCPU {
 	    e.printStackTrace();
 	}
 	return "";
-    }
-
-    /**
-     * Obté el graf.
-     * 
-     * @return graf
-     */
-    public ArrayList<Float> getGraf() {
-	return graf;
-    }
-
-    /**
-     * Obté el max percentatge.
-     * 
-     * @return max percentatge
-     */
-    public float getMaxPercentatge() {
-	return maxPercentatge;
-    }
-
-    /**
-     * Obté el min percentatge.
-     * 
-     * @return min percentatge
-     */
-    public float getMinPercentatge() {
-	return minPercentatge;
-    }
-
-    /**
-     * Obté el temps.
-     * 
-     * @return temps
-     */
-    public ArrayList<Second> getTemps() {
-	return temps;
     }
 
     /**
@@ -168,7 +79,7 @@ public class AnalisisCPU {
     public void updateCPU() {
 	CpuPerc cpuPerc = null;
 	try {
-	    cpuPerc = cpuSigar.getCpuPerc();
+	    cpuPerc = sigar.getCpuPerc();
 	} catch (SigarException se) {
 	    se.printStackTrace();
 	}

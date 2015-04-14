@@ -4,10 +4,7 @@
 package domini;
 
 /**
- * Classe encarregada de guardar la configuració de l'anàlisi que s'executa:
- * quins components s'analitzen i la duració de l'anàlisi.
- * 
- * @author Oriol Gasset Romo <oriol.gasset@est.fib.upc.edu>
+ * Controlador de les opcions de l'anàlisi.
  */
 public class Opcions {
 
@@ -174,6 +171,16 @@ public class Opcions {
      */
     public void setRam(boolean ram) {
 	this.ram = ram;
+    }
+
+    /**
+     * Defineix tots els booleans a true.
+     */
+    public void setAllTrue() {
+	setCpu(true);
+	setHdd(true);
+	setNet(true);
+	setRam(true);
     }
 
 }

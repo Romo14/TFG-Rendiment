@@ -3,7 +3,7 @@
  */
 package gui;
 
-import domini.OpcionsController;
+import domini.Opcions;
 
 /**
  * Controlador de les opcions de la capa de presentació, s'encarrega
@@ -15,13 +15,13 @@ import domini.OpcionsController;
 public class ViewOpcionsController {
 
     /** Controlador d'opcions de domini. */
-    static OpcionsController opcions;
+    static Opcions opcions;
 
     /**
      * Creadora per defecte de la classe.
      */
     public ViewOpcionsController() {
-	opcions = new OpcionsController();
+	opcions = new Opcions();
     }
 
     /**
@@ -162,7 +162,7 @@ public class ViewOpcionsController {
      * 
      * @return opcions
      */
-    public OpcionsController getOpcions() {
+    public Opcions getOpcions() {
 	return opcions;
     }
 

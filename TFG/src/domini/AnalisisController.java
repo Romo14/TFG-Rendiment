@@ -47,7 +47,7 @@ public class AnalisisController {
     private AnalisisNET net;
 
     /** El controlador d'opcions. */
-    private OpcionsController opcionsController;
+    private Opcions opcions;
 
     /** Objecte encarregar d'analitzar la memòria RAM. */
     private AnalisisRAM ram;
@@ -59,13 +59,13 @@ public class AnalisisController {
      * @param oc
      *            Controlador d'opcions del procés
      */
-    public AnalisisController(OpcionsController oc) {
+    public AnalisisController(Opcions oc) {
 	cpu = new AnalisisCPU();
 	hdd = new AnalisisHDD();
 	net = new AnalisisNET();
 	ram = new AnalisisRAM();
 	duracio = "-1";
-	opcionsController = oc;
+	opcions = oc;
 	try {
 	    ParseRoute pr = ParseRoute.getInstance();
 	    DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -95,16 +95,16 @@ public class AnalisisController {
      * formi part del procés, actualitzar les seves dades.
      */
     public void analitzar() {
-	if (opcionsController.isCpu()) {
+	if (opcions.isCpu()) {
 	    cpu.updateCPU();
 	}
-	if (opcionsController.isHdd()) {
+	if (opcions.isHdd()) {
 	    hdd.updateHDD();
 	}
-	if (opcionsController.isNet()) {
+	if (opcions.isNet()) {
 	    net.updateNET();
 	}
-	if (opcionsController.isRam()) {
+	if (opcions.isRam()) {
 	    ram.updateRAM();
 	}
     }
@@ -117,17 +117,17 @@ public class AnalisisController {
      */
     public void carregarAnalisi(File selectedFile) {
 	ArrayList<Object> dades = GestioDades.carregar(selectedFile);
-	this.opcionsController.setCpu((boolean) dades.get(6));
-	this.opcionsController.setRam((boolean) dades.get(7));
-	this.opcionsController.setHdd((boolean) dades.get(8));
-	this.opcionsController.setNet((boolean) dades.get(9));
-	if (opcionsController.isCpu())
+	this.opcions.setCpu((boolean) dades.get(6));
+	this.opcions.setRam((boolean) dades.get(7));
+	this.opcions.setHdd((boolean) dades.get(8));
+	this.opcions.setNet((boolean) dades.get(9));
+	if (opcions.isCpu())
 	    cpu.setTot((Object[]) dades.get(0));
-	if (opcionsController.isRam())
+	if (opcions.isRam())
 	    ram.setTot((Object[]) dades.get(1));
-	if (opcionsController.isHdd())
+	if (opcions.isHdd())
 	    hdd.setTot((Object[]) dades.get(2));
-	if (opcionsController.isNet())
+	if (opcions.isNet())
 	    net.setTot((Object[]) dades.get(3));
 	this.idPC = (String) dades.get(4);
 	this.duracio = (String) dades.get(5);
@@ -292,10 +292,10 @@ public class AnalisisController {
 	resultat.add(net.getTot());
 	resultat.add(idPC);
 	resultat.add(duracio);
-	resultat.add(opcionsController.isCpu());
-	resultat.add(opcionsController.isRam());
-	resultat.add(opcionsController.isHdd());
-	resultat.add(opcionsController.isNet());
+	resultat.add(opcions.isCpu());
+	resultat.add(opcions.isRam());
+	resultat.add(opcions.isHdd());
+	resultat.add(opcions.isNet());
 	GestioDades.guardar(resultat, fileName);
     }
 

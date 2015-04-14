@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 import org.hyperic.sigar.FileSystemUsage;
-import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarException;
 import org.jfree.data.time.Second;
 
@@ -13,25 +12,11 @@ import org.jfree.data.time.Second;
  * 
  * @author Oriol Gasset Romo <oriol.gasset@est.fib.upc.edu>
  */
-public class AnalisisHDD {
+public class AnalisisHDD extends Analisi {
 
-    /** Ús total. */
-    private long avgTotal;
-
-    /** Llistat de valors d'ús del disc dur. */
-    private ArrayList<Float> graf;
-
-    /** Element que obté les dades del disc dur. */
-    private Sigar hddSigar;
-
+   
     /** Valor inicial de lectures i escriptures a disc dur. */
     private float inicial;
-
-    /** Máxim d'ús del disc dur en total. */
-    private float maxTotal;
-
-    /** Mínim d'ús del disc dur en total. */
-    private float minTotal;
 
     /** Número d'escriptures totals a disc. */
     private long numEscriptures;
@@ -45,35 +30,15 @@ public class AnalisisHDD {
     /** Número de lectures totals a disc a l'iniciar l'anàlisi. */
     private long numLecturesInicial;
 
-    /** Segon en que es realitza l'anàlisi. */
-    private Second segon;
-
-    /** Temps durant el que es realitza l'anàlisi. */
-    private ArrayList<Second> temps;
-
+   
     /**
      * Creadora per defecte de la classe.
      */
     public AnalisisHDD() {
-	this.avgTotal = 0;
-	this.graf = new ArrayList<Float>();
-	this.maxTotal = 0;
-	this.minTotal = Long.MAX_VALUE;
-	this.hddSigar = new Sigar();
-	this.temps = new ArrayList<Second>();
-	this.segon = new Second();
-	this.inicial = 0;
+	super();
     }
 
-    /**
-     * Obté la mitjana d'ús del disc dur.
-     * 
-     * @return Mitjana d'ús del disc dur
-     */
-    public long getAvgTotal() {
-	return avgTotal;
-    }
-
+    
     /**
      * Obté el llistat amb els valors d'ús del disc dur.
      * 
@@ -110,23 +75,7 @@ public class AnalisisHDD {
 	return inicial;
     }
 
-    /**
-     * Obté el máxim ús del disc dur durant l'anàlisi.
-     * 
-     * @return Màxim ús
-     */
-    public float getMaxTotal() {
-	return maxTotal;
-    }
-
-    /**
-     * Obté el mínim ús del disc dur durant l'anàlisi.
-     * 
-     * @return Mínim ús
-     */
-    public float getMinTotal() {
-	return minTotal;
-    }
+    
 
     /**
      * Obté el número d'escriptures.
@@ -204,8 +153,8 @@ public class AnalisisHDD {
     public void setTot(Object[] dadesHdd) {
 	avgTotal = (long) dadesHdd[0];
 	inicial = (float) dadesHdd[1];
-	maxTotal = (float) dadesHdd[2];
-	minTotal = (float) dadesHdd[3];
+	maxTotal = (long) dadesHdd[2];
+	minTotal = (long) dadesHdd[3];
 	numEscriptures = (long) dadesHdd[4];
 	numEscripturesInicial = (long) dadesHdd[5];
 	numLectures = (long) dadesHdd[6];
@@ -221,10 +170,10 @@ public class AnalisisHDD {
     public void updateHDD() {
 	FileSystemUsage hdd = null;
 	try {
-	    hdd = hddSigar.getFileSystemUsage("C:");
+	    hdd = sigar.getFileSystemUsage("C:");
 	} catch (SigarException se) {
 	    try {
-		hdd = hddSigar.getFileSystemUsage("/");
+		hdd = sigar.getFileSystemUsage("/");
 	    } catch (SigarException e) {
 		e.printStackTrace();
 	    }
@@ -249,9 +198,9 @@ public class AnalisisHDD {
 	temps.add(segon);
 	segon = (Second) segon.next();
 	if (used > maxTotal)
-	    maxTotal = used;
+	    maxTotal = (long) used;
 	if (used < minTotal)
-	    minTotal = used;
+	    minTotal = (long) used;
 	avgTotal = aux;
 
     }
