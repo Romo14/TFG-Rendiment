@@ -56,6 +56,7 @@ public class AnalisisNET extends Analisi {
 	super();
 	ParseRoute pr = ParseRoute.getInstance();
 	this.setIp(pr.getLocalIPAddress());
+	info = this.getInfoComponent();
     }
 
     /**
